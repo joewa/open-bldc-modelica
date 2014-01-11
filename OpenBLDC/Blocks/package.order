@@ -2,4 +2,5 @@ HallDecode
 Triangular
 TestCtrl
 TestCtrl3ph
+TestCtrl3phPWM
 HalfBridgeCtrl

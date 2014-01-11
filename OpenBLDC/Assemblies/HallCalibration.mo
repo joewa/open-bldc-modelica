@@ -42,12 +42,13 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
     annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
   Modelica.Electrical.Analog.Basic.Ground ground2
     annotation (Placement(transformation(extent={{-140,-108},{-120,-88}})));
-  Modelica.Electrical.Analog.Sources.ConstantVoltage battery(V=5)  annotation (
+  Modelica.Electrical.Analog.Sources.ConstantVoltage battery(V=3)  annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-130,-70})));
-  Blocks.TestCtrl3ph testCtrl3ph
+  replaceable Blocks.TestCtrl3ph
+                     testCtrl3ph
     annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
 equation
   connect(constantSpeed.flange, hallDigital123.flange) annotation (Line(
