@@ -1,5 +1,6 @@
 within OpenBLDC.Converters.Continous;
-model PowerConverterCS "Sets output current whilst keeping in- and output power equal"
+model PowerConverterCS
+  "Sets output current whilst keeping in- and output power equal"
   extends OpenBLDC.Interfaces.SupplyPort;
   extends OpenBLDC.Interfaces.LoadPort;
   Modelica.Blocks.Interfaces.RealInput ref "Reference output current" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 180, origin = {106,0}), iconTransformation(extent = {{-20,-20},{20,20}}, rotation = 180, origin = {96,0})));

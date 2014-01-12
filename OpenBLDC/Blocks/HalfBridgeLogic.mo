@@ -1,7 +1,10 @@
 within OpenBLDC.Blocks;
-block HalfBridgeCtrl "Activates half bridge gates"
-  Modelica.Blocks.Interfaces.BooleanOutput hCtrl annotation(Placement(transformation(extent = {{90,50},{110,70}})));
-  Modelica.Blocks.Interfaces.BooleanOutput lCtrl annotation(Placement(transformation(extent = {{90,-70},{110,-50}})));
+block HalfBridgeLogic "Logics"
+
+  Modelica.Blocks.Interfaces.BooleanOutput pin_IN
+                                                 annotation(Placement(transformation(extent = {{90,50},{110,70}})));
+  Modelica.Blocks.Interfaces.BooleanOutput pin_SD
+                                                 annotation(Placement(transformation(extent = {{90,-70},{110,-50}})));
   Modelica.Blocks.Interfaces.RealInput val "0 or > 0 or < 0" annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
   Modelica.Blocks.Interfaces.BooleanInput pulses
     "Pulses from the PWM generator"                                              annotation(Placement(transformation(extent = {{-120,58},{-80,98}})));
@@ -23,18 +26,18 @@ equation
   // 2-leg PWM
   // 1-leg PWM
   if val > 0.5 then
-    hCtrl = hPulse;
-    lCtrl = not hPulse;
+    pin_IN = hPulse;
+    pin_SD = true;
   elseif val < (-0.5) then
-    hCtrl = not lPulse;
-    lCtrl = lPulse;
+    pin_IN = not lPulse;
+    pin_SD = true;
   else
-    hCtrl = false;
-    lCtrl = false;
+    pin_IN = false;
+    pin_SD = false;
   end if;
   // High side ON
   // Low side ON
   // Half bridge OFF
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
-end HalfBridgeCtrl;
-
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
+            -100},{100,100}}),                                                                        graphics));
+end HalfBridgeLogic;

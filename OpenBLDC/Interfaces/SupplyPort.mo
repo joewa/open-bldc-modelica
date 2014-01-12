@@ -1,8 +1,11 @@
 within OpenBLDC.Interfaces;
 partial model SupplyPort "Base model of the converter (DC)-supply port"
-  Modelica.Electrical.Analog.Interfaces.PositivePin pSupply(final v(start = 0)) "Positive pin of the supply circuit" annotation(Placement(transformation(extent = {{-110,50},{-90,70}}, rotation = 0)));
-  Modelica.Electrical.Analog.Interfaces.NegativePin nSupply(final v(start = 0)) "Negative pin of the supply circuit" annotation(Placement(transformation(extent = {{-110,-70},{-90,-50}}, rotation = 0)));
-  parameter Modelica.SIunits.Current IConverterMax(min = 0) "Maximum admissible converter DC supply current" annotation(Dialog(tab = "Reference values and limits"));
+  Modelica.Electrical.Analog.Interfaces.PositivePin pSupply(final v(start = 0))
+    "Positive pin of the supply circuit"                                                                             annotation(Placement(transformation(extent = {{-110,50},{-90,70}}, rotation = 0)));
+  Modelica.Electrical.Analog.Interfaces.NegativePin nSupply(final v(start = 0))
+    "Negative pin of the supply circuit"                                                                             annotation(Placement(transformation(extent = {{-110,-70},{-90,-50}}, rotation = 0)));
+  parameter Modelica.SIunits.Current IConverterMax(min = 0)
+    "Maximum admissible converter DC supply current"                                                         annotation(Dialog(tab = "Reference values and limits"));
   Modelica.SIunits.Voltage vSupply "Voltage of the supply port";
   Modelica.SIunits.Current iSupply "Current of the supply port";
   Modelica.SIunits.Power powerSupply "Power of the supply port";
@@ -30,6 +33,6 @@ Contains the basic connectors, parameters and asserts for the converter DC suppl
 <tr><td>     </td>  <td>2006-08-31</td>  <td> Improved assert statements </td></tr>
 </tbody>
 </table>
-</html>"), Icon(coordinateSystem(preserveAspectRatio = true)), Diagram(coordinateSystem(preserveAspectRatio = true, extent = {{-100,-100},{100,100}}, grid = {1,1}), graphics = {Line(points = {{-100,40},{-100,-40}}, color = {0,0,0}),Polygon(points = {{-100,-41},{-102,-33},{-98,-33},{-100,-41}}, lineColor = {0,0,0}, fillColor = {0,0,0}, fillPattern = FillPattern.Solid),Text(extent = {{-96,10},{-76,0}}, lineColor = {0,0,0}, fillColor = {0,0,0}, fillPattern = FillPattern.Solid, textString = "vSupply")}));
+</html>"), Icon(coordinateSystem(preserveAspectRatio = true)), Diagram(coordinateSystem(preserveAspectRatio = true, extent = {{-100,-100},{100,100}}, grid = {1,1}), graphics = {Line(points=  {{-100,40},{-100,-40}}, color=  {0,0,0}),Polygon(points=  {{-100,-41},{-102,-33},{-98,-33},{-100,-41}}, lineColor=  {0,0,0}, fillColor=  {0,0,0}, fillPattern=  FillPattern.Solid),Text(extent=  {{-96,10},{-76,0}}, lineColor=  {0,0,0}, fillColor=  {0,0,0}, fillPattern=  FillPattern.Solid, textString=  "vSupply")}));
 end SupplyPort;
 

@@ -16,7 +16,7 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
   Converters.SwitchingIdeal.Inverter3ph inverter3ph annotation(Placement(transformation(extent = {{-100,-80},{-80,-60}})));
   Modelica.Electrical.Analog.Basic.Ground ground2 annotation(Placement(transformation(extent = {{-140,-108},{-120,-88}})));
   Modelica.Electrical.Analog.Sources.ConstantVoltage battery(V = 15) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-130,-70})));
-  replaceable Blocks.TestCtrl3phPWM testCtrl3phPWM constrainedby Blocks.TestCtrl3ph annotation(Placement(transformation(extent = {{-120,-40},{-100,-20}})));
+  Blocks.TestCtrl3phPWM             testCtrl3phPWM                                  annotation(Placement(transformation(extent = {{-120,-40},{-100,-20}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points = {{-42,-22},{12,-22}}, color = {0,0,0}, smooth = Smooth.None));
   connect(fixed.flange,pMSM_ab.support) annotation(Line(points = {{-10,-86},{-10,76},{-30,76}}, color = {0,0,0}, smooth = Smooth.None));

@@ -2,6 +2,9 @@ HallDecode
 Triangular
 TestCtrl
 TestCtrl3ph
-TestCtrl3phPWM
+TestCtrl3phPWMold
 HalfBridgeCtrl
-PulseWidth
+TestCtrl3phPWM
+HalfBridgeLogic
+HalfBridgeDriver
+PulseWidthVar
