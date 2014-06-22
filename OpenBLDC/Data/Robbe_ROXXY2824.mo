@@ -1,4 +1,6 @@
 within OpenBLDC.Data;
+
+
 record Robbe_ROXXY2824 "Parameters of Robbe ROXXY 2824"
   extends Modelica.Icons.Record;
   parameter Modelica.SIunits.Torque tMax = 4.02896 "Maximum motor torque" annotation(Dialog(group = "Performance data"));
@@ -38,4 +40,3 @@ record Robbe_ROXXY2824 "Parameters of Robbe ROXXY 2824"
   parameter Real kp = Lsq / Tcl "Current controller proportional gain" annotation(Dialog(group = "Dependent data (no input possible)", enable = false));
   parameter Real ki = Rsq / Tcl "Current controller integral gain" annotation(Dialog(group = "Dependent data (no input possible)", enable = false));
 end Robbe_ROXXY2824;
-
