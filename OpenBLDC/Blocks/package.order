@@ -8,3 +8,5 @@ TestCtrl3phPWM
 HalfBridgeLogic
 HalfBridgeDriver
 PulseWidthVar
+SensorlessCtrl3phPWM
+DetectCommutation

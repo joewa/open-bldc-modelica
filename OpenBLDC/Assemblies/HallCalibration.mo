@@ -53,7 +53,8 @@ equation
   connect(testCtrl3phPWM.lCtrl, inverter3ph.ctrl_l) annotation(Line(points = {{-100, -36}, {-88, -36}, {-88, -59.4}}, color = {255, 0, 255}, smooth = Smooth.None));
   connect(testCtrl3phPWM.hCtrl, inverter3ph.ctrl_h) annotation(Line(points = {{-100, -24}, {-92, -24}, {-92, -59.4}}, color = {255, 0, 255}, smooth = Smooth.None));
   connect(hallDecode.y[1], testCtrl3phPWM.angle) annotation(Line(points = {{74, -22}, {82, -22}, {82, -110}, {-152, -110}, {-152, -30}, {-120, -30}}, color = {0, 0, 127}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-200, -200}, {100, 100}}), graphics), Documentation(info = "<html>
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
+            -200},{100,100}}),                                                                           graphics), Documentation(info = "<html>
     <p>This model demonstrates how to do the placement of the hall sensors with the induced phase current.</p>
     </html>"));
 end HallCalibration;
