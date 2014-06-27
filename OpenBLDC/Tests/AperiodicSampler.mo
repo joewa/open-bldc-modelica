@@ -1,6 +1,4 @@
 within OpenBLDC.Tests;
-
-
 model AperiodicSampler
   extends BaseSampler;
   discrete Real nextSampling(start = 0);
