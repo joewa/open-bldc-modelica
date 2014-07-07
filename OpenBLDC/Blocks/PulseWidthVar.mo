@@ -1,5 +1,6 @@
 within OpenBLDC.Blocks;
-model PulseWidthVar "Generates a boolean pulse signal with adjustable pulse width and period"
+model PulseWidthVar
+  "Generates a boolean pulse signal with adjustable pulse width and period"
   extends Modelica.Blocks.Icons.DiscreteBlock;
   Modelica.Blocks.Interfaces.RealInput dutyCycle annotation(Placement(transformation(extent = {{-120,60},{-80,100}})));
   Modelica.Blocks.Interfaces.RealInput periodTime annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));

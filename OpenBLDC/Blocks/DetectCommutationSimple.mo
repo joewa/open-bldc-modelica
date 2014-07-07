@@ -1,7 +1,8 @@
 within OpenBLDC.Blocks;
 block DetectCommutationSimple "Detects sensorless when commutation is required"
   extends Modelica.Blocks.Icons.Block;
-  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005 "Delay commutation";
+  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
+    "Delay commutation";
   Real intBEMF(start = 0);
   Integer bridgeStateInt[3];
   Integer senseBridgeID;
@@ -38,5 +39,7 @@ equation
     reinit(intBEMF, Modelica.Constants.small);
   end when;
   y = if intBEMF < 0 and senseBEMF then true else false;
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics = {Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48, horizontalAlignment = TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48, horizontalAlignment = TextAlignment.Left, textString = "bridgeState")}));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left, textString = "bridgeState")}));
 end DetectCommutationSimple;

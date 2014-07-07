@@ -1,7 +1,8 @@
 within OpenBLDC.Blocks;
 block DetectCommutation "Detects sensorless when commutation is required"
   extends Modelica.Blocks.Icons.Block;
-  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005 "Delay commutation";
+  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
+    "Delay commutation";
   Real intBEMF(start = 0);
   Modelica.Blocks.Interfaces.BooleanInput pulses[3] "PWM signal" annotation(Placement(transformation(extent = {{-120,20},{-80,60}})));
   Modelica.Blocks.Interfaces.RealInput bridgeState[3] annotation(Placement(transformation(extent = {{-120,-60},{-80,-20}})));
@@ -35,5 +36,7 @@ equation
   connect(gain.y,phaseBEMF[1].u2) annotation(Line(points = {{-8.5,-83},{-28,-83},{-28,-64.40000000000001}}, color = {0,0,127}, smooth = Smooth.None));
   connect(gain.y,phaseBEMF[2].u2) annotation(Line(points = {{-8.5,-83},{-28,-83},{-28,-64.40000000000001}}, color = {0,0,127}, smooth = Smooth.None));
   connect(gain.y,phaseBEMF[3].u2) annotation(Line(points = {{-8.5,-83},{-28,-83},{-28,-64.40000000000001}}, color = {0,0,127}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{200,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics = {Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48, horizontalAlignment = TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48, horizontalAlignment = TextAlignment.Left, textString = "bridgeState")}));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{200,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left, textString = "bridgeState")}));
 end DetectCommutation;

@@ -12,3 +12,6 @@ SensorlessCtrl3phPWM
 DetectCommutation
 DetectCommutationSimple
 SensorlessCtrl3phStateGraph
+SensorlessCtrl3phStateGraphNG
+PhaseDiffVoltage
+CatchStart
