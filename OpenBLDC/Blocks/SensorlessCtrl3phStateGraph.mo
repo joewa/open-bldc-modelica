@@ -15,7 +15,7 @@ block SensorlessCtrl3phStateGraph "Commutation applying PWM"
             {-10,-62}})));
   Modelica.Blocks.Sources.Constant const2[3](each k = 2.5e-005) annotation(Placement(transformation(extent={{-90,-82},
             {-70,-62}})));
-  Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y = 1) annotation(Placement(transformation(extent={{122,-16},
+  Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y=1)   annotation(Placement(transformation(extent={{122,-16},
             {142,4}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression[3](each y = time > Modelica.Constants.small) annotation(Placement(transformation(extent={{-60,
             -100},{-40,-80}})));
@@ -83,8 +83,8 @@ equation
           54,-100},{60,-100}},                                                                        color = {0,0,127}, smooth = Smooth.None));
   connect(detectCommutationSimple.v,v) annotation(Line(points={{46,-52},{46,-82},
           {0,-82},{0,-100}},                                                                          color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.y,transitionWithSignal.condition) annotation(Line(points={{60,-42},
-          {74,-42},{74,-26}},                                                                                              color = {255,0,255}, smooth = Smooth.None));
+  connect(detectCommutationSimple.y,transitionWithSignal.condition) annotation(Line(points={{60,-46},
+          {74,-46},{74,-26}},                                                                                              color = {255,0,255}, smooth = Smooth.None));
   connect(initialStep.outPort[1],transitionWithSignal1.inPort) annotation(Line(points={{-33.5,
           -14},{-24,-14}},                                                                                       color = {0,0,0}, smooth = Smooth.None));
   connect(booleanExpression1.y,transitionWithSignal1.condition) annotation(Line(points={{-23,-36},

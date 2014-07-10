@@ -15,3 +15,4 @@ SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
 PhaseDiffVoltage
 CatchStart
+CommutationCounter
