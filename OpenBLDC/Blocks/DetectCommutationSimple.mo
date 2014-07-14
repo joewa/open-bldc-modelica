@@ -4,8 +4,8 @@ block DetectCommutationSimple "Detects sensorless when commutation is required"
   parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
     "Delay commutation";
   parameter Real minEMF = 0.5 "Minimum EMF for good speed";
-  Real intBEMF(start = 0) "int(BEMF)!";
-  Real maxBEMF(start = 0) "Max EMF in this cycle";
+  Real intBEMF "int(BEMF)!";
+  Real maxBEMF "Max EMF in this cycle";
   Integer bridgeStateInt[3];
   Integer senseBridgeID;
   Real senseBridgeSign;
@@ -20,6 +20,9 @@ block DetectCommutationSimple "Detects sensorless when commutation is required"
   Modelica.Blocks.Interfaces.BooleanOutput speedOK(start=false)
     "Sufficient EMF for good commutation"
     annotation (Placement(transformation(extent={{90,30},{110,50}})));
+initial equation
+  intBEMF = 0;
+  maxBEMF = 0;
 equation
   if bridgeStateInt[1] == 0 and bridgeStateInt[2] == (-1) and bridgeStateInt[3] == 1 then
     senseBridgeID = 1;

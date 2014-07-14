@@ -2,7 +2,7 @@ within OpenBLDC.Blocks;
 block CommutationCounter
   "Counts up angular position in BLDC sensorless control mode"
   extends Modelica.Blocks.Icons.Block;
-  Real dir(start=0);
+  Real dir; // besser discrete machen? Wie dann mit phi?
 
   Modelica.Blocks.Interfaces.BooleanInput resetCounter
     "Reset counter with phi0"
@@ -25,23 +25,30 @@ block CommutationCounter
         origin={40,100})));
   Modelica.Blocks.Interfaces.BooleanOutput pwmActive
     annotation (Placement(transformation(extent={{90,-70},{110,-50}})));
+initial equation
+  dir = 0;
+  phi = 0;
+  pwmActive = false;
 equation
-  when initial() then
-    phi = 0;
-    dir = 0;
-    pwmActive = false;//fill(false, 3);
-  elsewhen resetCounter then
-    phi = pre(phi0); // at resetCounter pre() breaks an algebraic loop
-    dir = pre(dir0); // at resetCounter pre() breaks an algebraic loop
-    pwmActive = false;//fill(false, 3);
+  //when initial() then
+  //  phi =0;
+  //  dir =0;
+  //  pwmActive =false;//fill(false, 3);
+  der(phi)=0;
+  der(dir)=0;
+  when resetCounter then
+    reinit(phi,phi0);//phi = phi0; // at resetCounter pre() breaks an algebraic loop
+    reinit(dir,dir0);//dir = dir0; // at resetCounter pre() breaks an algebraic loop
+    pwmActive = true;//fill(false, 3);
   elsewhen commutate then
-    phi = mod(pre(phi) - 1 + dir, 6) + 1;
-    dir = pre(dir);
+    reinit(phi, mod(pre(phi) - 1 + dir, 6) + 1);
+    //dir = pre(dir);
+    //phi := mod(phi -1 + dir, 6) + 1;
     pwmActive = true;//fill(true, 3);
   elsewhen shutdown then
-    phi = 0;
-    dir = 0;
-    pwmActive = false;//fill(false, 3);
+    reinit(phi,0);//phi = 0;
+    reinit(dir,0);//dir = 0;
+    pwmActive =false;//fill(false, 3);
   end when;
   // PWM startet bei reset
   // Hier noch einen Eingang zum Ausschalten des PWM (phi=0) einfuegen.

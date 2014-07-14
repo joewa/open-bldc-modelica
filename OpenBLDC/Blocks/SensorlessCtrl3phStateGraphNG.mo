@@ -185,10 +185,6 @@ equation
       points={{-147.5,-20.25},{-130,-20.25},{-130,-20},{-132,-20}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(catched.outPort, startRunning.inPort[1]) annotation (Line(
-      points={{-126.5,-20},{-115,-20}},
-      color={0,0,0},
-      smooth=Smooth.None));
   connect(catchStart.y, commutationCounter.phi0) annotation (Line(
       points={{-134,-60},{-76,-60}},
       color={0,0,127},
@@ -249,6 +245,10 @@ equation
   connect(commutationCounter.phi, combiTable1Ds.u) annotation (Line(
       points={{-56,-60},{-20,-60}},
       color={0,0,127},
+      smooth=Smooth.None));
+  connect(catched.outPort, startRunning.inPort[1]) annotation (Line(
+      points={{-126.5,-20},{-115,-20}},
+      color={0,0,0},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,
             -100},{240,100}}),                                                                        graphics), Icon(coordinateSystem(extent={{-280,
