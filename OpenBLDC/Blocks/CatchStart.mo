@@ -41,7 +41,7 @@ block CatchStart "Check if motor is rotating and get position"
     y_start=0,
     T=0.1e-3)  annotation (Placement(transformation(extent={{0,26},{20,46}})));
   Modelica.Blocks.Interfaces.RealOutput dir(start=0) "Direction of rotation"
-    annotation (Placement(transformation(extent={{90,-70},{110,-50}})));
+    annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
   Modelica.Blocks.Interfaces.BooleanInput tryToCatch
     annotation (Placement(transformation(extent={{-120,-100},{-80,-60}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot
@@ -101,6 +101,11 @@ block CatchStart "Check if motor is rotating and get position"
     annotation (Placement(transformation(extent={{12,-10},{32,10}})));
   HallDecode hallDecode1
     annotation (Placement(transformation(extent={{58,-10},{78,10}})));
+  Modelica.Blocks.Interfaces.RealOutput KV(start=0)
+    "Measured motor KV assuming one pole pair"
+    annotation (Placement(transformation(extent={{90,-90},{110,-70}})));
+  Modelica.Blocks.Sources.Constant putSomeCodeHere
+    annotation (Placement(transformation(extent={{60,-148},{80,-128}})));
 equation
   when catchStep1.active then
     halltemp = hallDecode.y[1];
@@ -248,6 +253,10 @@ equation
       smooth=Smooth.None));
   connect(hallDecode1.y[1], y) annotation (Line(
       points={{78,0},{100,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(putSomeCodeHere.y, KV) annotation (Line(
+      points={{81,-138},{88,-138},{88,-80},{100,-80}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,

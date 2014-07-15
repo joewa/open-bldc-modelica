@@ -1,5 +1,6 @@
 within OpenBLDC.Blocks;
-block DetectCommutationSimple "Detects sensorless when commutation is required"
+block DetectCommutationZeroCrossing
+  "Detects sensorless when commutation is required by zero crossings"
   extends Modelica.Blocks.Icons.Block;
   parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
     "Delay commutation";
@@ -59,4 +60,4 @@ equation
             -100},{100,100}}),                                                                        graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48,
             horizontalAlignment =                                                                                                    TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
             horizontalAlignment =                                                                                                    TextAlignment.Left, textString = "bridgeState")}));
-end DetectCommutationSimple;
+end DetectCommutationZeroCrossing;

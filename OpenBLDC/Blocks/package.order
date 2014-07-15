@@ -10,7 +10,8 @@ HalfBridgeDriver
 PulseWidthVar
 SensorlessCtrl3phPWM
 DetectCommutation
-DetectCommutationSimple
+DetectCommutationIntBEMF
+DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
 PhaseDiffVoltage

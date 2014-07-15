@@ -32,8 +32,8 @@ block SensorlessCtrl3phStateGraph "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer=
         true, waitTime=DelayCommutation/2)                      annotation(Placement(transformation(extent={{64,-24},
             {84,-4}})));
-  DetectCommutationSimple detectCommutationSimple annotation(Placement(transformation(extent={{40,-52},
-            {60,-32}})));
+  DetectCommutationIntBEMF detectCommutationSimple
+    annotation (Placement(transformation(extent={{40,-52},{60,-32}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent={{200,80},
             {220,100}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression1(each y = chAngle) annotation(Placement(transformation(extent={{-44,-46},

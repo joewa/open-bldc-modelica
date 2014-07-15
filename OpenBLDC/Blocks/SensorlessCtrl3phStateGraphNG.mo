@@ -35,8 +35,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer=
         true, waitTime=DelayCommutation/2)                      annotation(Placement(transformation(extent={{72,-6},
             {92,14}})));
-  DetectCommutationSimple detectCommutationSimple annotation(Placement(transformation(extent={{40,-56},
-            {60,-36}})));
+  replaceable DetectCommutationIntBEMF detectCommutationSimple
+    annotation (Placement(transformation(extent={{40,-56},{60,-36}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent={{200,80},
             {220,100}})));
   Modelica.StateGraph.Transition           speedOK(enableTimer=false, condition=
@@ -190,7 +190,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(catchStart.dir, commutationCounter.dir0) annotation (Line(
-      points={{-134,-66},{-76,-66}},
+      points={{-134,-64},{-76,-64}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(startRunning.active, commutationCounter.resetCounter) annotation (
@@ -249,6 +249,10 @@ equation
   connect(catched.outPort, startRunning.inPort[1]) annotation (Line(
       points={{-126.5,-20},{-115,-20}},
       color={0,0,0},
+      smooth=Smooth.None));
+  connect(catchStart.KV, commutationCounter.KV0) annotation (Line(
+      points={{-134,-68},{-76,-68}},
+      color={0,0,127},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,
             -100},{240,100}}),                                                                        graphics), Icon(coordinateSystem(extent={{-280,
