@@ -35,7 +35,7 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer=
         true, waitTime=DelayCommutation/2)                      annotation(Placement(transformation(extent={{72,-6},
             {92,14}})));
-  replaceable DetectCommutationIntBEMF detectCommutationSimple
+  replaceable DetectCommutationIntBEMF detectCommutation
     annotation (Placement(transformation(extent={{40,-56},{60,-36}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent={{200,80},
             {220,100}})));
@@ -107,18 +107,30 @@ equation
           {164,40}},                                                                                                    color = {255,127,0}, smooth = Smooth.None));
   connect(senseBEMF.outPort[1],transitionWithSignal.inPort) annotation(Line(points={{60.5,
           4.25},{70,4.25},{70,4},{78,4}},                                                                   color = {0,0,0}, smooth = Smooth.None));
-  connect(detectCommutationSimple.senseBEMF,senseBEMF.active) annotation(Line(points={{50,-36},
-          {50,-7}},                                                                                         color = {255,0,255}, smooth = Smooth.None));
-  connect(detectCommutationSimple.pulses,pulseWidth.y) annotation(Line(points={{40,-42},
-          {34,-42},{34,82},{20,82}},                                                                                  color = {255,0,255}, smooth = Smooth.None));
-  connect(detectCommutationSimple.bridgeState,combiTable1Ds.y) annotation(Line(points={{40,-50},
-          {28,-50},{28,-60},{3,-60}},                                                                                       color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.v_dc,v_dc) annotation(Line(points={{54,-56},{
-          54,-100},{60,-100}},                                                                        color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.v,v) annotation(Line(points={{46,-56},{46,-82},
-          {0,-82},{0,-100}},                                                                          color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.y,transitionWithSignal.condition) annotation(Line(points={{60,-50},
-          {82,-50},{82,-8}},                                                                                               color = {255,0,255}, smooth = Smooth.None));
+  connect(detectCommutation.senseBEMF, senseBEMF.active) annotation (Line(
+      points={{50,-36},{50,-7}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(detectCommutation.pulses, pulseWidth.y) annotation (Line(
+      points={{40,-42},{34,-42},{34,82},{20,82}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(detectCommutation.bridgeState, combiTable1Ds.y) annotation (Line(
+      points={{40,-50},{28,-50},{28,-60},{3,-60}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(detectCommutation.v_dc, v_dc) annotation (Line(
+      points={{54,-56},{54,-100},{60,-100}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(detectCommutation.v, v) annotation (Line(
+      points={{46,-56},{46,-82},{0,-82},{0,-100}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(detectCommutation.y, transitionWithSignal.condition) annotation (Line(
+      points={{60,-50},{82,-50},{82,-8}},
+      color={255,0,255},
+      smooth=Smooth.None));
   connect(pulseWidth[1].dutyCycle, dutyCycle) annotation (Line(
       points={{0,90},{-140,90},{-140,80},{-280,80}},
       color={0,0,127},
