@@ -14,9 +14,9 @@ model PMSM "3ph-PMSM stator frame model"
     "Electrical angle between 2 phases";
   parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
     "Back EMF constant of one single phase (peak value) [VS/rad]";
-  parameter SIunits.Current I_a_0 = 0 "Initial current of phase a";
-  parameter SIunits.Current I_b_0 = 0 "Initial current of phase b";
-  parameter SIunits.Current I_c_0 = 0 "Initial current of phase c";
+  //parameter SIunits.Current I_a_0 = 0 "Initial current of phase a";
+  //parameter SIunits.Current I_b_0 = 0 "Initial current of phase b";
+  //parameter SIunits.Current I_c_0 = 0 "Initial current of phase c";
 
   SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
   output SIunits.Angle phiMechanical = flange.phi - support.phi;
@@ -50,9 +50,9 @@ model PMSM "3ph-PMSM stator frame model"
   Analog.Interfaces.Pin c2 annotation(extent = [-110,-106;-90,-86]);
   Rotational.Interfaces.Flange_a flange annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   Rotational.Interfaces.Support support annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
-initial equation
-  l_a.i = I_a_0;
-  l_b.i = I_b_0;
+//initial equation
+  //l_a.i = I_a_0;
+  //l_b.i = I_b_0;
   //l_c.i = I_c_0;
 equation
   connect(a2,r_a.p);

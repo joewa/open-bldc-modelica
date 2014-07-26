@@ -6,6 +6,7 @@ block CatchStart "Check if motor is rotating and get position"
   parameter Real CatchWaitTime = 0.1e-3 "Wait time to prevent jitter";
   Real halltemp(start=0) "Temporary angle for direction detection";
   //HallDecode hallDecodeCorrected "Corrected value if rotation direction is negative";
+  Real time_zc1(start=0) "Time when first zero crossing occured";
 
   Modelica.Blocks.Interfaces.RealInput v[3] "Voltage at motor terminals"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
@@ -20,7 +21,7 @@ block CatchStart "Check if motor is rotating and get position"
     annotation (Placement(transformation(extent={{-32,-50},{-12,-30}})));
   Modelica.Blocks.Math.Feedback feedback
     annotation (Placement(transformation(extent={{-26,26},{-6,46}})));
-  Modelica.Blocks.Math.MinMax minMax(nu=3)
+  Modelica.Blocks.Math.MinMax minMaxVoltage(nu=3)
     annotation (Placement(transformation(extent={{-50,20},{-30,40}})));
   Modelica.Blocks.Math.IntegerChange integerChange
     annotation (Placement(transformation(extent={{24,-50},{44,-30}})));
@@ -104,15 +105,15 @@ block CatchStart "Check if motor is rotating and get position"
   Modelica.Blocks.Interfaces.RealOutput KV(start=0)
     "Measured motor KV assuming one pole pair"
     annotation (Placement(transformation(extent={{90,-90},{110,-70}})));
-  Modelica.Blocks.Sources.Constant putSomeCodeHere
-    annotation (Placement(transformation(extent={{60,-148},{80,-128}})));
 equation
-  when catchStep1.active then
+  when wait1.active then
     halltemp = hallDecode.y[1];
+    time_zc1 = time;
   end when;
-  when catchStep2.active then
+  when wait2.active then
     dir = if mod(hallDecode.y[1] - halltemp, 6) < 3 then mod(hallDecode.y[1] - halltemp, 6) else mod(hallDecode.y[1] - halltemp, 6) - 6;
     //dir = mod(hallDecode.y[1] - halltemp, 6);
+    KV = (minMaxVoltage.yMax - minMaxVoltage.yMin) / (2 * cos(Modelica.Constants.pi/6)) * 6*(time - time_zc1);
   end when;
   product.u2 = fill(dir,3);
   // Correction of decoded hall value in case dir = -1
@@ -135,11 +136,11 @@ equation
       points={{-41,-40},{-32,-40}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(minMax.yMax, feedback.u1) annotation (Line(
+  connect(minMaxVoltage.yMax, feedback.u1) annotation (Line(
       points={{-29,36},{-24,36}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(minMax.yMin, feedback.u2) annotation (Line(
+  connect(minMaxVoltage.yMin, feedback.u2) annotation (Line(
       points={{-29,24},{-16,24},{-16,28}},
       color={0,0,127},
       smooth=Smooth.None));
@@ -235,7 +236,7 @@ equation
       points={{-56,0},{-50,0},{-50,6},{-46,6}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(phaseDiffVoltage.y, minMax.u[1:3]) annotation (Line(
+  connect(phaseDiffVoltage.y, minMaxVoltage.u[1:3]) annotation (Line(
       points={{-56,0},{-54,0},{-54,25.3333},{-50,25.3333}},
       color={0,0,127},
       smooth=Smooth.None));
@@ -255,11 +256,16 @@ equation
       points={{78,0},{100,0}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(putSomeCodeHere.y, KV) annotation (Line(
-      points={{81,-138},{88,-138},{88,-80},{100,-80}},
-      color={0,0,127},
-      smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -140},{100,100}}), graphics), Icon(coordinateSystem(extent={{-100,-140},
-            {100,100}})));
+            {100,100}})),
+    Documentation(info="<html>
+<p>This block &QUOT;catches&QUOT; a rotating BLDC motor measuring its electrical angle to which is required as initial value to start the sensorless commutation algorithm. The result is corresponds to a hall sensor measurement. Furthermore the voltage constant KV of the (one pole pair equivalent) motor is determined.</p>
+<p>The algorithm looks for zero crossings of the difference of the three terminal voltages. When a zero crossing occurs, the electrical angle is known. To determine the direction of rotation, dir, two consequtive zero crossings are required.</p>
+<p>The voltage constant can be determined by either measuring the maximum difference voltage of one the phases between two zero crossings or by measuring the voltages at a zero crossing applying the following equation:</p>
+<p>V_max = max(all phases) - min(all phases) / (2*cos(pi/6)).</p>
+<p>Then the voltage constant KV can be calculated using the duration between the two zero crossings.</p>
+<p>KV = V_max * 6 * (time-time_zc1).</p>
+<p>Note that this is the equivalent KV for a 1 pole pair delta connected motor.</p>
+</html>"));
 end CatchStart;
