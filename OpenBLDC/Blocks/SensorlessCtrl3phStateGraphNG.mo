@@ -1,7 +1,7 @@
 within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
-  parameter Modelica.SIunits.Duration DelayCommutation = 3e-5
+  parameter Modelica.SIunits.Duration DelayCommutation = 5e-5
     "Delay commutation";
   parameter Modelica.SIunits.Duration TimeoutCommutation = 10e-3
     "Motor has stopped when Timeout"; // das noch an der induzierten Spannung festmachen
@@ -33,9 +33,10 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
                                                annotation(Placement(transformation(extent={{40,-6},
             {60,14}})));
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer=
-        true, waitTime=DelayCommutation/2)                      annotation(Placement(transformation(extent={{72,-6},
+        true, waitTime=DelayCommutation)                        annotation(Placement(transformation(extent={{72,-6},
             {92,14}})));
-  replaceable DetectCommutationIntBEMF detectCommutation
+  replaceable DetectCommutationIntBEMF detectCommutation(DelayCommutation=
+        DelayCommutation)
     annotation (Placement(transformation(extent={{40,-56},{60,-36}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent={{200,80},
             {220,100}})));
@@ -59,7 +60,7 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal catched "Catching successful"
     annotation (Placement(transformation(extent={{-138,-30},{-118,-10}})));
   CatchStart catchStart
-    annotation (Placement(transformation(extent={{-154,-74},{-134,-50}})));
+    annotation (Placement(transformation(extent={{-152,-74},{-132,-50}})));
   Modelica.StateGraph.Transition firstAction(
     enableTimer=true,
     condition=true,
@@ -120,11 +121,11 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(detectCommutation.v_dc, v_dc) annotation (Line(
-      points={{54,-56},{54,-100},{60,-100}},
+      points={{56,-56},{56,-100},{60,-100}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(detectCommutation.v, v) annotation (Line(
-      points={{46,-56},{46,-82},{0,-82},{0,-100}},
+      points={{50,-56},{50,-82},{0,-82},{0,-100}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(detectCommutation.y, transitionWithSignal.condition) annotation (Line(
@@ -160,7 +161,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(v, catchStart.v) annotation (Line(
-      points={{0,-100},{0,-86},{-162,-86},{-162,-60},{-154,-60}},
+      points={{0,-100},{0,-86},{-162,-86},{-162,-60},{-152,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(stepIncrement.outPort[1], speedOK.inPort) annotation (Line(
@@ -177,7 +178,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(catching.active, catchStart.tryToCatch) annotation (Line(
-      points={{-158,-31},{-158,-68},{-154,-68}},
+      points={{-158,-31},{-158,-68},{-152,-68}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(firstAction.outPort, catching.inPort[1]) annotation (Line(
@@ -185,7 +186,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(catchStart.running, catched.condition) annotation (Line(
-      points={{-134,-54},{-128,-54},{-128,-32}},
+      points={{-132,-54},{-128,-54},{-128,-32}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(catching.outPort[1], transLoop.inPort) annotation (Line(
@@ -198,11 +199,11 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(catchStart.y, commutationCounter.phi0) annotation (Line(
-      points={{-134,-60},{-76,-60}},
+      points={{-132,-60},{-76,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(catchStart.dir, commutationCounter.dir0) annotation (Line(
-      points={{-134,-64},{-76,-64}},
+      points={{-132,-64},{-76,-64}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(startRunning.active, commutationCounter.resetCounter) annotation (
@@ -254,16 +255,20 @@ equation
       points={{-66.5,46},{-256,46},{-256,-48},{-246,-48}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(commutationCounter.phi, combiTable1Ds.u) annotation (Line(
-      points={{-56,-60},{-20,-60}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(catched.outPort, startRunning.inPort[1]) annotation (Line(
       points={{-126.5,-20},{-115,-20}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(catchStart.KV, commutationCounter.KV0) annotation (Line(
-      points={{-134,-68},{-76,-68}},
+      points={{-132,-68},{-76,-68}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(commutationCounter.KV, detectCommutation.KV) annotation (Line(
+      points={{-66,-70},{-66,-74},{42,-74},{42,-56}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(commutationCounter.phi, combiTable1Ds.u) annotation (Line(
+      points={{-56,-60},{-20,-60}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,

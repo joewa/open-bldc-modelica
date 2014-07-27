@@ -3,7 +3,7 @@ block CommutationCounter
   "Counts up angular position in BLDC sensorless control mode"
   extends Modelica.Blocks.Icons.Block;
   Real dir; // besser discrete machen? Wie dann mit phi?
-  Real KV "Memory of motor KV";
+//  Real KV "Memory of motor KV";
 
   Modelica.Blocks.Interfaces.BooleanInput resetCounter
     "Reset counter with phi0"
@@ -28,6 +28,11 @@ block CommutationCounter
     annotation (Placement(transformation(extent={{90,-70},{110,-50}})));
   Modelica.Blocks.Interfaces.RealInput KV0 "Motor KV"
     annotation (Placement(transformation(extent={{-120,-100},{-80,-60}})));
+  Modelica.Blocks.Interfaces.RealOutput KV(start=0) "Motor voltage constant"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={0,-100})));
 initial equation
   dir = 0;
   phi = 0;
