@@ -3,8 +3,7 @@ model HallSensor_Test "Hall sensor mounted on a shaft"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
-  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
-                                                                                             smpm annotation(Placement(transformation(extent = {{-36,-12},{-16,8}})));
+  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet smpm annotation(Placement(transformation(extent = {{-36,-12},{-16,8}})));
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{-32,-64},{-12,-44}})));
   Sensors.HallDigital123 hallDigital123 annotation(Placement(transformation(extent = {{12,-38},{32,-18}})));
 equation

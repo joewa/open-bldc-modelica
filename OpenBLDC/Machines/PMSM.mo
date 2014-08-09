@@ -10,14 +10,11 @@ model PMSM "3ph-PMSM stator frame model"
   parameter SIunits.Resistance R_p = 0.54 "Per phase resistance";
   parameter SIunits.Inductance L_p = 0.00145 "Per phase inductance";
   parameter Integer ppz = 1 "Pairs of poles";
-  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
-    "Electrical angle between 2 phases";
-  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
-    "Back EMF constant of one single phase (peak value) [VS/rad]";
+  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi "Electrical angle between 2 phases";
+  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04 "Back EMF constant of one single phase (peak value) [VS/rad]";
   //parameter SIunits.Current I_a_0 = 0 "Initial current of phase a";
   //parameter SIunits.Current I_b_0 = 0 "Initial current of phase b";
   //parameter SIunits.Current I_c_0 = 0 "Initial current of phase c";
-
   SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
   output SIunits.Angle phiMechanical = flange.phi - support.phi;
   output SIunits.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
@@ -50,7 +47,7 @@ model PMSM "3ph-PMSM stator frame model"
   Analog.Interfaces.Pin c2 annotation(extent = [-110,-106;-90,-86]);
   Rotational.Interfaces.Flange_a flange annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   Rotational.Interfaces.Support support annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
-//initial equation
+  //initial equation
   //l_a.i = I_a_0;
   //l_b.i = I_b_0;
   //l_c.i = I_c_0;
@@ -70,9 +67,9 @@ equation
   flux_a = psi_m * cos(phiElectrical + 0 * ang_p);
   flux_b = psi_m * cos(phiElectrical + 1 * ang_p);
   flux_c = psi_m * cos(phiElectrical + 2 * ang_p);
-  u_a.v = -wElectrical * flux_a;
-  u_b.v = -wElectrical * flux_b;
-  u_c.v = -wElectrical * flux_c;
+  u_a.v = wElectrical * flux_a;
+  u_b.v = wElectrical * flux_b;
+  u_c.v = wElectrical * flux_c;
   tau_a = ppz * flux_a * a2.i;
   tau_b = ppz * flux_b * b2.i;
   tau_c = ppz * flux_c * c2.i;

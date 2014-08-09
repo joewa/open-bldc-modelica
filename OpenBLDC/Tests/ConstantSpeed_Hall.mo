@@ -3,8 +3,7 @@ model ConstantSpeed_Hall "Constant speed demonstrate hall sensor commutation"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
-  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
-                                                                                             smpm annotation(Placement(transformation(extent = {{-36,-12},{-16,8}})));
+  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet smpm annotation(Placement(transformation(extent = {{-36,-12},{-16,8}})));
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{-44,-50},{-24,-30}})));
   Sensors.HallDigital123 hallDigital123_1 annotation(Placement(transformation(extent = {{12,-38},{32,-18}})));
 equation

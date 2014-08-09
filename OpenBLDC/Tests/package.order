@@ -1,5 +1,7 @@
 Commutation
 ConstantSpeed_Hall
+SensorlessMotorStart
+SensorMotorStart
 TestPWM
 BaseSampler
 AperiodicSampler
