@@ -1,7 +1,8 @@
 within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraph "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
-  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005 "Delay commutation";
+  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
+    "Delay commutation";
   Boolean chAngle;
   Integer intAngle;
   Modelica.Blocks.Interfaces.BooleanOutput hCtrl[3] annotation(Placement(transformation(extent = {{230,50},{250,70}}), iconTransformation(extent = {{80,50},{100,70}})));
@@ -24,7 +25,8 @@ block SensorlessCtrl3phStateGraph "Commutation applying PWM"
   Modelica.Blocks.Sources.BooleanExpression booleanExpression1(each y = chAngle) annotation(Placement(transformation(extent = {{-44,-46},{-24,-26}})));
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal1(enableTimer = false) annotation(Placement(transformation(extent = {{-30,-24},{-10,-4}})));
   Modelica.Blocks.Interfaces.RealInput dutyCycle "Commanded duty cycle" annotation(Placement(transformation(extent = {{-120,60},{-80,100}})));
-  Modelica.StateGraph.Transition delaySense(enableTimer = true, waitTime = DelayCommutation) "Wait some time until current crosses zero" annotation(Placement(transformation(extent = {{8,-24},{28,-4}})));
+  Modelica.StateGraph.Transition delaySense(enableTimer = true, waitTime = DelayCommutation)
+    "Wait some time until current crosses zero"                                                                                          annotation(Placement(transformation(extent = {{8,-24},{28,-4}})));
   Modelica.StateGraph.Step wait annotation(Placement(transformation(extent = {{-12,-24},{8,-4}})));
 equation
   intAngle = integer(angle);

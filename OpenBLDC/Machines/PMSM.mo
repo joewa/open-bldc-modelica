@@ -10,8 +10,10 @@ model PMSM "3ph-PMSM stator frame model"
   parameter SIunits.Resistance R_p = 0.54 "Per phase resistance";
   parameter SIunits.Inductance L_p = 0.00145 "Per phase inductance";
   parameter Integer ppz = 1 "Pairs of poles";
-  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi "Electrical angle between 2 phases";
-  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04 "Back EMF constant of one single phase (peak value) [VS/rad]";
+  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
+    "Electrical angle between 2 phases";
+  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
+    "Back EMF constant of one single phase (peak value) [VS/rad]";
   //parameter SIunits.Current I_a_0 = 0 "Initial current of phase a";
   //parameter SIunits.Current I_b_0 = 0 "Initial current of phase b";
   //parameter SIunits.Current I_c_0 = 0 "Initial current of phase c";

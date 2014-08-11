@@ -1,11 +1,13 @@
 within OpenBLDC.Blocks;
-block DetectCommutationZeroCrossingSimple "Detects sensorless when commutation is required by zero crossings"
+block DetectCommutationZeroCrossingSimple
+  "Detects sensorless when commutation is required by zero crossings"
   extends DetectCommutationPartial;
   Real maxBEMF "Max EMF in this cycle";
   //Modelica.Blocks.Logical.ZeroCrossing zeroCrossing;
   Real bemf;
   Boolean v_greaterthan0;
-  Real time2commutate(start = 0.006) "Duration when next commutation shall happen from last zero crossing";
+  Real time2commutate(start = 0.006)
+    "Duration when next commutation shall happen from last zero crossing";
   Real time_from_zc(start = -0.005) "Time from the last zero crossing";
 initial equation
   maxBEMF = 0;
@@ -33,5 +35,7 @@ elsewhen pre(v_greaterthan0) == true and v_greaterthan0 == false then
     // hier noch dir "richtige" Zeit bestimmen und die 0.00006 ersetzen!
   end when;
   y = if time_from_zc > time2commutate and senseBEMF then true else false;
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics = {Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48, horizontalAlignment = TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48, horizontalAlignment = TextAlignment.Left, textString = "bridgeState")}));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
+            horizontalAlignment =                                                                                                    TextAlignment.Left, textString = "bridgeState")}));
 end DetectCommutationZeroCrossingSimple;

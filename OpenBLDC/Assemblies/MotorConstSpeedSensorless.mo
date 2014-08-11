@@ -1,5 +1,6 @@
 within OpenBLDC.Assemblies;
-model MotorConstSpeedSensorless "Constant speed driven motor to sensorless hall sensor commutation"
+model MotorConstSpeedSensorless
+  "Constant speed driven motor to sensorless hall sensor commutation"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";

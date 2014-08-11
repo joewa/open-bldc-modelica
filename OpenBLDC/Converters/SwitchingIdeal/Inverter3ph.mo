@@ -23,7 +23,8 @@ model Inverter3ph "3-phase inverter (wrapper)"
   Modelica.Blocks.Interfaces.RealOutput v[m] "output voltage" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {0,-100})));
   Modelica.Blocks.Interfaces.RealOutput i[m] "output current" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {40,-100})));
   Modelica.Electrical.Analog.Sensors.VoltageSensor voltageSensor annotation(Placement(transformation(extent = {{-10,10},{10,-10}}, rotation = 270, origin = {-88,-16})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense(m = m, R = fill(13600.0, m)) "Impedance of voltage divider for phase voltage measurement" annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-32,-40})));
+  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense(m = m, R = fill(13600.0, m))
+    "Impedance of voltage divider for phase voltage measurement"                                                                                  annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-32,-40})));
 protected
   parameter Modelica.SIunits.Resistance ronSwitch[:] = fill(RonSwitch, m);
   parameter Modelica.SIunits.Conductance goffSwitch[:] = fill(GoffSwitch, m);

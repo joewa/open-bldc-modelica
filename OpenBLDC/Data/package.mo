@@ -1,4 +1,4 @@
 within OpenBLDC;
 package Data "Open BLDC data records"
-  extends Modelica.Icons.Record;
+  extends Icons.RecordPackage;
 end Data;

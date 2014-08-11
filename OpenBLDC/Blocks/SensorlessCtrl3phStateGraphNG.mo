@@ -1,8 +1,10 @@
 within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
-  parameter Modelica.SIunits.Duration DelayCommutation = 5e-005 "Delay commutation";
-  parameter Modelica.SIunits.Duration TimeoutCommutation = 0.01 "Motor has stopped when Timeout";
+  parameter Modelica.SIunits.Duration DelayCommutation = 5e-005
+    "Delay commutation";
+  parameter Modelica.SIunits.Duration TimeoutCommutation = 0.01
+    "Motor has stopped when Timeout";
   // das noch an der induzierten Spannung festmachen
   Boolean chAngle;
   Integer intAngle;
@@ -20,22 +22,28 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer = true, waitTime = 1e-007) annotation(Placement(transformation(extent = {{72,0},{92,20}})));
   replaceable DetectCommutationIntBEMF detectCommutation(DelayCommutation = DelayCommutation) annotation(Placement(transformation(extent = {{40,-32},{60,-12}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent = {{200,80},{220,100}})));
-  Modelica.StateGraph.Transition speedOK(enableTimer = false, condition = true) "Check speed?" annotation(Placement(transformation(extent = {{-50,0},{-30,20}})));
+  Modelica.StateGraph.Transition speedOK(enableTimer = false, condition = true)
+    "Check speed?"                                                                             annotation(Placement(transformation(extent = {{-50,0},{-30,20}})));
   Modelica.Blocks.Interfaces.RealInput dutyCycle "Commanded duty cycle" annotation(Placement(transformation(extent = {{-300,60},{-260,100}})));
-  Modelica.StateGraph.Transition delaySense(enableTimer = true, waitTime = DelayCommutation) "Wait some time until current crosses zero" annotation(Placement(transformation(extent = {{8,0},{28,20}})));
+  Modelica.StateGraph.Transition delaySense(enableTimer = true, waitTime = DelayCommutation)
+    "Wait some time until current crosses zero"                                                                                          annotation(Placement(transformation(extent = {{8,0},{28,20}})));
   Modelica.StateGraph.Step wait(nIn = 2) "Wait" annotation(Placement(transformation(extent = {{-18,0},{2,20}})));
   Modelica.StateGraph.StepWithSignal stepIncrement annotation(Placement(transformation(extent = {{-88,0},{-68,20}})));
-  Modelica.StateGraph.Transition catchTimeout(enableTimer = true, waitTime = 0.01, condition = true) "Timeout of catch start" annotation(Placement(transformation(extent = {{-138,24},{-158,44}})));
+  Modelica.StateGraph.Transition catchTimeout(enableTimer = true, waitTime = 0.01, condition = true)
+    "Timeout of catch start"                                                                                                  annotation(Placement(transformation(extent = {{-138,24},{-158,44}})));
   Modelica.StateGraph.TransitionWithSignal catched "Catching successful" annotation(Placement(transformation(extent = {{-138,-30},{-118,-10}})));
   CatchStart catchStart annotation(Placement(transformation(extent = {{-152,-74},{-132,-50}})));
   Modelica.StateGraph.Transition firstAction(enableTimer = true, condition = true, waitTime = 0.0001) annotation(Placement(transformation(extent = {{-202,-30},{-182,-10}})));
   Modelica.StateGraph.StepWithSignal catching(nOut = 2) annotation(Placement(transformation(extent = {{-168,-30},{-148,-10}})));
   CommutationCounter commutationCounter annotation(Placement(transformation(extent = {{-82,-70},{-62,-50}})));
-  Modelica.StateGraph.StepWithSignal startRunning "Initialize motor angle and start PWM" annotation(Placement(transformation(extent = {{-114,-30},{-94,-10}})));
+  Modelica.StateGraph.StepWithSignal startRunning
+    "Initialize motor angle and start PWM"                                               annotation(Placement(transformation(extent = {{-114,-30},{-94,-10}})));
   Modelica.StateGraph.Transition transition annotation(Placement(transformation(extent = {{-60,-30},{-40,-10}})));
   Modelica.StateGraph.Transition tooSlow(condition = true, enableTimer = true, waitTime = TimeoutCommutation) annotation(Placement(transformation(extent = {{86,-28},{106,-8}})));
-  Modelica.StateGraph.StepWithSignal shutDownMotor "Shutdown motor (because of stall)" annotation(Placement(transformation(extent = {{-46,42},{-66,62}})));
-  Modelica.StateGraph.Transition transLoop1(enableTimer = true, condition = true, waitTime = 0.001) "Timeout of catch start" annotation(Placement(transformation(extent = {{-252,-58},{-232,-38}})));
+  Modelica.StateGraph.StepWithSignal shutDownMotor
+    "Shutdown motor (because of stall)"                                                annotation(Placement(transformation(extent = {{-46,42},{-66,62}})));
+  Modelica.StateGraph.Transition transLoop1(enableTimer = true, condition = true, waitTime = 0.001)
+    "Timeout of catch start"                                                                                                 annotation(Placement(transformation(extent = {{-252,-58},{-232,-38}})));
   Modelica.StateGraph.StepWithSignal rampMotor "Open loop motor speed ramp up" annotation(Placement(transformation(extent = {{-170,44},{-190,24}})));
   PulseLogic pulseLogic annotation(Placement(transformation(extent = {{156,38},{176,58}})));
   PulseControlSelector pulseControlSelector annotation(Placement(transformation(extent = {{128,38},{148,58}})));

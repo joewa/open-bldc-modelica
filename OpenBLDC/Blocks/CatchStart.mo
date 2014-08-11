@@ -12,14 +12,16 @@ block CatchStart "Check if motor is rotating and get position"
   Integer KV_id(start = 1);
   Boolean hBool[3];
   Modelica.Blocks.Interfaces.RealInput v[3] "Voltage at motor terminals" annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
-  Modelica.Blocks.Interfaces.BooleanOutput running "Motor is running and position is actual" annotation(Placement(transformation(extent = {{90,50},{110,70}})));
+  Modelica.Blocks.Interfaces.BooleanOutput running
+    "Motor is running and position is actual"                                                annotation(Placement(transformation(extent = {{90,50},{110,70}})));
   Modelica.Blocks.Interfaces.RealOutput y "electrical angle" annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   PhaseDiffVoltage phaseDiffVoltage annotation(Placement(transformation(extent = {{-76,-10},{-56,10}})));
   HallDecode hallDecode annotation(Placement(transformation(extent = {{-32,-50},{-12,-30}})));
   Modelica.Blocks.Math.Feedback feedback annotation(Placement(transformation(extent = {{-26,26},{-6,46}})));
   Modelica.Blocks.Math.MinMax minMaxVoltage(nu = 3) annotation(Placement(transformation(extent = {{-50,20},{-30,40}})));
   Modelica.Blocks.Math.IntegerChange integerChange annotation(Placement(transformation(extent = {{24,-50},{44,-30}})));
-  Modelica.Blocks.Math.RealToBoolean hallBool[3](threshold = fill(0, 3)) "Emulate hall sensor" annotation(Placement(transformation(extent = {{-90,-50},{-70,-30}})));
+  Modelica.Blocks.Math.RealToBoolean hallBool[3](threshold = fill(0, 3))
+    "Emulate hall sensor"                                                                      annotation(Placement(transformation(extent = {{-90,-50},{-70,-30}})));
   Modelica.Blocks.Math.BooleanToReal hallReal[3] "Real value of hall sensor" annotation(Placement(transformation(extent = {{-62,-50},{-42,-30}})));
   Modelica.Blocks.Math.RealToInteger realToInteger annotation(Placement(transformation(extent = {{-4,-50},{16,-30}})));
   Modelica.Blocks.Logical.And and1 annotation(Placement(transformation(extent = {{58,-42},{78,-22}})));
@@ -41,10 +43,12 @@ block CatchStart "Check if motor is rotating and get position"
   Modelica.StateGraph.Step wait2 annotation(Placement(transformation(extent = {{52,-112},{72,-92}})));
   Modelica.StateGraph.Transition transition3(condition = true, enableTimer = true, waitTime = CatchWaitTime / 2) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {68,-70})));
   Modelica.Blocks.Math.Product product[3] annotation(Placement(transformation(extent = {{-44,-10},{-24,10}})));
-  Modelica.Blocks.Math.RealToBoolean realToBoolean1[3](threshold = fill(0, 3)) "Emulate hall sensor" annotation(Placement(transformation(extent = {{-16,-10},{4,10}})));
+  Modelica.Blocks.Math.RealToBoolean realToBoolean1[3](threshold = fill(0, 3))
+    "Emulate hall sensor"                                                                            annotation(Placement(transformation(extent = {{-16,-10},{4,10}})));
   Modelica.Blocks.Math.BooleanToReal hallReal1[3] "Real value of hall sensor" annotation(Placement(transformation(extent = {{12,-10},{32,10}})));
   HallDecode hallDecode1 annotation(Placement(transformation(extent = {{58,-10},{78,10}})));
-  Modelica.Blocks.Interfaces.RealOutput KV(start = 0) "Measured motor KV assuming one pole pair" annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
+  Modelica.Blocks.Interfaces.RealOutput KV(start = 0)
+    "Measured motor KV assuming one pole pair"                                                   annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
 equation
   //BEGIN KV Bestimmung durch Integration (Method 3)
   when catchStep1.active then

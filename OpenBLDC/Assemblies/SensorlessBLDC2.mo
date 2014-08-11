@@ -1,5 +1,6 @@
 within OpenBLDC.Assemblies;
-model SensorlessBLDC "Application of sensorless BLDC commutation"
+model SensorlessBLDC2
+  "Application of sensorless BLDC commutation (using MSL SM_PermanentMagnet)"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
@@ -19,6 +20,8 @@ model SensorlessBLDC "Application of sensorless BLDC commutation"
   replaceable Modelica.Blocks.Sources.Constant motorVoltageCommand(k = 0.85)
     "Replaceable motor voltage command"                                                                          annotation(Placement(transformation(extent = {{-192,-32},{-172,-12}})));
   Modelica.Mechanics.Rotational.Components.BearingFriction bearingFriction(tau_pos = [0,0.005]) annotation(Placement(transformation(extent = {{-38,-42},{-18,-22}})));
+  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
+                                                                                             smpm(useDamperCage = false, p = PPZ, Rs = 0.33 / 2, alpha20s(displayUnit = "1/K") = Modelica.Electrical.Machines.Thermal.Constants.alpha20Zero, Lmd = 3.5e-005 / 2, Lmq = 3.5e-005 / 2, Jr = 5e-005) annotation(Placement(transformation(extent = {{20,-78},{40,-58}})));
 equation
   connect(mechanicalLoad.flange,hallDigital123.flange) annotation(Line(points = {{-72,-16},{14,-16}}, color = {0,0,0}, smooth = Smooth.None));
   connect(hallDigital123.y,hallDecode.u) annotation(Line(points = {{34,-16},{42,-16}}, color = {0,0,127}, smooth = Smooth.None));
@@ -31,15 +34,20 @@ equation
   connect(ground2.p,battery.n) annotation(Line(points = {{-118,-88},{-118,-80}}, color = {0,0,255}, smooth = Smooth.None));
   connect(ground2.p,inverter3ph.p_n) annotation(Line(points = {{-118,-88},{-104,-88},{-104,-74},{-88,-74}}, color = {0,0,255}, smooth = Smooth.None));
   connect(battery.p,inverter3ph.p_p) annotation(Line(points = {{-118,-60},{-104,-60},{-104,-66},{-88,-66}}, color = {0,0,255}, smooth = Smooth.None));
-  connect(sensorlessCtrl3phPWM.hCtrl,inverter3ph.ctrl_h) annotation(Line(points = {{-144.296,-42.6667},{-80,-42.6667},{-80,-59.4}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(sensorlessCtrl3phPWM.lCtrl,inverter3ph.ctrl_l) annotation(Line(points = {{-144.296,-52.6667},{-76,-52.6667},{-76,-59.4}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(inverter3ph.v_dc,sensorlessCtrl3phPWM.v_dc) annotation(Line(points = {{-88,-78},{-92,-78},{-92,-112},{-145.407,-112},{-145.407,-56}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(inverter3ph.v,sensorlessCtrl3phPWM.v) annotation(Line(points = {{-78,-80},{-78,-120},{-147.63,-120},{-147.63,-56}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(hallDecode.y[1],sensorlessCtrl3phPWM.angle) annotation(Line(points = {{62,-16},{68,-16},{68,-140},{-170,-140},{-170,-47.6667},{-158,-47.6667}}, color = {0,0,127}, smooth = Smooth.None));
+  connect(sensorlessCtrl3phPWM.hCtrl,inverter3ph.ctrl_h) annotation(Line(points={{
+          -144.296,-42.6667},{-80,-42.6667},{-80,-59.4}},                                                                           color = {255,0,255}, smooth = Smooth.None));
+  connect(sensorlessCtrl3phPWM.lCtrl,inverter3ph.ctrl_l) annotation(Line(points={{
+          -144.296,-52.6667},{-76,-52.6667},{-76,-59.4}},                                                                           color = {255,0,255}, smooth = Smooth.None));
+  connect(inverter3ph.v_dc,sensorlessCtrl3phPWM.v_dc) annotation(Line(points={{-88,-78},
+          {-92,-78},{-92,-112},{-145.407,-112},{-145.407,-56}},                                                                                 color = {0,0,127}, smooth = Smooth.None));
+  connect(inverter3ph.v,sensorlessCtrl3phPWM.v) annotation(Line(points={{-78,-80},
+          {-78,-120},{-147.63,-120},{-147.63,-56}},                                                                           color = {0,0,127}, smooth = Smooth.None));
+  connect(hallDecode.y[1],sensorlessCtrl3phPWM.angle) annotation(Line(points={{62,-16},
+          {68,-16},{68,-140},{-170,-140},{-170,-47.6667},{-158,-47.6667}},                                                                                color = {0,0,127}, smooth = Smooth.None));
   connect(motorVoltageCommand.y,sensorlessCtrl3phPWM.dutyCycle) annotation(Line(points = {{-171,-22},{-164,-22},{-164,-41},{-158,-41}}, color = {0,0,127}, smooth = Smooth.None));
   connect(mechanicalLoad.flange,bearingFriction.flange_a) annotation(Line(points = {{-72,-16},{-56,-16},{-56,-32},{-38,-32}}, color = {0,0,0}, smooth = Smooth.None));
   connect(bearingFriction.flange_b,pMSM_run.flange) annotation(Line(points = {{-18,-32},{-10,-32},{-10,-70},{-18,-70}}, color = {0,0,0}, smooth = Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-200,-200},{100,100}}), graphics), Documentation(info = "<html>
     <p>This model demonstrates how to do the placement of the hall sensors with the induced phase current.</p>
     </html>"));
-end SensorlessBLDC;
+end SensorlessBLDC2;

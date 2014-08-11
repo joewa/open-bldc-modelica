@@ -4,7 +4,8 @@ block HalfBridgeLogic "Logics"
   Modelica.Blocks.Interfaces.BooleanOutput pin_IN annotation(Placement(transformation(extent = {{90,50},{110,70}})));
   Modelica.Blocks.Interfaces.BooleanOutput pin_SD annotation(Placement(transformation(extent = {{90,-70},{110,-50}})));
   Modelica.Blocks.Interfaces.RealInput val "0 or > 0 or < 0" annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
-  Modelica.Blocks.Interfaces.BooleanInput pulses "Pulses from the PWM generator" annotation(Placement(transformation(extent = {{-120,58},{-80,98}})));
+  Modelica.Blocks.Interfaces.BooleanInput pulses
+    "Pulses from the PWM generator"                                              annotation(Placement(transformation(extent = {{-120,58},{-80,98}})));
   Modelica.Blocks.Interfaces.IntegerInput pwm_Mode "Set the PWM mode" annotation(Placement(transformation(extent = {{-120,-100},{-80,-60}})));
 protected
   Boolean hPulse "Pulse to high side";
