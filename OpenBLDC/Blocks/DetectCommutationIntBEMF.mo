@@ -18,7 +18,7 @@ equation
     reinit(intBEMF, KV);
     //KV/30); // Wie berechnet man einen guten startwert?
     reinit(maxBEMF, 0);
-elsewhen maxBEMF < abs(v[senseBridgeID] - v_dc / 2) then
+  elsewhen maxBEMF < abs(v[senseBridgeID] - v_dc / 2) then
     // das ist fragwürdig
     reinit(maxBEMF, abs(v[senseBridgeID] - v_dc / 2));
   end when;

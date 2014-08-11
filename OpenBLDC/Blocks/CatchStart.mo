@@ -4,6 +4,8 @@ block CatchStart "Check if motor is rotating and get position"
   extends Modelica.Blocks.Icons.Block;
   parameter Real CatchMinVoltage = 0.5 "Minimum EMF for catch start";
   parameter Real CatchWaitTime = 0.0001 "Wait time to prevent jitter";
+  parameter Integer KV_Method = 3
+    "Selection of KV measurement method (now 2 or 3)";
   Real halltemp(start = 0) "Temporary angle for direction detection";
   //HallDecode hallDecodeCorrected "Corrected value if rotation direction is negative";
   Real time_zc1(start = 0) "Time when first zero crossing occured";
@@ -74,8 +76,12 @@ elsewhen change(hBool[3]) then
   when wait2.active then
     dir = if mod(hallDecode.y[1] - halltemp, 6) < 3 then mod(hallDecode.y[1] - halltemp, 6) else mod(hallDecode.y[1] - halltemp, 6) - 6;
     //dir = mod(hallDecode.y[1] - halltemp, 6);
-    //KV = (minMaxVoltage.yMax - minMaxVoltage.yMin) / (2 * cos(Modelica.Constants.pi/6)) * 6*(time - time_zc1); // Method 2
-    KV = abs(KVint) / 4;
+  end when;
+
+  when wait2.active and KV_Method == 2 then
+    KV = (minMaxVoltage.yMax - minMaxVoltage.yMin) / (2 * cos(Modelica.Constants.pi/6)) * 6*(time - time_zc1); // Method 2
+  elsewhen wait2.active and KV_Method == 3 then
+    KV = abs(KVint) / 4; //Method 3
   end when;
   product.u2 = fill(dir, 3);
   // Correction of decoded hall value in case dir = -1
@@ -108,7 +114,8 @@ elsewhen change(hBool[3]) then
   connect(wait2.outPort[1],transition3.inPort) annotation(Line(points = {{72.5,-102},{78,-102},{78,-70},{72,-70}}, color = {0,0,0}, smooth = Smooth.None));
   connect(transition3.outPort,stepWithSignal.inPort[1]) annotation(Line(points = {{66.5,-70},{53,-70}}, color = {0,0,0}, smooth = Smooth.None));
   connect(phaseDiffVoltage.y,product.u1) annotation(Line(points = {{-56,0},{-50,0},{-50,6},{-46,6}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(phaseDiffVoltage.y,minMaxVoltage.u[1:3]) annotation(Line(points = {{-56,0},{-54,0},{-54,25.3333},{-50,25.3333}}, color = {0,0,127}, smooth = Smooth.None));
+  connect(phaseDiffVoltage.y,minMaxVoltage.u[1:3]) annotation(Line(points={{-56,0},
+          {-54,0},{-54,25.3333},{-50,25.3333}},                                                                            color = {0,0,127}, smooth = Smooth.None));
   connect(product.y,realToBoolean1.u) annotation(Line(points = {{-23,0},{-18,0}}, color = {0,0,127}, smooth = Smooth.None));
   connect(realToBoolean1.y,hallReal1.u) annotation(Line(points = {{5,0},{10,0}}, color = {255,0,255}, smooth = Smooth.None));
   connect(hallReal1.y,hallDecode1.u) annotation(Line(points = {{33,0},{58,0}}, color = {0,0,127}, smooth = Smooth.None));

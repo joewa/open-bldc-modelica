@@ -31,11 +31,16 @@ equation
   connect(ground2.p,battery.n) annotation(Line(points = {{-118,-88},{-118,-80}}, color = {0,0,255}, smooth = Smooth.None));
   connect(ground2.p,inverter3ph.p_n) annotation(Line(points = {{-118,-88},{-104,-88},{-104,-74},{-88,-74}}, color = {0,0,255}, smooth = Smooth.None));
   connect(battery.p,inverter3ph.p_p) annotation(Line(points = {{-118,-60},{-104,-60},{-104,-66},{-88,-66}}, color = {0,0,255}, smooth = Smooth.None));
-  connect(sensorlessCtrl3phPWM.hCtrl,inverter3ph.ctrl_h) annotation(Line(points = {{-144.296,-42.6667},{-80,-42.6667},{-80,-59.4}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(sensorlessCtrl3phPWM.lCtrl,inverter3ph.ctrl_l) annotation(Line(points = {{-144.296,-52.6667},{-76,-52.6667},{-76,-59.4}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(inverter3ph.v_dc,sensorlessCtrl3phPWM.v_dc) annotation(Line(points = {{-88,-78},{-92,-78},{-92,-112},{-145.407,-112},{-145.407,-56}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(inverter3ph.v,sensorlessCtrl3phPWM.v) annotation(Line(points = {{-78,-80},{-78,-120},{-147.63,-120},{-147.63,-56}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(hallDecode.y[1],sensorlessCtrl3phPWM.angle) annotation(Line(points = {{62,-16},{68,-16},{68,-140},{-170,-140},{-170,-47.6667},{-158,-47.6667}}, color = {0,0,127}, smooth = Smooth.None));
+  connect(sensorlessCtrl3phPWM.hCtrl,inverter3ph.ctrl_h) annotation(Line(points={{
+          -144.296,-42.6667},{-80,-42.6667},{-80,-59.4}},                                                                           color = {255,0,255}, smooth = Smooth.None));
+  connect(sensorlessCtrl3phPWM.lCtrl,inverter3ph.ctrl_l) annotation(Line(points={{
+          -144.296,-52.6667},{-76,-52.6667},{-76,-59.4}},                                                                           color = {255,0,255}, smooth = Smooth.None));
+  connect(inverter3ph.v_dc,sensorlessCtrl3phPWM.v_dc) annotation(Line(points={{-88,-78},
+          {-92,-78},{-92,-112},{-145.407,-112},{-145.407,-56}},                                                                                 color = {0,0,127}, smooth = Smooth.None));
+  connect(inverter3ph.v,sensorlessCtrl3phPWM.v) annotation(Line(points={{-78,-80},
+          {-78,-120},{-147.63,-120},{-147.63,-56}},                                                                           color = {0,0,127}, smooth = Smooth.None));
+  connect(hallDecode.y[1],sensorlessCtrl3phPWM.angle) annotation(Line(points={{62,-16},
+          {68,-16},{68,-140},{-170,-140},{-170,-47.6667},{-158,-47.6667}},                                                                                color = {0,0,127}, smooth = Smooth.None));
   connect(motorVoltageCommand.y,sensorlessCtrl3phPWM.dutyCycle) annotation(Line(points = {{-171,-22},{-164,-22},{-164,-41},{-158,-41}}, color = {0,0,127}, smooth = Smooth.None));
   connect(mechanicalLoad.flange,bearingFriction.flange_a) annotation(Line(points = {{-72,-16},{-56,-16},{-56,-32},{-38,-32}}, color = {0,0,0}, smooth = Smooth.None));
   connect(bearingFriction.flange_b,pMSM_run.flange) annotation(Line(points = {{-18,-32},{-10,-32},{-10,-70},{-18,-70}}, color = {0,0,0}, smooth = Smooth.None));

@@ -17,7 +17,7 @@ block StartMotor "Select input 1 when true"
   Modelica.Blocks.Interfaces.RealInput dutyCycleIn "HAll angle" annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
 equation
   when rmpStart then
-    //change(rmpStart) then
+    //change(rmpStart) then //TODO "change(rmpStart)" causes problems in OpenModelica --> REPORT
     reinit(revolutions, 0.4);
     reinit(rev_per_sec, 0);
   end when;
