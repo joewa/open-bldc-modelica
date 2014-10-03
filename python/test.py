@@ -1,13 +1,17 @@
 # file: test.py
 #!/usr/bin/python
 import OMPython
-cmds =	["loadModel(Modelica)",
-	"model test end test;",
-	"loadFile(\"../OpenBLDC/package.mo\")",
-	"simulate(OpenBLDC.Assemblies.HallCalibration, stopTime=0.25)",
-	"plot(h)"]
+cmds =  ["loadModel(Modelica)",
+        "model test end test;",
+        "loadFile(\"../OpenBLDC/package.mo\")",
+        "simulate(OpenBLDC.Tests.TestPWM, fileNamePrefix=\"Result\", stopTime=0.25)",
+        "plotAll()"]
 
+_omc = OMPython.OMCSession()
 for cmd in cmds:
-	answer = OMPython.execute(cmd)
-	print "\nResult:\n%s" %answer
+        answer = _omc.sendExpression(cmd)
+        print "\nResult:\n%s" %answer
+        if not answer:
+                print _omc.sendExpression("getErrorString()")
+
 
