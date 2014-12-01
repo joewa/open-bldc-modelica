@@ -12,6 +12,7 @@ StartMotor
 SensorlessCtrl3phPWM
 DetectCommutationPartial
 DetectCommutationIntBEMF
+DetectCommutationIntBEMFext
 DetectCommutationZeroCrossingSimple
 DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph

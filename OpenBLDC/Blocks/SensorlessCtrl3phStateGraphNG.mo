@@ -18,7 +18,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.Blocks.Interfaces.RealInput v_dc "dc link voltage" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 90, origin = {60,-100})));
   Modelica.Blocks.Interfaces.RealInput v[3] "voltage per phase" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 90, origin = {0,-100})));
   Modelica.StateGraph.InitialStep initialStep(nOut = 1, nIn = 2) annotation(Placement(transformation(extent = {{-228,-30},{-208,-10}})));
-  Modelica.StateGraph.StepWithSignal senseBEMF(nOut = 2) annotation(Placement(transformation(extent = {{40,0},{60,20}})));
+  Modelica.StateGraph.StepWithSignal senseBEMF(nOut = 2, nIn=2)
+                                                         annotation(Placement(transformation(extent = {{40,0},{60,20}})));
   Modelica.StateGraph.TransitionWithSignal transitionWithSignal(enableTimer = true, waitTime = 1e-007) annotation(Placement(transformation(extent = {{72,0},{92,20}})));
   replaceable DetectCommutationIntBEMF detectCommutation(DelayCommutation = DelayCommutation) annotation(Placement(transformation(extent = {{40,-32},{60,-12}})));
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent = {{200,80},{220,100}})));
@@ -27,7 +28,7 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.Blocks.Interfaces.RealInput dutyCycle "Commanded duty cycle" annotation(Placement(transformation(extent = {{-300,60},{-260,100}})));
   Modelica.StateGraph.Transition delaySense(enableTimer = true, waitTime = DelayCommutation)
     "Wait some time until current crosses zero"                                                                                          annotation(Placement(transformation(extent = {{8,0},{28,20}})));
-  Modelica.StateGraph.Step wait(nIn = 2) "Wait" annotation(Placement(transformation(extent = {{-18,0},{2,20}})));
+  Modelica.StateGraph.Step wait "Wait"          annotation(Placement(transformation(extent = {{-18,0},{2,20}})));
   Modelica.StateGraph.StepWithSignal stepIncrement annotation(Placement(transformation(extent = {{-88,0},{-68,20}})));
   Modelica.StateGraph.Transition catchTimeout(enableTimer = true, waitTime = 0.01, condition = true)
     "Timeout of catch start"                                                                                                  annotation(Placement(transformation(extent = {{-138,24},{-158,44}})));
@@ -63,8 +64,10 @@ equation
   connect(detectCommutation.v_dc,v_dc) annotation(Line(points = {{56,-32},{56,-100},{60,-100}}, color = {0,0,127}, smooth = Smooth.None));
   connect(detectCommutation.v,v) annotation(Line(points = {{50,-32},{50,-82},{0,-82},{0,-100}}, color = {0,0,127}, smooth = Smooth.None));
   connect(detectCommutation.y,transitionWithSignal.condition) annotation(Line(points = {{60,-26},{82,-26},{82,-2}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(delaySense.outPort,senseBEMF.inPort[1]) annotation(Line(points = {{19.5,10},{39,10}}, color = {0,0,0}, smooth = Smooth.None));
-  connect(speedOK.outPort,wait.inPort[1]) annotation(Line(points = {{-38.5,10},{-30,10},{-30,10.5},{-19,10.5}}, color = {0,0,0}, smooth = Smooth.None));
+  connect(delaySense.outPort,senseBEMF.inPort[1]) annotation(Line(points={{19.5,10},
+          {30,10},{30,10.5},{39,10.5}},                                                         color = {0,0,0}, smooth = Smooth.None));
+  connect(speedOK.outPort,wait.inPort[1]) annotation(Line(points={{-38.5,10},{
+          -30,10},{-30,10},{-19,10}},                                                                           color = {0,0,0}, smooth = Smooth.None));
   connect(wait.outPort[1],delaySense.inPort) annotation(Line(points = {{2.5,10},{14,10}}, color = {0,0,0}, smooth = Smooth.None));
   connect(v,catchStart.v) annotation(Line(points = {{0,-100},{0,-86},{-162,-86},{-162,-60},{-152,-60}}, color = {0,0,127}, smooth = Smooth.None));
   connect(stepIncrement.outPort[1],speedOK.inPort) annotation(Line(points = {{-67.5,10},{-44,10}}, color = {0,0,0}, smooth = Smooth.None));
@@ -78,7 +81,6 @@ equation
   connect(catchStart.dir,commutationCounter.dir0) annotation(Line(points = {{-132,-64},{-82,-64}}, color = {0,0,127}, smooth = Smooth.None));
   connect(startRunning.active,commutationCounter.resetCounter) annotation(Line(points = {{-104,-31},{-104,-54},{-82,-54}}, color = {255,0,255}, smooth = Smooth.None));
   connect(stepIncrement.active,commutationCounter.commutate) annotation(Line(points = {{-78,-1},{-78,-28},{-76,-28},{-76,-50}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(transition.outPort,wait.inPort[2]) annotation(Line(points = {{-48.5,-20},{-24,-20},{-24,9.5},{-19,9.5}}, color = {0,0,0}, smooth = Smooth.None));
   connect(startRunning.outPort[1],transition.inPort) annotation(Line(points = {{-93.5,-20},{-54,-20}}, color = {0,0,0}, smooth = Smooth.None));
   connect(senseBEMF.outPort[2],tooSlow.inPort) annotation(Line(points = {{60.5,9.75},{72,9.75},{72,-18},{92,-18}}, color = {0,0,0}, smooth = Smooth.None));
   connect(tooSlow.outPort,shutDownMotor.inPort[1]) annotation(Line(points = {{97.5,-18},{108,-18},{108,52},{-45,52}}, color = {0,0,0}, smooth = Smooth.None));
@@ -112,7 +114,12 @@ equation
   connect(rampMotor.active,pulseControlSelector.activeIn2) annotation(Line(points = {{-180,45},{-180,122},{144,122},{144,58}}, color = {255,0,255}, smooth = Smooth.None));
   connect(rampMotor.active,pulseControlSelector.select2) annotation(Line(points = {{-180,45},{-180,72},{118,72},{118,48},{128,48}}, color = {255,0,255}, smooth = Smooth.None));
   connect(rampMotor.active,startMotor.rmpStart) annotation(Line(points = {{-180,45},{-180,96},{-164,96}}, color = {255,0,255}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-280,-100},{260,140}}), graphics), Icon(coordinateSystem(extent = {{-280,-100},{260,140}}, preserveAspectRatio = false), graphics), Documentation(info = "<html>
+  connect(transition.outPort, senseBEMF.inPort[2]) annotation (Line(
+      points={{-48.5,-20},{26,-20},{26,9.5},{39,9.5}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,
+            -100},{260,140}}),                                                                        graphics), Icon(coordinateSystem(extent = {{-280,-100},{260,140}}, preserveAspectRatio = false), graphics), Documentation(info = "<html>
 <p>Mit dem Rampen-algorithmus am Besten direkt auf das PWM und Br&uuml;ckentreiber gehen. Dann kann dort auch gleich der einfache Hall-Regler eingebaut werden.</p>
 </html>"));
 end SensorlessCtrl3phStateGraphNG;
