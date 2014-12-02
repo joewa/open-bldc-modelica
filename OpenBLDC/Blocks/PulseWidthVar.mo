@@ -22,5 +22,8 @@ equation
     end if;
   end when;
   y = time >= pulsStart and time < pulsStart + dutyCycle * periodTime and active;
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
+            -100},{100,100}}),                                                                        graphics), Icon(
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}), graphics));
 end PulseWidthVar;

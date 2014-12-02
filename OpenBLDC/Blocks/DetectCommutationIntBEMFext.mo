@@ -62,9 +62,9 @@ algorithm
   end when;
 
   y :=if intBEMF < 0 and senseBEMF then true else false;
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent = {{-76,60},{-12,24}}, lineColor = {0,0,255}, textString = "pulses", fontSize = 48,
-            horizontalAlignment =                                                                                                    TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
-            horizontalAlignment =                                                                                                    TextAlignment.Left, textString = "bridgeState")}),
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics={  Text(extent=  {{-76,60},{-12,24}}, lineColor=  {0,0,255}, textString=  "pulses", fontSize=  48,
+            horizontalAlignment=                                                                                                    TextAlignment.Left),Text(extent=  {{-76,-20},{36,-56}}, lineColor=  {0,0,255}, fontSize=  48,
+            horizontalAlignment=                                                                                                    TextAlignment.Left, textString=  "bridgeState")}),
     Documentation(info="<html>
 <p>This block implements the extended back-emf integration method.</p>
 <p>It determines the time of a zero crossing by evaluating the slope of the back-emf. In the next step, the slope is also used to calculate the time when the next commutation is required.</p>
