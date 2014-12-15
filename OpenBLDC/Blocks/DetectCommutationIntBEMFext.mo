@@ -96,7 +96,7 @@ algorithm
       // TODO Add a proper condition here
       //if pulses then
       k_pwm_period := mod(k_sample, pwm_period_int);
-      if (k_pwm_period >= 1 and k_pwm_period < ((pwm_dutyCycle_int * pwm_period_int)/10000)) or sampleAll then
+      if (k_pwm_period > 1 and (k_pwm_period < ((pwm_dutyCycle_int * pwm_period_int)/10000) or sampleAll)) then
         if n_reg < NREG then
           n_reg := n_reg + 1;
         end if;
