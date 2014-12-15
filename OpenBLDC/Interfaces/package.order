@@ -3,3 +3,5 @@ PartialInverter
 LoadPort
 Source
 SupplyPort
+PwmControlBusConnectorIn
+PwmControlBusConnectorOut

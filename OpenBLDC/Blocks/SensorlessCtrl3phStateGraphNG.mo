@@ -50,6 +50,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   PulseControlSelector pulseControlSelector annotation(Placement(transformation(extent = {{128,38},{148,58}})));
   StartMotor startMotor(FinalSpeed = 200, DutyCycleStart = 0.65, StartTime = 0.3) annotation(Placement(transformation(extent = {{-164,94},{-144,114}})));
   Modelica.StateGraph.TransitionWithSignal rampDone annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-212,34})));
+  Modelica.Blocks.Logical.And and1
+    annotation (Placement(transformation(extent={{100,-66},{112,-54}})));
 equation
   intAngle = integer(angle);
   chAngle = change(intAngle);
@@ -97,11 +99,9 @@ equation
   connect(pulseLogic.y,halfBridgeLogic[1].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
   connect(pulseLogic.y,halfBridgeLogic[2].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
   connect(pulseLogic.y,halfBridgeLogic[3].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(pulseLogic.y,detectCommutation.pulses) annotation(Line(points = {{176,56},{180,56},{180,-40},{30,-40},{30,-18},{40,-18}}, color = {255,0,255}, smooth = Smooth.None));
   connect(pulseControlSelector.dutyCycleOut,pulseLogic.dutyCycle) annotation(Line(points = {{148,56},{156,56}}, color = {0,0,127}, smooth = Smooth.None));
   connect(pulseControlSelector.bridgeModeOut,pulseLogic.bridgeModeIn) annotation(Line(points = {{148,48},{156,48}}, color = {0,0,127}, smooth = Smooth.None));
   connect(pulseControlSelector.activeOut,pulseLogic.active) annotation(Line(points = {{148,40},{156,40}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(commutationCounter.pwmActive,pulseControlSelector.activeIn1) annotation(Line(points = {{-62,-66},{144,-66},{144,38}}, color = {255,0,255}, smooth = Smooth.None));
   connect(combiTable1Ds.y,pulseControlSelector.bridgeModeIn1) annotation(Line(points = {{3,-50},{138,-50},{138,38}}, color = {0,0,127}, smooth = Smooth.None));
   connect(dutyCycle,pulseControlSelector.dutyCycleIn1) annotation(Line(points = {{-280,80},{114,80},{114,28},{132,28},{132,38}}, color = {0,0,127}, smooth = Smooth.None));
   connect(startMotor.dutyCycleOut,pulseControlSelector.dutyCycleIn2) annotation(Line(points = {{-144,96},{132,96},{132,58}}, color = {0,0,127}, smooth = Smooth.None));
@@ -117,6 +117,23 @@ equation
   connect(transition.outPort, senseBEMF.inPort[2]) annotation (Line(
       points={{-48.5,-20},{26,-20},{26,9.5},{39,9.5}},
       color={0,0,0},
+      smooth=Smooth.None));
+  connect(pulseLogic.pwmControlBusConnectorOut, detectCommutation.pwmControlBusConnectorIn)
+    annotation (Line(
+      points={{166,38.2},{166,-40},{32,-40},{32,-18},{40,-18}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(commutationCounter.pwmActive, and1.u2) annotation (Line(
+      points={{-62,-66},{26,-66},{26,-64.8},{98.8,-64.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(and1.y, pulseControlSelector.activeIn1) annotation (Line(
+      points={{112.6,-60},{144,-60},{144,38}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(senseBEMF.active, and1.u1) annotation (Line(
+      points={{50,-1},{50,-6},{68,-6},{68,-60},{98.8,-60}},
+      color={255,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,
             -100},{260,140}}),                                                                        graphics), Icon(coordinateSystem(extent = {{-280,-100},{260,140}}, preserveAspectRatio = false), graphics), Documentation(info = "<html>

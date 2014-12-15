@@ -16,5 +16,5 @@ equation
   y_inside = sin(phi_el + hall_angle + pi / 2);
   y = if y_inside <= 0.0 then 1 else 0;
   // funzt
-  annotation(Icon(coordinateSystem(extent = {{-100,-100},{100,100}}, preserveAspectRatio = false), graphics={  Text(extent = {{-150.0,-140.0},{150.0,-110.0}}, fillColor = {0,0,0}, textString = "%Hall sensor")}), Diagram(coordinateSystem(extent = {{-100,-100},{100,100}}, preserveAspectRatio = false), graphics));
+  annotation(Icon(coordinateSystem(extent = {{-100,-100},{100,100}}, preserveAspectRatio = false), graphics={  Text(extent=  {{-150.0,-140.0},{150.0,-110.0}}, fillColor=  {0,0,0}, textString=  "%Hall sensor")}), Diagram(coordinateSystem(extent = {{-100,-100},{100,100}}, preserveAspectRatio = false), graphics));
 end HallDigital1;

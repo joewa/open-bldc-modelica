@@ -13,6 +13,7 @@ SensorlessCtrl3phPWM
 DetectCommutationPartial
 DetectCommutationIntBEMF
 DetectCommutationIntBEMFext
+DetectCommutationIntBEMFext_old
 DetectCommutationZeroCrossingSimple
 DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph

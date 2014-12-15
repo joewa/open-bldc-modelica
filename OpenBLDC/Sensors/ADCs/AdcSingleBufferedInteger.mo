@@ -109,6 +109,13 @@ equation
       index=1,
       extent={{6,3},{6,3}}));
 
+  connect(adcSingleIntegerBus.active, pulseWidthVar.reset) annotation (Line(
+      points={{0,-98},{-22,-98},{-22,-70.2}},
+      color={0,0,127},
+      smooth=Smooth.None), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics));
 end AdcSingleBufferedInteger;
