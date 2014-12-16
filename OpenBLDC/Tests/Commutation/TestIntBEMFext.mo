@@ -1,7 +1,9 @@
 within OpenBLDC.Tests.Commutation;
 model TestIntBEMFext "Model to understand the linear regression method"
   extends Modelica.Icons.Example;
-  Blocks.DetectCommutationIntBEMFext dC(bufsize=10, NREG=10,
+  Blocks.DetectCommutationIntBEMFext_old dC(
+    bufsize=10,
+    NREG=10,
     sampleAll=false)
     annotation (Placement(transformation(extent={{0,-6},{20,14}})));
   Modelica.Blocks.Sources.BooleanStep senseBemfStep(startTime=1e-5)

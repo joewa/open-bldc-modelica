@@ -28,19 +28,11 @@ block DetectCommutationIntBEMFext
     "Duration from zero crossing to next commutation";
   discrete Real m_reg(start=0) "Slope";
   discrete Real b_reg(start=0) "y-intercept";
-  discrete Real v_buffer[bufsize](start=zeros(bufsize));
-  Integer zc_index(start=bufsize)
-    "Index in the ADC-buffer where the zero crossing occurs";
-  discrete Real duration_zc2comm(start=0)
-    "Duration from zero crossing to next commutation";
   discrete Real time_blockstart(start=0) "Time when last block started";
-  discrete Real time_zc(start=0) "Time when last zero crossing occured";
-  Real bemf "Back EMF at the open phase";
-  discrete Real intBEMF(start=0) "int(BEMF)!";
-  //Real intBEMFext;
+  discrete Real time_nextblock(start=0)
+    "Time when next block (commutation) will occur";
   discrete Real maxBEMF(start=0) "Max EMF in this cycle";
   Real v_sense "Sensed voltage at the open motor pin, referenced to v_dc/2";
-  Boolean y_neu(start=false);
   Sensors.ADCs.AdcSingleBufferedInteger adcSingleBufferedInteger(BufDepth=
         bufsize, Ts=Ts_ADC)
     annotation (Placement(transformation(extent={{-28,8},{-8,28}})));
@@ -63,14 +55,8 @@ algorithm
     n_reg := 0;
   end when;
   when senseBEMF then
-    intBEMF :=KV;
     maxBEMF:= 0;
     time_blockstart := time;
-    for f in 1:bufsize loop
-      v_buffer[f] := 0;
-    end for;
-    zc_index := bufsize;
-    //anstieg :=0;
   end when;
   when maxBEMF < abs(v_sense) then
     // das ist fragwürdig
@@ -80,11 +66,6 @@ algorithm
 
   //Neueste Variante mit ADC-Modell
   when adcSingleBufferedInteger.adcSingleIntegerBus.cbStart then
-    //sumx := 0;
-    //sumx2 := 0;
-    //sumxy := 0;
-    //sumy := 0;
-    //sumy2 := 0;
     pwm_dutyCycle_int := integer(floor(10000 * pwmControlBusConnectorIn.dutyCycle));
     pwm_period_int := integer(pwmControlBusConnectorIn.period / period_adc);
     // CAUTION: pwm_period_int works only if period / period_adc has no fraction
@@ -93,7 +74,6 @@ algorithm
     for f in 1:bufsize loop
       k_sample := bufsize * k_cb_ADC + f;
       // Store valid measurements in the table (e.g. high side switch is on)
-      // TODO Add a proper condition here
       //if pulses then
       k_pwm_period := mod(k_sample, pwm_period_int);
       if (k_pwm_period > 1 and (k_pwm_period < ((pwm_dutyCycle_int * pwm_period_int)/10000) or sampleAll)) then
@@ -101,11 +81,11 @@ algorithm
           n_reg := n_reg + 1;
         end if;
         //if n_reg >= NREG then // decrement obsolete buffer values from sums
-         sumx := sumx - xreg[1];
-         sumx2 := sumx2 - xreg[1]*xreg[1];
-         sumxy := sumxy - xreg[1]*yreg[1];
-         sumy := sumy - yreg[1];
-         sumy2 := sumy2 - yreg[1]*yreg[1];
+        sumx := sumx - xreg[1];
+        sumx2 := sumx2 - xreg[1]*xreg[1];
+        sumxy := sumxy - xreg[1]*yreg[1];
+        sumy := sumy - yreg[1];
+        sumy2 := sumy2 - yreg[1]*yreg[1];
         //end if;
         //if n_reg > 1 then
           for f2 in 2:NREG loop
@@ -123,15 +103,14 @@ algorithm
       end if;
     end for;
     // Check if we are ready to calculate slope and zero crossing (sufficient values and time)
-    // TODO Add a proper condition here
     if (n_reg >= NREG and not (n_reg * sumx2 == sumx * sumx)) then
       m_reg := (n_reg * sumxy  -  sumx * sumy) / (n_reg * sumx2  -  sumx * sumx);
-      //m_reg := (yreg[2]-yreg[1])/(xreg[2]-xreg[1]);
       b_reg := (sumy * sumx2  -  sumx * sumxy) / (n_reg * sumx2  -  sumx * sumx);
       if m_reg < -0.1 then // slope must not be zero
         k_zc := integer( -b_reg / m_reg);
-        if k_zc < k_sample then // the zero crossing shall have occurred in the past
-          duration_zc2comm_int := sqrt(-(2*KV / m_reg));
+        if k_zc < k_sample and time > time_nextblock then // the zero crossing shall have occurred in the past
+          duration_zc2comm_int := sqrt(-(2*KV_int / m_reg)) / 4; // TODO check "4"
+          time_nextblock := time_blockstart + (k_zc + duration_zc2comm_int) * period_adc;
         end if;
       end if;
     end if;
@@ -139,35 +118,10 @@ algorithm
     k_cb_ADC := k_cb_ADC + 1;
   end when;
 
-  when (senseBEMF and sample(0, period_adc)) then
-    for f in 1:(bufsize-1) loop
-      v_buffer[f] := v_buffer[f+1]; // Shift buffer (ugly)
-      if v_buffer[f] > 0 then //and v_buffer[f+1] < 0 then
-        zc_index := f; // index of last value > 0
-      end if;
-    end for;
-    v_buffer[bufsize] := bemf; // Add new value to buffer
-    // Extended method
-    if zc_index == 25 then
-      time_zc := time - 25*period_adc;
-      duration_zc2comm := sqrt(-(2*KV*(10+10)*period_adc/(v_buffer[35]-v_buffer[15])));
-    end if;
-    if time_zc+duration_zc2comm < time and time_zc+duration_zc2comm+period_adc > time then
-      y_neu := true; // Puls erzeugen
-    else
-      y_neu := false;
-    end if;
-
-    if bemf < 0 then // Alte Methode: Integriere ab Nulldurchgang
-      intBEMF := intBEMF + bemf*period_adc;
-    end if;
-  end when;
-
-  y :=if intBEMF < 0 and senseBEMF then true else false;
+  y := if time_nextblock < time and time_nextblock + period_adc > time then true else false;
 
 equation
   v_sense = v[senseBridgeID] - v_dc / 2;
-  bemf = senseBridgeSign * v_sense;
   signalVoltage.v = v[senseBridgeID] * vdivider;
   adcSingleBufferedInteger.adcSingleIntegerBus.active = senseBEMF;
   connect(adcSingleBufferedInteger.pin_n, ground.p) annotation (Line(
@@ -190,8 +144,6 @@ equation
 <p>This block implements the extended back-emf integration method.</p>
 <p>It determines the time of a zero crossing by evaluating the slope of the back-emf. In the next step, the slope is also used to calculate the time when the next commutation is required.</p>
 <p>TODO:</p>
-<p>1. Implement the ADC-DMA-method and evaluate the measurements only when the ADC callback is executed.</p>
-<p>2. In case the single-leg-PWM is applied, evaluate only the measurements when high side switch is on.</p>
-<p>3. In case the function is called late, i.e. the zero crossing already happened, use the earliest voltage measurements and slope to determine when the zero crossing occured.</p>
+<p>1. Investigate the spike that occurs single leg mode as in Test.Commutation.IntBEMF3.</p>
 </html>"));
 end DetectCommutationIntBEMFext;

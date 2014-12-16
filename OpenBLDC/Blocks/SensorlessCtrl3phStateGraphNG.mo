@@ -1,6 +1,7 @@
 within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
+  parameter Integer PwmMode = 1 "Two-leg (1) or single-leg (2) mode";
   parameter Modelica.SIunits.Duration DelayCommutation = 5e-005
     "Delay commutation";
   parameter Modelica.SIunits.Duration TimeoutCommutation = 0.01
@@ -12,7 +13,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.Blocks.Interfaces.BooleanOutput lCtrl[3] annotation(Placement(transformation(extent = {{250,-70},{270,-50}}), iconTransformation(extent = {{80,-70},{100,-50}})));
   Modelica.Blocks.Interfaces.RealInput angle "Decoded hall" annotation(Placement(transformation(extent = {{-300,-20},{-260,20}})));
   Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table = [0,0,0,0;1,1,-1,0;2,0,-1,1;3,-1,0,1;4,-1,1,0;5,0,1,-1;6,1,0,-1]) annotation(Placement(transformation(extent = {{-18,-60},{2,-40}})));
-  Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y = 1) annotation(Placement(transformation(extent = {{164,-78},{184,-58}})));
+  Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y=PwmMode)
+                                                                             annotation(Placement(transformation(extent = {{164,-78},{184,-58}})));
   HalfBridgeDriver halfBridgeDriver[3] annotation(Placement(transformation(extent = {{220,38},{240,58}})));
   HalfBridgeLogic halfBridgeLogic[3] annotation(Placement(transformation(extent = {{194,38},{214,58}})));
   Modelica.Blocks.Interfaces.RealInput v_dc "dc link voltage" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 90, origin = {60,-100})));
