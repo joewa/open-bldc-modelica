@@ -13,6 +13,6 @@ The project is released under the GNU GENERAL PUBLIC LICENSE - Version 2.
 
 ## Status and contribution
 
-This is a part-time development project and is not dedicated for productive usage. Any contributions preferably [Pull Requests](../../pulls) are always welcome.
+This is a part-time development project and is not dedicated for productive usage. Any contributions preferably [Pull Requests](https://github.com/joewa/open-bldc-modelica/pulls) are always welcome.
 
-You may report any issues or share ideas by using the [Issues](../../issues) button.
+You may report any issues or share ideas by using the [Issues](https://github.com/joewa/open-bldc-modelica/issues) button.
