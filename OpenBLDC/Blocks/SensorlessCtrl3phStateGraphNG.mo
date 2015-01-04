@@ -15,8 +15,6 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table = [0,0,0,0;1,1,-1,0;2,0,-1,1;3,-1,0,1;4,-1,1,0;5,0,1,-1;6,1,0,-1]) annotation(Placement(transformation(extent = {{-18,-60},{2,-40}})));
   Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y=PwmMode)
                                                                              annotation(Placement(transformation(extent = {{164,-78},{184,-58}})));
-  HalfBridgeDriver halfBridgeDriver[3] annotation(Placement(transformation(extent = {{220,38},{240,58}})));
-  HalfBridgeLogic halfBridgeLogic[3] annotation(Placement(transformation(extent = {{194,38},{214,58}})));
   Modelica.Blocks.Interfaces.RealInput v_dc "dc link voltage" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 90, origin = {60,-100})));
   Modelica.Blocks.Interfaces.RealInput v[3] "voltage per phase" annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 90, origin = {0,-100})));
   Modelica.StateGraph.InitialStep initialStep(nOut = 1, nIn = 2) annotation(Placement(transformation(extent = {{-228,-30},{-208,-10}})));
@@ -54,14 +52,11 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.TransitionWithSignal rampDone annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-212,34})));
   Modelica.Blocks.Logical.And and1
     annotation (Placement(transformation(extent={{100,-66},{112,-54}})));
+  HalfBridgeLogicBLDC halfBridgeLogicINSD[3]
+    annotation (Placement(transformation(extent={{198,38},{218,58}})));
 equation
   intAngle = integer(angle);
   chAngle = change(intAngle);
-  connect(halfBridgeLogic.pin_IN,halfBridgeDriver.pin_IN) annotation(Line(points = {{214,54},{220,54}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(halfBridgeLogic.pin_SD,halfBridgeDriver.pin_SD) annotation(Line(points = {{214,42},{220,42}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(halfBridgeDriver.lCtrl,lCtrl) annotation(Line(points = {{240,42},{246,42},{246,-60},{260,-60}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(halfBridgeDriver.hCtrl,hCtrl) annotation(Line(points = {{240,54},{248,54},{248,60},{260,60}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(integerExpression.y,halfBridgeLogic.pwm_Mode) annotation(Line(points = {{185,-68},{188,-68},{188,40},{194,40}}, color = {255,127,0}, smooth = Smooth.None));
   connect(senseBEMF.outPort[1],transitionWithSignal.inPort) annotation(Line(points = {{60.5,10.25},{70,10.25},{70,10},{78,10}}, color = {0,0,0}, smooth = Smooth.None));
   connect(detectCommutation.senseBEMF,senseBEMF.active) annotation(Line(points = {{50,-12},{50,-1}}, color = {255,0,255}, smooth = Smooth.None));
   connect(detectCommutation.bridgeState,combiTable1Ds.y) annotation(Line(points = {{40,-26},{18,-26},{18,-50},{3,-50}}, color = {0,0,127}, smooth = Smooth.None));
@@ -97,10 +92,6 @@ equation
   connect(commutationCounter.phi,combiTable1Ds.u) annotation(Line(points = {{-62,-60},{-42,-60},{-42,-50},{-20,-50}}, color = {0,0,127}, smooth = Smooth.None));
   connect(catching.outPort[1],catchTimeout.inPort) annotation(Line(points = {{-147.5,-19.75},{-140,-19.75},{-140,34},{-144,34}}, color = {0,0,0}, smooth = Smooth.None));
   connect(catchTimeout.outPort,rampMotor.inPort[1]) annotation(Line(points = {{-149.5,34},{-169,34}}, color = {0,0,0}, smooth = Smooth.None));
-  connect(pulseLogic.bridgeModeOut,halfBridgeLogic.val) annotation(Line(points = {{176,48},{194,48}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(pulseLogic.y,halfBridgeLogic[1].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(pulseLogic.y,halfBridgeLogic[2].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(pulseLogic.y,halfBridgeLogic[3].pulses) annotation(Line(points = {{176,56},{176,55.8},{194,55.8}}, color = {255,0,255}, smooth = Smooth.None));
   connect(pulseControlSelector.dutyCycleOut,pulseLogic.dutyCycle) annotation(Line(points = {{148,56},{156,56}}, color = {0,0,127}, smooth = Smooth.None));
   connect(pulseControlSelector.bridgeModeOut,pulseLogic.bridgeModeIn) annotation(Line(points = {{148,48},{156,48}}, color = {0,0,127}, smooth = Smooth.None));
   connect(pulseControlSelector.activeOut,pulseLogic.active) annotation(Line(points = {{148,40},{156,40}}, color = {255,0,255}, smooth = Smooth.None));
@@ -135,6 +126,34 @@ equation
       smooth=Smooth.None));
   connect(senseBEMF.active, and1.u1) annotation (Line(
       points={{50,-1},{50,-6},{68,-6},{68,-60},{98.8,-60}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(pulseLogic.bridgeModeOut, halfBridgeLogicINSD.val) annotation (Line(
+      points={{176,48},{198,48}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(integerExpression.y, halfBridgeLogicINSD.pwm_Mode) annotation (Line(
+      points={{185,-68},{190,-68},{190,40},{198,40}},
+      color={255,127,0},
+      smooth=Smooth.None));
+  connect(pulseLogic.y, halfBridgeLogicINSD[1].pulses) annotation (Line(
+      points={{176,56},{188,56},{188,55.8},{198,55.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(pulseLogic.y, halfBridgeLogicINSD[2].pulses) annotation (Line(
+      points={{176,56},{188,56},{188,55.8},{198,55.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(pulseLogic.y, halfBridgeLogicINSD[3].pulses) annotation (Line(
+      points={{176,56},{188,56},{188,55.8},{198,55.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(halfBridgeLogicINSD.hCtrl, hCtrl) annotation (Line(
+      points={{218,54},{236,54},{236,60},{260,60}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(halfBridgeLogicINSD.lCtrl, lCtrl) annotation (Line(
+      points={{218,42},{238,42},{238,-60},{260,-60}},
       color={255,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-280,

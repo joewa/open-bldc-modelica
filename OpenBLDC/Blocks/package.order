@@ -3,6 +3,8 @@ Triangular
 TestCtrl3ph
 HalfBridgeCtrl
 TestCtrl3phPWM
+HalfBridgeLogicBLDC
+HalfBridgeLogicINSD
 HalfBridgeLogic
 HalfBridgeDriver
 PulseWidthVar

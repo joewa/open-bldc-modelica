@@ -25,7 +25,7 @@ equation
   der(rev_per_sec) = if rmpStart then FinalSpeed / StartTime else 0;
   der(revolutions) = rev_per_sec;
   bridgeSequence.u = if HallAvail then angle else mod(floor(revolutions * 6) - 1 + dir, 6) + 1;
-  done = if rev_per_sec >= FinalSpeed and rmpStart then true else false;
+  done = if rev_per_sec >= FinalSpeed and rmpStart and not HallAvail then true else false;
   //hasControl = if rampStart or HallAvail then true else false; // parameter in if-eqn is doof
   //hasControl = if rmpStart then true else false; // parameter in if-eqn is doof
   connect(bridgeSequence.y,bridgeModeOut) annotation(Line(points = {{61,0},{100,0}}, color = {0,0,127}, smooth = Smooth.None));

@@ -9,5 +9,8 @@ block HalfBridgeDriver "Half bridge driver, e.g. IR2184"
 equation
   hCtrl = pin_IN and pin_SD;
   lCtrl = not pin_IN and pin_SD;
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics),
+      Documentation(info="<html>
+<p>The half bridge driver generates the gate signals for the switches of a half bridge from an input pulse signal IN an a shutdown signal SD. This logic is implemented in several bridge driver IC&apos;s e.g. the IRS2184.</p>
+</html>"));
 end HalfBridgeDriver;

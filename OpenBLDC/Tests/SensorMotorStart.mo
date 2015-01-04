@@ -1,9 +1,13 @@
 within OpenBLDC.Tests;
 model SensorMotorStart "Startup of motor with sensorless commutation from zero"
   extends Modelica.Icons.Example;
-  extends Assemblies.SensorlessBLDC(redeclare
-      Blocks.SensorlessCtrl3phStateGraphNG                                         sensorlessCtrl3phPWM(redeclare
-        Blocks.DetectCommutationIntBEMF                                                                                                     detectCommutation, startMotor(HallAvail = true)), redeclare
-      Modelica.Mechanics.Rotational.Sources.LinearSpeedDependentTorque                                                                                                     mechanicalLoad(TorqueDirection = false, w_nominal = 8000 * 2 * Modelica.Constants.pi / 60, tau_nominal = -0.01), motorVoltageCommand(k = 0.4));
+  extends Assemblies.SensorlessBLDC(
+    redeclare Blocks.SensorlessCtrl3phStateGraphNG sensorlessCtrl3phPWM(
+      redeclare Blocks.DetectCommutationIntBEMF detectCommutation,
+      startMotor(HallAvail = true)),
+    redeclare Modelica.Mechanics.Rotational.Sources.LinearSpeedDependentTorque mechanicalLoad(
+      TorqueDirection = false,
+      w_nominal = 8000 * 2 * Modelica.Constants.pi / 60, tau_nominal = -0.01),
+      motorVoltageCommand(k = 0.4));
   annotation(experiment(StopTime = 0.5));
 end SensorMotorStart;

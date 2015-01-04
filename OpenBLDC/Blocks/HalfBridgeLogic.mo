@@ -36,5 +36,6 @@ equation
   // High side ON
   // Low side ON
   // Half bridge OFF
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
+            -100},{100,100}}),                                                                        graphics));
 end HalfBridgeLogic;
