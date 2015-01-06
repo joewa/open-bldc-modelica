@@ -1,6 +1,12 @@
 within OpenBLDC.Blocks;
 model PulseLogic "Generates PWM signal depending on commutation and speed"
   extends Modelica.Blocks.Icons.DiscreteBlock;
+  parameter Real PwmClockFrequency = 1e6 "PWM clock frequency [Hz]";
+  parameter Integer DefaultPeriodPsc = 25
+    "Default PWM period prescaler = f_clock / f_PWM";
+  parameter Boolean PwmVarFrequency = true "Apply variable frequency method?";
+  Integer periodPsc(start=DefaultPeriodPsc);
+  discrete Real dutyCycle_d(start=0);
   Modelica.Blocks.Interfaces.RealInput dutyCycle annotation(Placement(transformation(extent = {{-120,60},{-80,100}})));
   Modelica.Blocks.Interfaces.RealInput bridgeModeIn[3] annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
   Modelica.Blocks.Interfaces.BooleanInput active annotation(Placement(transformation(extent = {{-120,-100},{-80,-60}})));
@@ -8,7 +14,6 @@ model PulseLogic "Generates PWM signal depending on commutation and speed"
   Modelica.Blocks.Interfaces.RealOutput bridgeModeOut[3] annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   PulseWidthVar pulseWidth annotation(Placement(transformation(extent={{34,48},{
             54,68}})));
-  Modelica.Blocks.Sources.Constant const2(each k = 2.5e-005) annotation(Placement(transformation(extent = {{-46,40},{-26,60}})));
   Modelica.Blocks.Logical.Change changeBridgeMode[3]
     "Indicate if bridge mode has changed"
     annotation (Placement(transformation(extent={{0,14},{12,26}})));
@@ -24,11 +29,20 @@ model PulseLogic "Generates PWM signal depending on commutation and speed"
     annotation (Placement(transformation(extent={{-60,-22},{-48,-10}})));
 equation
   pulseWidth.reset = false;
-  connect(const2.y,pulseWidth.periodTime) annotation(Line(points={{-25,50},{-16,
-          50},{-16,58},{34,58}},                                                                      color = {0,0,127}, smooth = Smooth.None));
+
+  pulseWidth.dutyCycle = dutyCycle_d;
+  pwmControlBusConnectorOut.dutyCycle = dutyCycle_d;
+  when active and pwmControlBusConnectorOut.reset then
+    dutyCycle_d = dutyCycle;
+  end when;
+
+  pulseWidth.periodTime = periodPsc / PwmClockFrequency;
+  pwmControlBusConnectorOut.period = periodPsc / PwmClockFrequency;
+  when PwmVarFrequency and pwmControlBusConnectorOut.reset then
+    periodPsc = integer( DefaultPeriodPsc / ( 4 * dutyCycle_d * (1 - dutyCycle_d)));
+  end when;
+
   connect(pulseWidth.y,y) annotation(Line(points={{54,58},{62,58},{62,80},{100,80}},   color = {255,0,255}, smooth = Smooth.None));
-  connect(dutyCycle,pulseWidth.dutyCycle) annotation(Line(points={{-100,80},{
-          -64,80},{-64,66},{34,66}},                                                                     color = {0,0,127}, smooth = Smooth.None));
   connect(active,pulseWidth.active) annotation(Line(points={{-100,-80},{-8,-80},
           {-8,50},{34,50}},                                                                        color = {255,0,255}, smooth = Smooth.None));
   connect(changeBridgeMode.y, or1.u[1:3]) annotation (Line(
@@ -43,23 +57,9 @@ equation
       points={{-100,0},{-54,0},{-54,20},{-33.2,20}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(dutyCycle, pwmControlBusConnectorOut.dutyCycle) annotation (Line(
-      points={{-100,80},{-64,80},{-64,-98},{0,-98}},
-      color={0,0,127},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   connect(active, pwmControlBusConnectorOut.active) annotation (Line(
       points={{-100,-80},{0,-80},{0,-98}},
       color={255,0,255},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(const2.y, pwmControlBusConnectorOut.period) annotation (Line(
-      points={{-25,50},{-16,50},{-16,-98},{0,-98}},
-      color={0,0,127},
       smooth=Smooth.None), Text(
       string="%second",
       index=1,
@@ -103,5 +103,9 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
-            -100},{100,100}}),                                                                        graphics));
+            -100},{100,100}}),                                                                        graphics),
+      Documentation(info="<html>
+<p>This block implements some logic for appropriate PWM signal generation for the three half bridges of the motor controller. The actual dutyCycle is updated only when <code>bridgeModeIn[3]</code> changes, i.e. the motor commutates or an active event occurs.</p>
+<p>The PWM period can be either fixed <code>pulseWidth.periodTime&nbsp;=&nbsp;periodPsc&nbsp;/&nbsp;PwmClockFrequency</code> or variable by setting the parameter <code>PwmVarFrequency</code> to false or true. When the variable PWM frequency method is selected, the PWM period is calculated by <code>periodPsc&nbsp;=<font style=\"color: #ff0000; \">&nbsp;</font>DefaultPeriodPsc&nbsp;/&nbsp;(&nbsp;4&nbsp;*&nbsp;dutyCycle&nbsp;*&nbsp;(1&nbsp;-&nbsp;dutyCycle))</code>. So the PWM period is increased when very high or very low duty cycles are applied keeping the current ripple constant at all duty cycles</p>
+</html>"));
 end PulseLogic;

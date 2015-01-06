@@ -46,7 +46,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.Transition transLoop1(enableTimer = true, condition = true, waitTime = 0.001)
     "Timeout of catch start"                                                                                                 annotation(Placement(transformation(extent = {{-252,-58},{-232,-38}})));
   Modelica.StateGraph.StepWithSignal rampMotor "Open loop motor speed ramp up" annotation(Placement(transformation(extent = {{-170,44},{-190,24}})));
-  PulseLogic pulseLogic annotation(Placement(transformation(extent = {{156,38},{176,58}})));
+  PulseLogic pulseLogic annotation(Placement(transformation(extent={{156,38},{
+            176,58}})));
   PulseControlSelector pulseControlSelector annotation(Placement(transformation(extent = {{128,38},{148,58}})));
   StartMotor startMotor(FinalSpeed = 200, DutyCycleStart = 0.65, StartTime = 0.3) annotation(Placement(transformation(extent = {{-164,94},{-144,114}})));
   Modelica.StateGraph.TransitionWithSignal rampDone annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-212,34})));
@@ -92,9 +93,12 @@ equation
   connect(commutationCounter.phi,combiTable1Ds.u) annotation(Line(points = {{-62,-60},{-42,-60},{-42,-50},{-20,-50}}, color = {0,0,127}, smooth = Smooth.None));
   connect(catching.outPort[1],catchTimeout.inPort) annotation(Line(points = {{-147.5,-19.75},{-140,-19.75},{-140,34},{-144,34}}, color = {0,0,0}, smooth = Smooth.None));
   connect(catchTimeout.outPort,rampMotor.inPort[1]) annotation(Line(points = {{-149.5,34},{-169,34}}, color = {0,0,0}, smooth = Smooth.None));
-  connect(pulseControlSelector.dutyCycleOut,pulseLogic.dutyCycle) annotation(Line(points = {{148,56},{156,56}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(pulseControlSelector.bridgeModeOut,pulseLogic.bridgeModeIn) annotation(Line(points = {{148,48},{156,48}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(pulseControlSelector.activeOut,pulseLogic.active) annotation(Line(points = {{148,40},{156,40}}, color = {255,0,255}, smooth = Smooth.None));
+  connect(pulseControlSelector.dutyCycleOut,pulseLogic.dutyCycle) annotation(Line(points={{148,56},
+          {156,56}},                                                                                            color = {0,0,127}, smooth = Smooth.None));
+  connect(pulseControlSelector.bridgeModeOut,pulseLogic.bridgeModeIn) annotation(Line(points={{148,48},
+          {156,48}},                                                                                                color = {0,0,127}, smooth = Smooth.None));
+  connect(pulseControlSelector.activeOut,pulseLogic.active) annotation(Line(points={{148,40},
+          {156,40}},                                                                                      color = {255,0,255}, smooth = Smooth.None));
   connect(combiTable1Ds.y,pulseControlSelector.bridgeModeIn1) annotation(Line(points = {{3,-50},{138,-50},{138,38}}, color = {0,0,127}, smooth = Smooth.None));
   connect(dutyCycle,pulseControlSelector.dutyCycleIn1) annotation(Line(points = {{-280,80},{114,80},{114,28},{132,28},{132,38}}, color = {0,0,127}, smooth = Smooth.None));
   connect(startMotor.dutyCycleOut,pulseControlSelector.dutyCycleIn2) annotation(Line(points = {{-144,96},{132,96},{132,58}}, color = {0,0,127}, smooth = Smooth.None));
