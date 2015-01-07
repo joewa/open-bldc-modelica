@@ -1,12 +1,15 @@
 within OpenBLDC.Tests.Commutation;
 model TestIntBEMFext "Model to understand the linear regression method"
   extends Modelica.Icons.Example;
-  Blocks.DetectCommutationIntBEMFext_old dC(
+  Blocks.DetectCommutationIntBEMFext     dC(
     bufsize=10,
     NREG=10,
-    sampleAll=false)
+    sampleAll=false,
+    sampleHi=true,
+    sampleLo=false)
     annotation (Placement(transformation(extent={{0,-6},{20,14}})));
-  Modelica.Blocks.Sources.BooleanStep senseBemfStep(startTime=1e-5)
+  Modelica.Blocks.Sources.BooleanStep senseBemfStep(startTime=1e-5, startValue=
+        false)
     annotation (Placement(transformation(extent={{-80,42},{-60,62}})));
   Modelica.Blocks.Sources.Constant v_dc(k=2)
     annotation (Placement(transformation(extent={{-22,-76},{-2,-56}})));
@@ -20,7 +23,7 @@ model TestIntBEMFext "Model to understand the linear regression method"
     annotation (Placement(transformation(extent={{-38,4},{-18,24}})));
   Modelica.Blocks.Sources.Constant period(k=25e-6)
     annotation (Placement(transformation(extent={{-82,-22},{-62,-2}})));
-  Modelica.Blocks.Sources.Constant d(k=0.2) "Duty cycle"
+  Modelica.Blocks.Sources.Constant d(k=0.25) "Duty cycle"
     annotation (Placement(transformation(extent={{-82,12},{-62,32}})));
 
 equation

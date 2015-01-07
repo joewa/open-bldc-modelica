@@ -20,7 +20,9 @@ public
     annotation (Placement(transformation(extent={{90,-70},{110,-50}})));
 equation
   doSample = time >= pre(nextSampling);
-  when {doSample,edge(active),edge(reset)} then
+  //doSample = time >= nextSampling;
+
+  when {doSample,active} then
     if edge(active) then
       nextSampling = time + periodTime;
       pulsStart = time;

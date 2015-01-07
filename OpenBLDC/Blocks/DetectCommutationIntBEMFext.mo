@@ -2,12 +2,15 @@ within OpenBLDC.Blocks;
 block DetectCommutationIntBEMFext
   "Detects sensorless when commutation is required by back EMF integration - extended method"
   extends DetectCommutationPartial;
-  parameter Boolean sampleAll = true "Sample only on pulses when false";
+  parameter Boolean sampleHi = true "Sample when PWM signal is high when true";
+  parameter Boolean sampleLo = true "Sample when PWM signal is low when true";
+  parameter Boolean sampleAll = true "Use all samples";
+  parameter Integer dropnoisysamples = 1 "Drop samples with switching noise";
   parameter Integer bufsize = 10 "Size of buffer";
   parameter Real period_adc = 1e-6;
   parameter Modelica.SIunits.Time Ts_ADC = 1e-6 "Sample rate of ADC";
   parameter Real vdivider = 3.6/13.6 "Voltage divider of phase voltage";
-  parameter Integer NREG = 10 "Number of elements for a valid regression";
+  parameter Integer NREG = 10 "Number of samples for a valid regression";
   Integer v_dc_int(start=0) "ADC value of dc link voltage";
   Integer k_cb_ADC(start=0) "Increments at each the ADC callback";
   Integer sumx(start=0) "computes sum of x (time-axis)";
@@ -22,6 +25,8 @@ block DetectCommutationIntBEMFext
   Integer pwm_dutyCycle_int;
   Integer pwm_period_int "PWM period relating to period_adc";
   Integer k_pwm_period(start=0) "Indicates if the pwm sample ocurred at pwm-on";
+  Boolean takesampleHi "Is true when high sample will be evaluated";
+  Boolean takesampleLo "Is true when low sample will be evaluated";
   Integer k_zc(start=0) "Sample when the zero crossing occurs";
   Integer KV_int(start=0) "Integer equivalent of KV";
   discrete Real duration_zc2comm_int(start=0)
@@ -76,7 +81,9 @@ algorithm
       // Store valid measurements in the table (e.g. high side switch is on)
       //if pulses then
       k_pwm_period := mod(k_sample, pwm_period_int);
-      if (k_pwm_period > 1 and (k_pwm_period < ((pwm_dutyCycle_int * pwm_period_int)/10000) or sampleAll)) then
+      takesampleHi := k_pwm_period > dropnoisysamples and k_pwm_period < ((pwm_dutyCycle_int * pwm_period_int)/10000 - dropnoisysamples);
+      takesampleLo := k_pwm_period < pwm_period_int - dropnoisysamples and k_pwm_period > ((pwm_dutyCycle_int * pwm_period_int)/10000 + dropnoisysamples);
+      if ( (takesampleHi and sampleHi) or (takesampleLo and sampleLo) or sampleAll) then
         if n_reg < NREG then
           n_reg := n_reg + 1;
         end if;
@@ -93,8 +100,10 @@ algorithm
             xreg[f2-1] := xreg[f2]; // Shift buffer (ugly)
           end for;
         //end if;
+        // write new value to buffer
         yreg[NREG] := integer( senseBridgeSign*(adcSingleBufferedInteger.adcSingleIntegerBus.buffer[f] - v_dc_int / 2));
         xreg[NREG] := k_sample; // Sample-number in actual commutation cycle
+        // calculate sums for linear fit
         sumx := sumx + xreg[NREG];
         sumx2 := sumx2 + xreg[NREG]*xreg[NREG];
         sumxy := sumxy + xreg[NREG]*yreg[NREG];
