@@ -11,6 +11,8 @@ block DetectCommutationIntBEMFext
   parameter Modelica.SIunits.Time Ts_ADC = 1e-6 "Sample rate of ADC";
   parameter Real vdivider = 3.6/13.6 "Voltage divider of phase voltage";
   parameter Integer NREG = 10 "Number of samples for a valid regression";
+  parameter Boolean modeSlope = true
+    "True for slope detection mode; false for ZeroCrossing only";
   Integer v_dc_int(start=0) "ADC value of dc link voltage";
   Integer k_cb_ADC(start=0) "Increments at each the ADC callback";
   Integer sumx(start=0) "computes sum of x (time-axis)";
@@ -36,6 +38,8 @@ block DetectCommutationIntBEMFext
   discrete Real time_blockstart(start=0) "Time when last block started";
   discrete Real time_nextblock(start=0)
     "Time when next block (commutation) will occur";
+  discrete Real time_last_zc(start=0)
+    "Time of last zero crossing (when modeSlope=false)";
   discrete Real maxBEMF(start=0) "Max EMF in this cycle";
   Real v_sense "Sensed voltage at the open motor pin, referenced to v_dc/2";
   Sensors.ADCs.AdcSingleBufferedInteger adcSingleBufferedInteger(BufDepth=
@@ -117,8 +121,18 @@ algorithm
       b_reg := (sumy * sumx2  -  sumx * sumxy) / (n_reg * sumx2  -  sumx * sumx);
       if m_reg < -0.1 then // slope must not be zero
         k_zc := integer( -b_reg / m_reg);
-        if k_zc < k_sample and time > time_nextblock then // the zero crossing shall have occurred in the past
-          duration_zc2comm_int := sqrt(-(2*KV_int / m_reg)) / 4; // TODO check "4"
+        if k_zc < k_sample and time > time_nextblock + period_adc then // the zero crossing shall have occurred in the past
+          if modeSlope then
+            duration_zc2comm_int := sqrt(-(2*KV_int / m_reg)) / 4; // TODO check "4"
+          else // Zero crossing mode only
+            if time_last_zc > 0 then // first call, this is ugly!
+              duration_zc2comm_int := integer( (time_blockstart / period_adc + k_zc  -  time_last_zc / period_adc) / 2);
+              // This is (time_this_zc - time_last_zc) / 2 / period_adc;
+            else
+              duration_zc2comm_int := k_zc; // Ugly; better use zero crossing from catch mode
+            end if;
+            time_last_zc := time_blockstart + k_zc * period_adc;
+          end if;
           time_nextblock := time_blockstart + (k_zc + duration_zc2comm_int) * period_adc;
         end if;
       end if;
@@ -127,9 +141,11 @@ algorithm
     k_cb_ADC := k_cb_ADC + 1;
   end when;
 
-  y := if time_nextblock < time and time_nextblock + period_adc > time then true else false;
+  //y := if time_nextblock < time and time_nextblock + period_adc > time then true else false;
 
 equation
+  y = if time_nextblock < time and time_nextblock + period_adc > time then true else false;
+
   v_sense = v[senseBridgeID] - v_dc / 2;
   signalVoltage.v = v[senseBridgeID] * vdivider;
   adcSingleBufferedInteger.adcSingleIntegerBus.active = senseBEMF;
@@ -150,8 +166,7 @@ equation
             horizontalAlignment =                                                                                                   TextAlignment.Left),Text(extent = {{-76,-20},{36,-56}}, lineColor = {0,0,255}, fontSize = 48,
             horizontalAlignment =                                                                                                   TextAlignment.Left, textString = "bridgeState")}),
     Documentation(info="<html>
-<p>This block implements the extended back-emf integration method.</p>
-<p>It determines the time of a zero crossing by evaluating the slope of the back-emf. In the next step, the slope is also used to calculate the time when the next commutation is required.</p>
+<p>This block determines the time when the next commutation has to occur by detecting the zero crossing and (if enabled) the slope of the voltage of the open motor phase. The back-EMF is sampled with an ADC. The ADC callback is executed each time its buffer is (half-) full, i.e. <code><font style=\"color: #0000ff; \">when</font> ...cbStart<font style=\"color: #0000ff; \">&nbsp;...</font></code>. The ADC buffer is then evaluated by <code><font style=\"color: #0000ff; \">for&nbsp;</font>f<font style=\"color: #0000ff; \">&nbsp;in&nbsp;</font>1:bufsize<font style=\"color: #0000ff; \">&nbsp;loop</font></code>... Depending on the selected PWM method, it may be required to evaluate only the samples during t_on or t_off. Furthermore some potentially noisy samples that are close to PWM switching events can be droped by adjusting the <code>dropnoisysamples</code> parameter. All good samples are stored in a circular buffer of the size <code>NREG</code> where <code>yreg[NREG]</code> are the sampled values and <code>xreg[NREG]</code> are their respective indexes. The voltage zero crossing is determined by applying a linear fit to all good values in the buffer. The index of the calculated zero crossing (from the beginning of the ADC measurement) is <code>k_zc</code>. This is not neccessarily the index of a valid sample. The time of the next commutation event <code>time_nextblock</code> is either calculated by evaluation of the voltage slope (<code><font style=\"color: #0000ff; \">if&nbsp;</font>modeSlope</code>) or the duration of the last voltage zero crossing. Note that the second method will work robustly with the most motors while the first method potentialy provides better dynamic response / acceleration while it may cause trouble with motors with an &QUOT;ugly&QUOT; back EMF shape.</p>
 <p>TODO:</p>
 <p>1. Investigate the spike that occurs single leg mode as in Test.Commutation.IntBEMF3.</p>
 </html>"));

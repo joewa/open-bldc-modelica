@@ -2,7 +2,7 @@ within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
   parameter Integer PwmMode = 1 "Two-leg (1) or single-leg (2) mode";
-  parameter Modelica.SIunits.Duration DelayCommutation = 5e-005
+  parameter Modelica.SIunits.Duration DelayCommutation = 20e-006
     "Delay commutation";
   parameter Modelica.SIunits.Duration TimeoutCommutation = 0.01
     "Motor has stopped when Timeout";
@@ -46,8 +46,8 @@ block SensorlessCtrl3phStateGraphNG "Commutation applying PWM"
   Modelica.StateGraph.Transition transLoop1(enableTimer = true, condition = true, waitTime = 0.001)
     "Timeout of catch start"                                                                                                 annotation(Placement(transformation(extent = {{-252,-58},{-232,-38}})));
   Modelica.StateGraph.StepWithSignal rampMotor "Open loop motor speed ramp up" annotation(Placement(transformation(extent = {{-170,44},{-190,24}})));
-  PulseLogic pulseLogic annotation(Placement(transformation(extent={{156,38},{
-            176,58}})));
+  PulseLogic pulseLogic annotation(Placement(transformation(extent={{156,38},{176,
+            58}})));
   PulseControlSelector pulseControlSelector annotation(Placement(transformation(extent = {{128,38},{148,58}})));
   StartMotor startMotor(FinalSpeed = 200, DutyCycleStart = 0.65, StartTime = 0.3) annotation(Placement(transformation(extent = {{-164,94},{-144,114}})));
   Modelica.StateGraph.TransitionWithSignal rampDone annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-212,34})));
@@ -106,7 +106,8 @@ equation
   connect(rampMotor.outPort[1],rampDone.inPort) annotation(Line(points = {{-190.5,34},{-208,34}}, color = {0,0,0}, smooth = Smooth.None));
   connect(rampDone.outPort,initialStep.inPort[1]) annotation(Line(points = {{-213.5,34},{-236,34},{-236,-19.5},{-229,-19.5}}, color = {0,0,0}, smooth = Smooth.None));
   connect(startMotor.done,rampDone.condition) annotation(Line(points = {{-158,94},{-158,66},{-212,66},{-212,46}}, color = {255,0,255}, smooth = Smooth.None));
-  connect(startMotor.dutyCycleIn,dutyCycle) annotation(Line(points = {{-164,104},{-188,104},{-188,80},{-280,80}}, color = {0,0,127}, smooth = Smooth.None));
+  connect(startMotor.dutyCycleIn,dutyCycle) annotation(Line(points={{-164,104},
+          {-220,104},{-220,80},{-280,80}},                                                                        color = {0,0,127}, smooth = Smooth.None));
   connect(startMotor.angle,angle) annotation(Line(points = {{-164,112},{-244,112},{-244,62},{-280,62},{-280,0}}, color = {0,0,127}, smooth = Smooth.None));
   connect(rampMotor.active,pulseControlSelector.activeIn2) annotation(Line(points = {{-180,45},{-180,122},{144,122},{144,58}}, color = {255,0,255}, smooth = Smooth.None));
   connect(rampMotor.active,pulseControlSelector.select2) annotation(Line(points = {{-180,45},{-180,72},{118,72},{118,48},{128,48}}, color = {255,0,255}, smooth = Smooth.None));
