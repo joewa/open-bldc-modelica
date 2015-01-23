@@ -6,7 +6,7 @@ model SensorlessBLDC "Application of sensorless BLDC commutation"
   parameter Integer PPZ = 6 "Motor pairs of poles";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
   Sensors.HallDigital123 hallDigital123(Ppz = PPZ) annotation(Placement(transformation(extent = {{14,-26},{34,-6}})));
-  replaceable Modelica.Mechanics.Rotational.Sources.ConstantSpeed mechanicalLoad
+  replaceable Modelica.Mechanics.Rotational.Sources.ConstantSpeed mechanicalLoad(w_fixed=0)
     "Replaceable mechanical attachment"                                                                              annotation(Placement(transformation(extent = {{-92,-26},{-72,-6}})));
   Modelica.Mechanics.Rotational.Components.Fixed fixed annotation(Placement(transformation(extent = {{-20,-96},{0,-76}})));
   Blocks.HallDecode hallDecode annotation(Placement(transformation(extent = {{42,-26},{62,-6}})));

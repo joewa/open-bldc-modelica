@@ -20,6 +20,7 @@ DetectCommutationZeroCrossingSimple
 DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
+SensorCtrl3phStateGraphNG
 PhaseDiffVoltage
 CatchStart
 CommutationCounter

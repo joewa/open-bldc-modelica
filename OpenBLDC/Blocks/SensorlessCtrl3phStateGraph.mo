@@ -45,8 +45,10 @@ equation
   connect(detectCommutationSimple.senseBEMF,senseBEMF.active) annotation(Line(points = {{50,-32},{50,-25}}, color = {255,0,255}, smooth = Smooth.None));
   connect(detectCommutationSimple.pulses,pulseWidth.y) annotation(Line(points = {{40,-38},{34,-38},{34,-72},{-10,-72}}, color = {255,0,255}, smooth = Smooth.None));
   connect(detectCommutationSimple.bridgeState,combiTable1Ds.y) annotation(Line(points = {{40,-46},{28,-46},{28,24},{-27,24}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.v_dc,v_dc) annotation(Line(points = {{54,-52},{54,-100},{60,-100}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(detectCommutationSimple.v,v) annotation(Line(points = {{46,-52},{46,-82},{0,-82},{0,-100}}, color = {0,0,127}, smooth = Smooth.None));
+  connect(detectCommutationSimple.v_dc,v_dc) annotation(Line(points={{56,-52},{
+          56,-100},{60,-100}},                                                                        color = {0,0,127}, smooth = Smooth.None));
+  connect(detectCommutationSimple.v,v) annotation(Line(points={{50,-52},{50,-82},
+          {0,-82},{0,-100}},                                                                          color = {0,0,127}, smooth = Smooth.None));
   connect(detectCommutationSimple.y,transitionWithSignal.condition) annotation(Line(points = {{60,-46},{74,-46},{74,-26}}, color = {255,0,255}, smooth = Smooth.None));
   connect(initialStep.outPort[1],transitionWithSignal1.inPort) annotation(Line(points = {{-33.5,-14},{-24,-14}}, color = {0,0,0}, smooth = Smooth.None));
   connect(booleanExpression1.y,transitionWithSignal1.condition) annotation(Line(points = {{-23,-36},{-20,-36},{-20,-26}}, color = {255,0,255}, smooth = Smooth.None));
