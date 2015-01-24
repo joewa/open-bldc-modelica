@@ -25,34 +25,9 @@ model MotorComparison
     R_p=R_p,
     L_p=L_p,
     ppz=ppz,
-    PhaseBEMF=0.005)                                                          annotation(Placement(transformation(extent={{-52,-80},
+    PhaseBEMF=5/1000)                                                         annotation(Placement(transformation(extent={{-52,-80},
             {-32,-60}})));
-  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
-    smpm(useSupport=true,
-    p=ppz,
-    Rs=R_p,
-    alpha20s(displayUnit="1/K") = Modelica.Electrical.Machines.Thermal.Constants.alpha20Zero,
-    Lmd=L_p,
-    Lmq=L_p,
-    useDamperCage=false,
-    fsNominal=1000,
-    VsOpenCircuit=5/sqrt(2))
-    annotation (Placement(transformation(extent={{-80,-160},{-60,-140}})));
 
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent={{-90,
-            -112},{-102,-98}})));
-  Modelica.Electrical.Machines.Utilities.TerminalBox
-                                 terminalBox(terminalConnection="Y")
-    annotation (Placement(transformation(extent={{-80,-136},{-60,-116}},
-          rotation=0)));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b(m=m, k=2)
-    annotation (Placement(transformation(extent={{-78,-120},{-90,-106}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c(m=m, k=3)
-    annotation (Placement(transformation(extent={{-90,-130},{-102,-116}})));
-  Modelica.Mechanics.Rotational.Components.Disc disc(deltaPhi=90/ppz*(2*pi/360))
-    annotation (Placement(transformation(extent={{-52,-160},{-32,-140}})));
-  Modelica.Mechanics.Rotational.Components.IdealGear idealGear(ratio=-1)
-    annotation (Placement(transformation(extent={{-24,-160},{-4,-140}})));
   Modelica.Electrical.Analog.Ideal.IdealClosingSwitch switch1b(Goff=1e-3)
     annotation (Placement(transformation(extent={{-152,-78},{-140,-66}})));
   Modelica.Electrical.Analog.Ideal.IdealClosingSwitch switch1c(Goff=1e-3)
@@ -67,6 +42,14 @@ model MotorComparison
     annotation (Placement(transformation(extent={{-152,-108},{-140,-96}})));
   Modelica.Blocks.Sources.BooleanStep booleanStep(startTime=5e-3)
     annotation (Placement(transformation(extent={{-200,-40},{-180,-20}})));
+  Machines.SM_PermanentMagnet_WRP sM_PermanentMagnet_WRP1(
+    fsNominal=1000,
+    R_p=R_p,
+    ppz=ppz,
+    VsOpenCircuit=5/sqrt(2)*2*pi/ppz,
+    L_md=L_p,
+    L_mq=L_p)
+    annotation (Placement(transformation(extent={{-52,-140},{-32,-120}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points={{-28,-22},
           {32,-22}},                                                                                 color = {0,0,0}, smooth = Smooth.None));
@@ -80,72 +63,16 @@ equation
           -78},{10,-168}},                                                                         color = {0,0,0}, smooth = Smooth.None));
   connect(pMSM_run.flange,constantSpeed.flange) annotation(Line(points={{-32,-70},
           {20,-70},{20,-22},{-28,-22}},                                                                         color = {0,0,0}, smooth = Smooth.None));
-  connect(smpm.plug_sn, terminalBox.plug_sn) annotation (Line(
-      points={{-76,-140},{-76,-136}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(smpm.plug_sp, terminalBox.plug_sp) annotation (Line(
-      points={{-64,-140},{-64,-136}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(plugToPin_a.plug_p, terminalBox.plugSupply) annotation (Line(
-      points={{-94.8,-105},{-70,-105},{-70,-134}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(plugToPin_b.plug_p, terminalBox.plugSupply) annotation (Line(
-      points={{-82.8,-113},{-70,-113},{-70,-134}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(plugToPin_c.plug_p, terminalBox.plugSupply) annotation (Line(
-      points={{-94.8,-123},{-70,-123},{-70,-134}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(terminalBox.starpoint, ground1.p) annotation (Line(
-      points={{-79,-134},{-122,-134},{-122,-150}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(ground1.p, pMSM_run.a2) annotation (Line(
-      points={{-122,-150},{-122,-63.6},{-52,-63.6}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(smpm.support, fixed.flange) annotation (Line(
-      points={{-60,-160},{10,-160},{10,-168}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(smpm.flange, disc.flange_a) annotation (Line(
-      points={{-60,-150},{-52,-150}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(disc.flange_b, idealGear.flange_a) annotation (Line(
-      points={{-32,-150},{-24,-150}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(idealGear.flange_b, constantSpeed.flange) annotation (Line(
-      points={{-4,-150},{20,-150},{20,-22},{-28,-22}},
-      color={0,0,0},
-      smooth=Smooth.None));
   connect(switch1c.n, pMSM_run.c1) annotation (Line(
       points={{-140,-86},{-94,-86},{-94,-76.4},{-52,-76.4}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(switch1b.n, pMSM_run.b1) annotation (Line(
-      points={{-140,-72},{-96,-72},{-96,-68.4},{-52,-68.4}},
+      points={{-140,-72},{-130,-72},{-130,-68.4},{-52,-68.4}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(switch1a.n, pMSM_run.a1) annotation (Line(
       points={{-140,-58},{-96,-58},{-96,-60.4},{-52,-60.4}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(switch2a.n, plugToPin_a.pin_p) annotation (Line(
-      points={{-140,-102},{-114,-102},{-114,-105},{-97.2,-105}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(switch2b.n, plugToPin_b.pin_p) annotation (Line(
-      points={{-140,-116},{-114,-116},{-114,-113},{-85.2,-113}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(switch2c.n, plugToPin_c.pin_p) annotation (Line(
-      points={{-140,-130},{-114,-130},{-114,-123},{-97.2,-123}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(switch1a.p, switch1b.p) annotation (Line(
@@ -196,9 +123,50 @@ equation
       points={{-179,-30},{-162,-30},{-162,-125.8},{-146,-125.8}},
       color={255,0,255},
       smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.support, fixed.flange) annotation (Line(
+      points={{-32,-138},{10,-138},{10,-168}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.flange, constantSpeed.flange) annotation (
+      Line(
+      points={{-32,-130},{20,-130},{20,-22},{-28,-22}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.c2, sM_PermanentMagnet_WRP1.b2) annotation (
+      Line(
+      points={{-52,-139.6},{-56,-139.6},{-56,-140},{-60,-140},{-60,-131.6},{-52,
+          -131.6}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.a2, sM_PermanentMagnet_WRP1.b2) annotation (
+      Line(
+      points={{-52,-123.6},{-56,-123.6},{-56,-124},{-60,-124},{-60,-131.6},{-52,
+          -131.6}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.a1, switch2a.n) annotation (Line(
+      points={{-52,-120.4},{-88,-120.4},{-88,-102},{-140,-102}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.b1, switch2b.n) annotation (Line(
+      points={{-52,-128.4},{-96,-128.4},{-96,-116},{-140,-116}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.c1, switch2c.n) annotation (Line(
+      points={{-52,-136.4},{-132,-136.4},{-132,-130},{-140,-130}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(sM_PermanentMagnet_WRP1.b2, ground1.p) annotation (Line(
+      points={{-52,-131.6},{-122,-131.6},{-122,-150}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(pMSM_run.b2, ground1.p) annotation (Line(
+      points={{-52,-71.6},{-122,-71.6},{-122,-150}},
+      color={0,0,255},
+      smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
-            -200},{100,100}}),                                                                        graphics), Documentation(info = "<html>
-    <p>This model demonstrates how to do the placement of the hall sensors with the induced phase current.</p>
-    </html>"),
+            -200},{100,100}}),                                                                        graphics), Documentation(info="<html>
+<p>This model is used to compare the stator frame PMSM model with the model from the MSL.</p>
+</html>"),
     experiment(StopTime=0.01));
 end MotorComparison;
