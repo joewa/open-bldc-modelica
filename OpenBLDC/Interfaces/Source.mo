@@ -33,6 +33,6 @@ equation
     <tr><td>1.0.0</td>  <td>2006-02-20</td>  <td> </td></tr>
     </tbody>
     </table>
-    </html>"), Icon(coordinateSystem(preserveAspectRatio = true, extent = {{-100,-100},{100,100}}, grid = {1,1}), graphics={  Rectangle(extent = {{-100,100},{100,-100}}, lineColor = {0,0,127}, fillColor = {255,255,255},
-            fillPattern =                                                                                                   FillPattern.Solid),Text(extent = {{-150,150},{150,110}}, textString = "%name", lineColor = {0,0,255})}));
+    </html>"), Icon(coordinateSystem(preserveAspectRatio = true, extent = {{-100,-100},{100,100}}, grid = {1,1}), graphics={  Rectangle(extent=  {{-100,100},{100,-100}}, lineColor=  {0,0,127}, fillColor=  {255,255,255},
+            fillPattern=                                                                                                    FillPattern.Solid),Text(extent=  {{-150,150},{150,110}}, textString=  "%name", lineColor=  {0,0,255})}));
 end Source;

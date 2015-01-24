@@ -3,17 +3,34 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
+  parameter Integer ppz = 1 "Motor pairs of poles";
+  parameter Modelica.SIunits.Resistance R_p = 0.33/2
+    "Motor per phase resistance";
+  parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
+    "Motor per phase inductance";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
   Sensors.HallDigital123 hallDigital123 annotation(Placement(transformation(extent = {{12,-32},{32,-12}})));
   Modelica.Mechanics.Rotational.Sources.ConstantSpeed constantSpeed(w_fixed = 2 * pi * 10) annotation(Placement(transformation(extent = {{-62,-32},{-42,-12}})));
-  Machines.PMSM pMSM_ab(R_p = 0.33 / 2, L_p = 3.5e-005 / 2, PhaseBEMF = 0.1) annotation(Placement(transformation(extent = {{-50,74},{-30,94}})));
+  Machines.PMSM pMSM_ab(                                    PhaseBEMF = 0.1,
+    R_p=R_p,
+    L_p=L_p,
+    ppz=ppz)                                                                 annotation(Placement(transformation(extent = {{-50,74},{-30,94}})));
   Modelica.Mechanics.Rotational.Components.Fixed fixed annotation(Placement(transformation(extent={{-18,
             -174},{2,-154}})));
   Blocks.HallDecode hallDecode annotation(Placement(transformation(extent = {{54,-32},{74,-12}})));
-  Machines.PMSM pMSM_bc(R_p = 0.33 / 2, L_p = 3.5e-005 / 2, PhaseBEMF = 0.1) annotation(Placement(transformation(extent = {{-50,46},{-30,66}})));
+  Machines.PMSM pMSM_bc(                                    PhaseBEMF = 0.1,
+    R_p=R_p,
+    L_p=L_p,
+    ppz=ppz)                                                                 annotation(Placement(transformation(extent = {{-50,46},{-30,66}})));
   Modelica.Electrical.Analog.Basic.Ground ground1 annotation(Placement(transformation(extent = {{-92,-10},{-72,10}})));
-  Machines.PMSM pMSM_ac(R_p = 0.33 / 2, L_p = 3.5e-005 / 2, PhaseBEMF = 0.1) annotation(Placement(transformation(extent = {{-50,18},{-30,38}})));
-  Machines.PMSM pMSM_run(R_p = 0.33 / 2, L_p = 3.5e-005 / 2, PhaseBEMF = 0.1) annotation(Placement(transformation(extent = {{-50,-80},{-30,-60}})));
+  Machines.PMSM pMSM_ac(                                    PhaseBEMF = 0.1,
+    R_p=R_p,
+    L_p=L_p,
+    ppz=ppz)                                                                 annotation(Placement(transformation(extent = {{-50,18},{-30,38}})));
+  Machines.PMSM pMSM_run(                                    PhaseBEMF = 0.1,
+    R_p=R_p,
+    L_p=L_p,
+    ppz=ppz)                                                                  annotation(Placement(transformation(extent = {{-50,-80},{-30,-60}})));
   Converters.SwitchingIdeal.Inverter3ph inverter3ph annotation(Placement(transformation(extent = {{-100,-80},{-80,-60}})));
   Modelica.Electrical.Analog.Basic.Ground ground2 annotation(Placement(transformation(extent = {{-140,-108},{-120,-88}})));
   Modelica.Electrical.Analog.Sources.ConstantVoltage battery(V = 15) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-130,-70})));
@@ -22,7 +39,16 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
                                                     annotation(Placement(transformation(extent={{-98,
             -126},{-78,-106}})));
   Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
-    smpm(useSupport=true)
+    smpm(useSupport=true,
+    p=ppz,
+    fsNominal=490,
+    Rs=R_p,
+    alpha20s(displayUnit="1/K") = Modelica.Electrical.Machines.Thermal.Constants.alpha20Zero,
+
+    VsOpenCircuit=11.1,
+    Lmd=L_p,
+    Lmq=L_p,
+    useDamperCage=false)
     annotation (Placement(transformation(extent={{-48,-160},{-28,-140}})));
   Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent={{-58,
             -112},{-70,-98}})));
@@ -119,6 +145,14 @@ equation
       smooth=Smooth.None));
   connect(plugToPin_c.plug_p, terminalBox.plugSupply) annotation (Line(
       points={{-62.8,-123},{-38,-123},{-38,-134}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(inverter3ph1.p_p, battery.p) annotation (Line(
+      points={{-98,-112},{-106,-112},{-106,-60},{-130,-60}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(inverter3ph1.p_n, ground2.p) annotation (Line(
+      points={{-98,-120},{-116,-120},{-116,-88},{-130,-88}},
       color={0,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
