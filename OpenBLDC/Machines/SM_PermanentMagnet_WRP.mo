@@ -17,6 +17,7 @@ model SM_PermanentMagnet_WRP
     "Stator main field inductance in d-axis";
   parameter SIunits.Inductance L_mq = 0.00145
     "Stator main field inductance in d-axis";
+  parameter Real m_k(min=0, max=0.999) = 0.5 "Mutual coupling coefficient";
   parameter Integer ppz = 1 "Pairs of poles";
   parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
     "Electrical angle between 2 phases";
@@ -51,6 +52,7 @@ model SM_PermanentMagnet_WRP
     Lmd=L_md,
     Lmq=L_mq,
     useDamperCage=false,
+    Lszero=sqrt(L_md*L_mq)*(1 - m_k),
     Lssigma=0.001/(2*pi*fsNominal))
     annotation (Placement(transformation(extent={{20,-80},{40,-60}})));
 
@@ -71,8 +73,8 @@ model SM_PermanentMagnet_WRP
     annotation (Placement(transformation(extent={{-20,-80},{-40,-60}})));
   Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c2(m=m, k=3)
     annotation (Placement(transformation(extent={{-20,-100},{-40,-80}})));
-equation
 
+equation
   connect(smpm.support, support) annotation (Line(
       points={{40,-80},{100,-80}},
       color={0,0,0},

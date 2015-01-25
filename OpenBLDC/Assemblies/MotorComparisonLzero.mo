@@ -1,6 +1,5 @@
 within OpenBLDC.Assemblies;
-model MotorComparison
-  "Compare per phase model with the model from the standard library"
+model MotorComparisonLzero "Test setup to compare the effect of Lzero"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
@@ -9,19 +8,19 @@ model MotorComparison
     "Motor per phase resistance";
   parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
-  parameter Real m_k(min=0, max=0.999) = 0 "Mutual coupling coefficient";
+  parameter Real m_k(min=0, max=0.999) = 0.5 "Mutual coupling coefficient";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
   Sensors.HallDigital123 hallDigital123 annotation(Placement(transformation(extent={{32,-32},
             {52,-12}})));
-  Modelica.Mechanics.Rotational.Sources.ConstantSpeed constantSpeed(w_fixed=8000
+  Modelica.Mechanics.Rotational.Sources.ConstantSpeed constantSpeed(w_fixed=500
         *2*Modelica.Constants.pi/60)                                                       annotation(Placement(transformation(extent={{-48,-32},
             {-28,-12}})));
   Modelica.Mechanics.Rotational.Components.Fixed fixed annotation(Placement(transformation(extent={{0,-178},
             {20,-158}})));
   Blocks.HallDecode hallDecode annotation(Placement(transformation(extent={{74,-32},
             {94,-12}})));
-  Modelica.Electrical.Analog.Basic.Ground ground1 annotation(Placement(transformation(extent={{-132,
-            -170},{-112,-150}})));
+  Modelica.Electrical.Analog.Basic.Ground ground1 annotation(Placement(transformation(extent={{-134,
+            -180},{-114,-160}})));
   Machines.PMSMm pMSM_run(
     R_p=R_p,
     ppz=ppz,
@@ -42,7 +41,7 @@ model MotorComparison
     annotation (Placement(transformation(extent={{-152,-136},{-140,-124}})));
   Modelica.Electrical.Analog.Ideal.IdealClosingSwitch switch2a(Goff=1e-3)
     annotation (Placement(transformation(extent={{-152,-108},{-140,-96}})));
-  Modelica.Blocks.Sources.BooleanStep booleanStep(startTime=5e-3)
+  Modelica.Blocks.Sources.BooleanPulse booleanStep(startTime=5e-3, period=50e-6)
     annotation (Placement(transformation(extent={{-200,-40},{-180,-20}})));
   Machines.SM_PermanentMagnet_WRP sM_PermanentMagnet_WRP1(
     fsNominal=1000,
@@ -53,6 +52,41 @@ model MotorComparison
     L_mq=L_p,
     m_k=m_k)
     annotation (Placement(transformation(extent={{-52,-140},{-32,-120}})));
+  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V=10)
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-152,-150})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d1 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-117,-155})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d2 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-109,-155})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d3 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-101,-155})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d4 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-93,-155})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d5 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-85,-155})));
+  Modelica.Electrical.Analog.Ideal.IdealDiode d6 annotation (Placement(
+        transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=90,
+        origin={-77,-155})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points={{-28,-22},
           {32,-22}},                                                                                 color = {0,0,0}, smooth = Smooth.None));
@@ -67,7 +101,7 @@ equation
   connect(pMSM_run.flange,constantSpeed.flange) annotation(Line(points={{-32,-70},
           {20,-70},{20,-22},{-28,-22}},                                                                         color = {0,0,0}, smooth = Smooth.None));
   connect(switch1c.n, pMSM_run.c1) annotation (Line(
-      points={{-140,-86},{-94,-86},{-94,-76.4},{-52,-76.4}},
+      points={{-140,-86},{-68,-86},{-68,-76.4},{-52,-76.4}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(switch1b.n, pMSM_run.b1) annotation (Line(
@@ -96,10 +130,6 @@ equation
       smooth=Smooth.None));
   connect(switch2b.p, switch2c.p) annotation (Line(
       points={{-152,-116},{-152,-130}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(switch2c.p, ground1.p) annotation (Line(
-      points={{-152,-130},{-152,-150},{-122,-150}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(booleanStep.y, switch1a.control) annotation (Line(
@@ -148,11 +178,11 @@ equation
       color={0,0,255},
       smooth=Smooth.None));
   connect(sM_PermanentMagnet_WRP1.a1, switch2a.n) annotation (Line(
-      points={{-52,-120.4},{-88,-120.4},{-88,-102},{-140,-102}},
+      points={{-52,-120.4},{-66,-120.4},{-66,-102},{-140,-102}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(sM_PermanentMagnet_WRP1.b1, switch2b.n) annotation (Line(
-      points={{-52,-128.4},{-96,-128.4},{-96,-116},{-140,-116}},
+      points={{-52,-128.4},{-70,-128.4},{-70,-116},{-140,-116}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(sM_PermanentMagnet_WRP1.c1, switch2c.n) annotation (Line(
@@ -160,16 +190,73 @@ equation
       color={0,0,255},
       smooth=Smooth.None));
   connect(sM_PermanentMagnet_WRP1.b2, ground1.p) annotation (Line(
-      points={{-52,-131.6},{-122,-131.6},{-122,-150}},
+      points={{-52,-131.6},{-124,-131.6},{-124,-160}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(pMSM_run.b2, ground1.p) annotation (Line(
-      points={{-52,-71.6},{-122,-71.6},{-122,-150}},
+      points={{-52,-71.6},{-124,-71.6},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(constantVoltage.n, ground1.p) annotation (Line(
+      points={{-152,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(constantVoltage.p, switch2c.p) annotation (Line(
+      points={{-152,-140},{-152,-130}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(ground1.p, d1.p) annotation (Line(
+      points={{-124,-160},{-117,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d2.p, ground1.p) annotation (Line(
+      points={{-109,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d3.p, ground1.p) annotation (Line(
+      points={{-101,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d4.p, ground1.p) annotation (Line(
+      points={{-93,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d5.p, ground1.p) annotation (Line(
+      points={{-85,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d6.p, ground1.p) annotation (Line(
+      points={{-77,-160},{-124,-160}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d6.n, sM_PermanentMagnet_WRP1.c1) annotation (Line(
+      points={{-77,-150},{-76,-150},{-76,-136.4},{-52,-136.4}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d5.n, switch2b.n) annotation (Line(
+      points={{-85,-150},{-84,-150},{-84,-116},{-140,-116}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d4.n, switch2a.n) annotation (Line(
+      points={{-93,-150},{-92,-150},{-92,-102},{-140,-102}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d3.n, switch1c.n) annotation (Line(
+      points={{-101,-150},{-100,-150},{-100,-86},{-140,-86}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d2.n, pMSM_run.b1) annotation (Line(
+      points={{-109,-150},{-108,-150},{-108,-68.4},{-52,-68.4}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(d1.n, switch1a.n) annotation (Line(
+      points={{-117,-150},{-116,-150},{-116,-58},{-140,-58}},
       color={0,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
             -200},{100,100}}),                                                                        graphics), Documentation(info="<html>
 <p>This model is used to compare the stator frame PMSM model with the model from the MSL.</p>
+<p>Play around with the coupling coefficient <code>m_k</code> and observe the impact on the motor currents.</p>
 </html>"),
     experiment(StopTime=0.01));
-end MotorComparison;
+end MotorComparisonLzero;

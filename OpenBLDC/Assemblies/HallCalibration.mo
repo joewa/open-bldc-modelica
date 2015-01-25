@@ -44,12 +44,12 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
     fsNominal=490,
     Rs=R_p,
     alpha20s(displayUnit="1/K") = Modelica.Electrical.Machines.Thermal.Constants.alpha20Zero,
-
     VsOpenCircuit=11.1,
     Lmd=L_p,
     Lmq=L_p,
     useDamperCage=false)
     annotation (Placement(transformation(extent={{-48,-160},{-28,-140}})));
+
   Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent={{-58,
             -112},{-70,-98}})));
   Modelica.Electrical.Machines.Utilities.TerminalBox
