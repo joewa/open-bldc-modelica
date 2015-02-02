@@ -1,5 +1,8 @@
+MotorComparisonFreeRunning
 MotorComparison
 MotorComparisonLzero
+MotorComparisonLzero2
+MotorComparisonLDQ
 HallCalibration
 HallSensor_Test
 MotorConstSpeedSensorless

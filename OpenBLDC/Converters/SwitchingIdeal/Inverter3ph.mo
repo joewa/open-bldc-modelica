@@ -23,14 +23,30 @@ model Inverter3ph "3-phase inverter (wrapper)"
   Modelica.Blocks.Interfaces.RealOutput v[m] "output voltage" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {0,-100})));
   Modelica.Blocks.Interfaces.RealOutput i[m] "output current" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {40,-100})));
   Modelica.Electrical.Analog.Sensors.VoltageSensor voltageSensor annotation(Placement(transformation(extent = {{-10,10},{10,-10}}, rotation = 270, origin = {-88,-16})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense(m = m, R = fill(13600.0, m))
-    "Impedance of voltage divider for phase voltage measurement"                                                                                  annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 180, origin = {-32,-40})));
+  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense_L(m=m, R=fill(3600.0, m))
+    "Impedance of voltage divider for phase voltage measurement" annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-32,-40})));
 protected
   parameter Modelica.SIunits.Resistance ronSwitch[:] = fill(RonSwitch, m);
   parameter Modelica.SIunits.Conductance goffSwitch[:] = fill(GoffSwitch, m);
   parameter Modelica.SIunits.Resistance ronDiode[:] = fill(RonDiode, m);
   parameter Modelica.SIunits.Conductance goffDiode[:] = fill(GoffDiode, m);
   parameter Modelica.SIunits.Voltage vknee[:] = fill(0, m);
+public
+  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense_H(m=m, R=fill(10000.0,
+        m)) "Impedance of voltage divider for phase voltage measurement"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={6,-24})));
+  Modelica.Electrical.MultiPhase.Basic.Capacitor c_sense(m=m, C=fill(0.5e-9, m))
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-32,-20})));
 equation
   connect(ctrl_l,inverter.ctrl_l) annotation(Line(points = {{20,106},{20,80},{-8.800000000000001,80},{-8.800000000000001,10.6}}, color = {255,0,255}, smooth = Smooth.None));
   connect(ctrl_h,inverter.ctrl_h) annotation(Line(points = {{-20,106},{-20,80},{-13.2,80},{-13.2,10.6}}, color = {255,0,255}, smooth = Smooth.None));
@@ -49,7 +65,26 @@ equation
   connect(voltageSensor.v,v_dc) annotation(Line(points = {{-78,-16},{-54,-16},{-54,-80},{-100,-80}}, color = {0,0,127}, smooth = Smooth.None));
   connect(inverter.v,v) annotation(Line(points = {{-15.4,-10},{-16,-10},{-16,-70},{0,-70},{0,-100}}, color = {0,0,127}, smooth = Smooth.None));
   connect(inverter.i,i) annotation(Line(points = {{-6.6,-10},{-6,-10},{-6,-60},{40,-60},{40,-100}}, color = {0,0,127}, smooth = Smooth.None));
-  connect(r_sense.plug_n,star_n.plug_p) annotation(Line(points = {{-42,-40},{-62,-40}}, color = {0,0,255}, smooth = Smooth.None));
-  connect(r_sense.plug_p,inverter.plug_p) annotation(Line(points = {{-22,-40},{8,-40},{8,0},{0,0}}, color = {0,0,255}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), DymolaStoredErrors, Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
+  connect(r_sense_L.plug_n, star_n.plug_p) annotation (Line(
+      points={{-42,-40},{-62,-40}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(r_sense_H.plug_p, inverter.plug_p) annotation (Line(
+      points={{6,-14},{6,0},{0,0}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(r_sense_L.plug_p, r_sense_H.plug_n) annotation (Line(
+      points={{-22,-40},{6,-40},{6,-34}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(c_sense.plug_n, r_sense_L.plug_n) annotation (Line(
+      points={{-42,-20},{-42,-40}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(c_sense.plug_p, r_sense_L.plug_p) annotation (Line(
+      points={{-22,-20},{-22,-40}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
+            -100},{100,100}}),                                                                        graphics), DymolaStoredErrors, Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
 end Inverter3ph;

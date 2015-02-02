@@ -21,7 +21,7 @@ model MotorComparison
   Blocks.HallDecode hallDecode annotation(Placement(transformation(extent={{74,-32},
             {94,-12}})));
   Modelica.Electrical.Analog.Basic.Ground ground1 annotation(Placement(transformation(extent={{-132,
-            -170},{-112,-150}})));
+            -188},{-112,-168}})));
   Machines.PMSMm pMSM_run(
     R_p=R_p,
     ppz=ppz,
@@ -42,8 +42,8 @@ model MotorComparison
     annotation (Placement(transformation(extent={{-152,-136},{-140,-124}})));
   Modelica.Electrical.Analog.Ideal.IdealClosingSwitch switch2a(Goff=1e-3)
     annotation (Placement(transformation(extent={{-152,-108},{-140,-96}})));
-  Modelica.Blocks.Sources.BooleanStep booleanStep(startTime=5e-3)
-    annotation (Placement(transformation(extent={{-200,-40},{-180,-20}})));
+  Modelica.Blocks.Sources.BooleanStep booleanStep(startTime=3e-3)
+    annotation (Placement(transformation(extent={{-200,-20},{-180,0}})));
   Machines.SM_PermanentMagnet_WRP sM_PermanentMagnet_WRP1(
     fsNominal=1000,
     R_p=R_p,
@@ -53,6 +53,18 @@ model MotorComparison
     L_mq=L_p,
     m_k=m_k)
     annotation (Placement(transformation(extent={{-52,-140},{-32,-120}})));
+  Modelica.Blocks.Sources.BooleanStep booleanStep1(startTime=6e-3)
+    annotation (Placement(transformation(extent={{-200,-82},{-180,-62}})));
+  Modelica.Electrical.Analog.Basic.Resistor resistor2(R=1e5) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-96,-164})));
+  Modelica.Electrical.Analog.Basic.Resistor resistor1(R=1e5) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-96,-148})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points={{-28,-22},
           {32,-22}},                                                                                 color = {0,0,0}, smooth = Smooth.None));
@@ -99,31 +111,23 @@ equation
       color={0,0,255},
       smooth=Smooth.None));
   connect(switch2c.p, ground1.p) annotation (Line(
-      points={{-152,-130},{-152,-150},{-122,-150}},
+      points={{-152,-130},{-152,-168},{-122,-168}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(booleanStep.y, switch1a.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-53.8},{-146,-53.8}},
+      points={{-179,-10},{-162,-10},{-162,-53.8},{-146,-53.8}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(booleanStep.y, switch1b.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-67.8},{-146,-67.8}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(booleanStep.y, switch1c.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-81.8},{-146,-81.8}},
+      points={{-179,-10},{-162,-10},{-162,-67.8},{-146,-67.8}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(booleanStep.y, switch2a.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-97.8},{-146,-97.8}},
+      points={{-179,-10},{-162,-10},{-162,-97.8},{-146,-97.8}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(booleanStep.y, switch2b.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-111.8},{-146,-111.8}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(booleanStep.y, switch2c.control) annotation (Line(
-      points={{-179,-30},{-162,-30},{-162,-125.8},{-146,-125.8}},
+      points={{-179,-10},{-162,-10},{-162,-111.8},{-146,-111.8}},
       color={255,0,255},
       smooth=Smooth.None));
   connect(sM_PermanentMagnet_WRP1.support, fixed.flange) annotation (Line(
@@ -159,12 +163,29 @@ equation
       points={{-52,-136.4},{-132,-136.4},{-132,-130},{-140,-130}},
       color={0,0,255},
       smooth=Smooth.None));
-  connect(sM_PermanentMagnet_WRP1.b2, ground1.p) annotation (Line(
-      points={{-52,-131.6},{-122,-131.6},{-122,-150}},
+  connect(booleanStep1.y, switch1c.control) annotation (Line(
+      points={{-179,-72},{-168,-72},{-168,-81.8},{-146,-81.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(booleanStep1.y, switch2c.control) annotation (Line(
+      points={{-179,-72},{-168,-72},{-168,-125.8},{-146,-125.8}},
+      color={255,0,255},
+      smooth=Smooth.None));
+  connect(resistor2.n, ground1.p) annotation (Line(
+      points={{-106,-164},{-114,-164},{-114,-168},{-122,-168}},
       color={0,0,255},
       smooth=Smooth.None));
-  connect(pMSM_run.b2, ground1.p) annotation (Line(
-      points={{-52,-71.6},{-122,-71.6},{-122,-150}},
+  connect(resistor1.n, ground1.p) annotation (Line(
+      points={{-106,-148},{-114,-148},{-114,-168},{-122,-168}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(resistor2.p, sM_PermanentMagnet_WRP1.b2) annotation (Line(
+      points={{-86,-164},{-74,-164},{-74,-132},{-60,-132},{-52,-131.6}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(resistor1.p, pMSM_run.b2) annotation (Line(
+      points={{-86,-148},{-78,-148},{-78,-72},{-64,-72},{-64,-71.6},{-52,-71.6}},
+
       color={0,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,

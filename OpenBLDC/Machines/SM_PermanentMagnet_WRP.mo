@@ -65,13 +65,13 @@ model SM_PermanentMagnet_WRP
     annotation (Placement(transformation(extent={{-20,80},{-40,100}})));
   Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a2(m=m, k=1)
     annotation (Placement(transformation(extent={{-20,60},{-40,80}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b1(m=m, k=2)
+  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b1(m=m, k=3)
     annotation (Placement(transformation(extent={{-20,0},{-40,20}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b2(m=m, k=2)
+  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b2(m=m, k=3)
     annotation (Placement(transformation(extent={{-20,-20},{-40,0}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c1(m=m, k=3)
+  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c1(m=m, k=2)
     annotation (Placement(transformation(extent={{-20,-80},{-40,-60}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c2(m=m, k=3)
+  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c2(m=m, k=2)
     annotation (Placement(transformation(extent={{-20,-100},{-40,-80}})));
 
 equation
