@@ -3,6 +3,7 @@ MotorComparison
 MotorComparisonLzero
 MotorComparisonLzero2
 MotorComparisonLDQ
+MotorComparisonLDQ2
 HallCalibration
 HallSensor_Test
 MotorConstSpeedSensorless

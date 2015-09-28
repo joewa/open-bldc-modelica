@@ -185,9 +185,9 @@ equation
       smooth=Smooth.None));
   connect(resistor1.p, pMSM_run.b2) annotation (Line(
       points={{-86,-148},{-78,-148},{-78,-72},{-64,-72},{-64,-71.6},{-52,-71.6}},
-
       color={0,0,255},
       smooth=Smooth.None));
+
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
             -200},{100,100}}),                                                                        graphics), Documentation(info="<html>
 <p>This model is used to compare the stator frame PMSM model with the model from the MSL.</p>

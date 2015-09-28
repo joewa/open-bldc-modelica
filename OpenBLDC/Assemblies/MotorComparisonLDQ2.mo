@@ -1,5 +1,5 @@
 within OpenBLDC.Assemblies;
-model MotorComparisonLDQ
+model MotorComparisonLDQ2
   "Test setup to compare the effect of different L_q and L_d"
   extends Modelica.Icons.Example;
   import Modelica.Constants.pi;
@@ -9,7 +9,7 @@ model MotorComparisonLDQ
     "Motor per phase resistance";
   parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
-  parameter Real m_k(min=0, max=0.999) = 0.9 "Mutual coupling coefficient";
+  parameter Real m_k(min=0, max=0.999) = 0 "Mutual coupling coefficient";
   parameter Modelica.SIunits.Duration T_PWM = 50e-6;
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
   Sensors.HallDigital123 hallDigital123(Ppz=ppz)
@@ -24,12 +24,13 @@ model MotorComparisonLDQ
             {94,-12}})));
   Modelica.Electrical.Analog.Basic.Ground ground1 annotation(Placement(transformation(extent={{-86,
             -188},{-66,-168}})));
-  Machines.PMSMm pMSM_run(
+  Machines.PMSMdq_3ph
+                 pMSM_run(
     R_p=R_p,
     ppz=ppz,
     PhaseBEMF=5/1000,
-    L_p=L_p,
-    m_k=m_k)                                                                  annotation(Placement(transformation(extent={{0,-80},
+    L_md=L_p - L_p*0.2,
+    L_mq=L_p + L_p*0.2)                                                       annotation(Placement(transformation(extent={{0,-80},
             {20,-60}})));
 
   Machines.SM_PermanentMagnet_WRP sM_PermanentMagnet_WRP1(
@@ -37,9 +38,9 @@ model MotorComparisonLDQ
     R_p=R_p,
     ppz=ppz,
     VsOpenCircuit=5/sqrt(2)*2*pi/ppz,
-    m_k=m_k,
     L_md=L_p - L_p*0.2,
-    L_mq=L_p + L_p*0.2)
+    L_mq=L_p + L_p*0.2,
+    m_k=0)
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V=10)
     annotation (Placement(transformation(
@@ -211,4 +212,4 @@ equation
 <p>The connectors a and b are operated in 2-leg PWM mode. Observe the voltage on the open connector c of inverter3ph_2 and the torque of the motor.</p>
 </html>"),
     experiment(StopTime=0.01));
-end MotorComparisonLDQ;
+end MotorComparisonLDQ2;
