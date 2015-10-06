@@ -56,6 +56,10 @@ model HallCalibrationOld "Constant speed demonstrate hall sensor commutation"
     annotation (Placement(transformation(extent={{-46,-120},{-58,-106}})));
   Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c(m=m, k=3)
     annotation (Placement(transformation(extent={{-58,-130},{-70,-116}})));
+  Blocks.PhaseDiffVoltage phaseDiffVoltage
+    annotation (Placement(transformation(extent={{-82,-168},{-62,-148}})));
+  Modelica.Blocks.Sources.Constant const(k=0)
+    annotation (Placement(transformation(extent={{-160,-40},{-140,-20}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points = {{-42,-22},{12,-22}}, color = {0,0,0}, smooth = Smooth.None));
   connect(fixed.flange,pMSM_ab.support) annotation(Line(points={{-8,-164},{-8,
@@ -81,8 +85,6 @@ equation
   connect(pMSM_bc.flange,constantSpeed.flange) annotation(Line(points = {{-30,56},{0,56},{0,-22},{-42,-22}}, color = {0,0,0}, smooth = Smooth.None));
   connect(pMSM_ac.flange,constantSpeed.flange) annotation(Line(points = {{-30,28},{0,28},{0,-22},{-42,-22}}, color = {0,0,0}, smooth = Smooth.None));
   connect(ground2.p,battery.n) annotation(Line(points = {{-130,-88},{-130,-80}}, color = {0,0,255}, smooth = Smooth.None));
-  connect(hallDecode.y[1],testCtrl3phPWM.angle) annotation(Line(points={{74,-22},
-          {86,-22},{86,-50},{-148,-50},{-148,-30},{-120,-30}},                                                                            color = {0,0,127}, smooth = Smooth.None));
   connect(testCtrl3phPWM.hCtrl, inverter3ph1.ctrl_h) annotation (Line(
       points={{-100,-24},{-76,-24},{-76,-92},{-90,-92},{-90,-105.4}},
       color={255,0,255},
@@ -138,6 +140,14 @@ equation
   connect(inverter3ph1.p_n, ground2.p) annotation (Line(
       points={{-98,-120},{-116,-120},{-116,-88},{-130,-88}},
       color={0,0,255},
+      smooth=Smooth.None));
+  connect(inverter3ph1.v, phaseDiffVoltage.u) annotation (Line(
+      points={{-88,-126},{-88,-158},{-82,-158}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(const.y, testCtrl3phPWM.angle) annotation (Line(
+      points={{-139,-30},{-120,-30}},
+      color={0,0,127},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
             -200},{100,100}}),                                                                        graphics), Documentation(info = "<html>

@@ -70,12 +70,12 @@ equation
       points={{-32,40},{-36,40}},
       color={0,0,255},
       smooth=Smooth.None));
-  connect(selfInductor.plug_p, plug_sp) annotation (Line(
-      points={{-56,40},{-56,68},{60,68},{60,100}},
+  connect(u.plug_n, plug_sn) annotation (Line(
+      points={{12,40},{12,72},{-60,72},{-60,100}},
       color={0,0,255},
       smooth=Smooth.None));
-  connect(u.plug_n, plug_sn) annotation (Line(
-      points={{12,40},{12,76},{-60,76},{-60,100}},
+  connect(selfInductor.plug_p, plug_sp) annotation (Line(
+      points={{-56,40},{-56,60},{60,60},{60,100}},
       color={0,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,

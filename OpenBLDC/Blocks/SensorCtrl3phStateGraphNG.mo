@@ -25,7 +25,7 @@ block SensorCtrl3phStateGraphNG "Commutation applying PWM"
             58}})));
   HalfBridgeLogicBLDC halfBridgeLogicINSD[3]
     annotation (Placement(transformation(extent={{198,38},{218,58}})));
-  Modelica.Blocks.Sources.BooleanStep switchOn(startTime=10e-3)
+  Modelica.Blocks.Sources.BooleanStep switchOn(startTime=0.1e-3)
     annotation (Placement(transformation(extent={{118,-10},{138,10}})));
   Modelica.Blocks.Sources.Constant const(k=7)
     annotation (Placement(transformation(extent={{-104,24},{-84,44}})));

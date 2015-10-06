@@ -50,7 +50,7 @@ model PMSMdq_3ph
     ppz=ppz,
     m=3,
     PhaseBEMF=PhaseBEMF)
-    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    annotation (Placement(transformation(extent={{22,-82},{42,-62}})));
 equation
   connect(a1, plugToPin_a1.pin_p) annotation (Line(
       points={{-100,96},{-90,96},{-90,90},{-78,90}},
@@ -77,35 +77,35 @@ equation
       color={0,0,255},
       smooth=Smooth.None));
   connect(pMSMndq.flange, flange) annotation (Line(
-      points={{40,0},{100,0}},
+      points={{42,-72},{72,-72},{72,0},{100,0}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(pMSMndq.support, support) annotation (Line(
-      points={{40,-8},{70,-8},{70,-80},{100,-80}},
+      points={{42,-80},{100,-80}},
       color={0,0,0},
       smooth=Smooth.None));
+  connect(pMSMndq.plug_sp, plugToPin_a2.plug_p) annotation (Line(
+      points={{38,-62},{38,70},{-74,70}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(pMSMndq.plug_sp, plugToPin_b2.plug_p) annotation (Line(
+      points={{38,-62},{38,-10},{-74,-10}},
+      color={0,0,255},
+      smooth=Smooth.None));
+  connect(pMSMndq.plug_sp, plugToPin_c2.plug_p) annotation (Line(
+      points={{38,-62},{38,-46},{-36,-46},{-36,-90},{-74,-90}},
+      color={0,0,255},
+      smooth=Smooth.None));
   connect(pMSMndq.plug_sn, plugToPin_a1.plug_p) annotation (Line(
-      points={{24,10},{24,90},{-74,90}},
+      points={{26,-62},{26,90},{-74,90}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(pMSMndq.plug_sn, plugToPin_b1.plug_p) annotation (Line(
-      points={{24,10},{-74,10}},
+      points={{26,-62},{26,10},{-74,10}},
       color={0,0,255},
       smooth=Smooth.None));
   connect(pMSMndq.plug_sn, plugToPin_c1.plug_p) annotation (Line(
-      points={{24,10},{-26,10},{-26,-70},{-74,-70}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(pMSMndq.plug_sp, plugToPin_a2.plug_p) annotation (Line(
-      points={{36,10},{36,70},{-74,70}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(plugToPin_b2.plug_p, pMSMndq.plug_sp) annotation (Line(
-      points={{-74,-10},{-42,-10},{-42,28},{36,28},{36,10}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(plugToPin_c2.plug_p, pMSMndq.plug_sp) annotation (Line(
-      points={{-74,-90},{-42,-90},{-42,28},{36,28},{36,10}},
+      points={{26,-62},{26,-32},{-56,-32},{-56,-70},{-74,-70}},
       color={0,0,255},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,

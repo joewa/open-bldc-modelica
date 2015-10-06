@@ -4,7 +4,8 @@ block TestCtrl3phPWM "Commutation applying PWM"
   Modelica.Blocks.Interfaces.BooleanOutput hCtrl[3] annotation(Placement(transformation(extent = {{90,50},{110,70}})));
   Modelica.Blocks.Interfaces.BooleanOutput lCtrl[3] annotation(Placement(transformation(extent = {{90,-70},{110,-50}})));
   Modelica.Blocks.Interfaces.RealInput angle "Decoded hall" annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
-  Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table = [1,1,-1,0;2,0,-1,1;3,-1,0,1;4,-1,1,0;5,0,1,-1;6,1,0,-1]) annotation(Placement(transformation(extent = {{-60,-10},{-40,10}})));
+  Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table=[0,0,0,0; 1,1,-1,0;
+        2,0,-1,1; 3,-1,0,1; 4,-1,1,0; 5,0,1,-1; 6,1,0,-1])                                                            annotation(Placement(transformation(extent = {{-60,-10},{-40,10}})));
   PulseWidthVar pulseWidth[3] annotation(Placement(transformation(extent={{-22,68},
             {-2,88}})));
   Modelica.Blocks.Sources.Constant const[3](each k = 0.9) annotation(Placement(transformation(extent = {{-90,78},{-70,98}})));

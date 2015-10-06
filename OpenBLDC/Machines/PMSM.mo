@@ -54,18 +54,18 @@ model PMSM "3ph-PMSM stator frame model"
   //l_b.i = I_b_0;
   //l_c.i = I_c_0;
 equation
-  connect(a2,r_a.p);
+  connect(a1,r_a.p);
   connect(r_a.n,l_a.p);
   connect(l_a.n,u_a.p);
-  connect(u_a.n,a1);
-  connect(b2,r_b.p);
+  connect(u_a.n,a2);
+  connect(b1,r_b.p);
   connect(r_b.n,l_b.p);
   connect(l_b.n,u_b.p);
-  connect(u_b.n,b1);
-  connect(c2,r_c.p);
+  connect(u_b.n,b2);
+  connect(c1,r_c.p);
   connect(r_c.n,l_c.p);
   connect(l_c.n,u_c.p);
-  connect(u_c.n,c1);
+  connect(u_c.n,c2);
   flux_a = psi_m * cos(phiElectrical + 0 * ang_p);
   flux_b = psi_m * cos(phiElectrical + 1 * ang_p);
   flux_c = psi_m * cos(phiElectrical + 2 * ang_p);
