@@ -9,6 +9,7 @@ HalfBridgeLogic
 HalfBridgeDriver
 PulseWidthVar
 PulseLogic
+PulseLogicNph
 PulseControlSelector
 StartMotor
 SensorlessCtrl3phPWM
@@ -21,6 +22,8 @@ DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
 SensorCtrl3phStateGraphNG
+SensorCtrl5phStateGraphNG
 PhaseDiffVoltage
+PhaseDiffVoltageNph
 CatchStart
 CommutationCounter

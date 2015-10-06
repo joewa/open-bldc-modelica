@@ -44,7 +44,8 @@ equation
   connect(motorVoltageCommand.y,sensorlessCtrl3phPWM.dutyCycle) annotation(Line(points = {{-171,-22},{-164,-22},{-164,-41},{-158,-41}}, color = {0,0,127}, smooth = Smooth.None));
   connect(mechanicalLoad.flange,bearingFriction.flange_a) annotation(Line(points = {{-72,-16},{-56,-16},{-56,-32},{-38,-32}}, color = {0,0,0}, smooth = Smooth.None));
   connect(bearingFriction.flange_b,pMSM_run.flange) annotation(Line(points = {{-18,-32},{-10,-32},{-10,-70},{-18,-70}}, color = {0,0,0}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-200,-200},{100,100}}), graphics), Documentation(info = "<html>
+  annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,
+            -200},{100,100}}),                                                                        graphics), Documentation(info = "<html>
     <p>This model demonstrates how to do the placement of the hall sensors with the induced phase current.</p>
     </html>"));
 end SensorlessBLDC;

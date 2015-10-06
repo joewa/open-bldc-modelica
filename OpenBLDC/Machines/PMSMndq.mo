@@ -38,7 +38,8 @@ model PMSMndq
 
   Modelica.Electrical.MultiPhase.Basic.VariableInductor selfInductor(m=m)
     annotation (Placement(transformation(extent={{-56,30},{-36,50}})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor resistor(     R={R_p,R_p,R_p}, m=m)
+  Modelica.Electrical.MultiPhase.Basic.Resistor resistor(                      m=m, R=fill(
+        R_p, m))
     annotation (Placement(transformation(extent={{-32,30},{-12,50}})));
   Modelica.Electrical.MultiPhase.Sources.SignalVoltage u(m=m) "back EMF"
     annotation (Placement(transformation(extent={{-8,30},{12,50}})));

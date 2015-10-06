@@ -5,7 +5,8 @@ MotorComparisonLzero2
 MotorComparisonLDQ
 MotorComparisonLDQ2
 HallCalibration
+HallCalibrationOld
 HallSensor_Test
 MotorConstSpeedSensorless
 SensorlessBLDC
-SensorlessBLDC2
+SensorBLDC5ph
