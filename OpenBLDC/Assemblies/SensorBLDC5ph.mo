@@ -19,9 +19,9 @@ model SensorBLDC5ph "Application of 5 phase hall sensor BLDC commutation"
   Machines.PMSMndq
                 pMSM_run(                                    ppz = PPZ, PhaseBEMF = 0.005, Jr = 5e-005,
     R_p=R_p,
-    L_md=L_p - L_p*0.2,
-    L_mq=L_p + L_p*0.2,
-    m=m)                                                                                                annotation(Placement(transformation(extent = {{-38,-80},{-18,-60}})));
+    m=m,
+    L_md=L_p,
+    L_mq=L_p)                                                                                           annotation(Placement(transformation(extent = {{-38,-80},{-18,-60}})));
   Converters.SwitchingIdeal.InverterNph inverter3ph(m=m)
                                                     annotation(Placement(transformation(extent = {{-88,-80},{-68,-60}})));
   Modelica.Electrical.Analog.Basic.Ground ground2 annotation(Placement(transformation(extent = {{-128,-108},{-108,-88}})));
@@ -36,8 +36,10 @@ model SensorBLDC5ph "Application of 5 phase hall sensor BLDC commutation"
   Modelica.Electrical.Machines.Utilities.TerminalBox terminalBox(
       terminalConnection="Y", m=m)
     annotation (Placement(transformation(extent={{-38,-60},{-18,-40}})));
-  Modelica.Blocks.Sources.Constant const(k=0)
-    annotation (Placement(transformation(extent={{-202,-76},{-182,-56}})));
+  Modelica.Blocks.Sources.Step step(startTime=0.11e-3)
+    annotation (Placement(transformation(extent={{-198,-68},{-178,-48}})));
+  Blocks.HallDecode5ph hallDecode5ph
+    annotation (Placement(transformation(extent={{58,-26},{78,-6}})));
 equation
   connect(mechanicalLoad.flange, hallDigital12345.flange) annotation (Line(
       points={{-72,-16},{14,-16}},
@@ -81,8 +83,13 @@ equation
       points={{-68,-70},{-50,-70},{-50,-50},{-28,-50},{-28,-58}},
       color={0,0,255},
       smooth=Smooth.None));
-  connect(const.y, sensorCtrlPWM.angle) annotation (Line(
-      points={{-181,-66},{-170,-66},{-170,-47.6667},{-158,-47.6667}},
+  connect(hallDigital12345.y, hallDecode5ph.u) annotation (Line(
+      points={{34,-16},{58,-16}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(hallDecode5ph.y[1], sensorCtrlPWM.angle) annotation (Line(
+      points={{78,-16},{88,-16},{88,-130},{-170,-130},{-170,-47.6667},{-158,
+          -47.6667}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-200,

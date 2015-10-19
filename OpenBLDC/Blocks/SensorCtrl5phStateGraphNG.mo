@@ -13,9 +13,10 @@ block SensorCtrl5phStateGraphNG "Commutation applying PWM"
   Modelica.Blocks.Interfaces.BooleanOutput hCtrl[m] annotation(Placement(transformation(extent = {{250,50},{270,70}}), iconTransformation(extent = {{80,50},{100,70}})));
   Modelica.Blocks.Interfaces.BooleanOutput lCtrl[m] annotation(Placement(transformation(extent = {{250,-70},{270,-50}}), iconTransformation(extent = {{80,-70},{100,-50}})));
   Modelica.Blocks.Interfaces.RealInput angle "Decoded hall" annotation(Placement(transformation(extent = {{-300,-20},{-260,20}})));
-  Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table=[0,0,0,0,0.0,0.0; 1,1,
-        -1,0,0.0,0.0; 2,0,-1,1,0.0,0.0; 3,-1,0,1,0.0,0.0; 4,-1,1,0,0.0,0.0; 5,0,
-        1,-1,0.0,0.0; 6,1,0,-1,0.0,0.0])                                                                                      annotation(Placement(transformation(extent={{52,24},
+  Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table=[0,0,0,0,0,0; 1,-1,0,
+        1,1,-1; 2,-1,1,1,0,-1; 3,0,1,1,-1,-1; 4,1,1,0,-1,-1; 5,1,1,-1,-1,0; 6,1,
+        0,-1,-1,1; 7,1,-1,-1,0,1; 8,0,-1,-1,1,1; 9,-1,-1,0,1,1; 10,-1,-1,1,1,0])
+                                                                                                        annotation(Placement(transformation(extent={{52,24},
             {72,44}})));
   Modelica.Blocks.Sources.IntegerExpression integerExpression[m](each y=PwmMode)
                                                                              annotation(Placement(transformation(extent = {{164,-78},{184,-58}})));
@@ -24,7 +25,8 @@ block SensorCtrl5phStateGraphNG "Commutation applying PWM"
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot annotation(Placement(transformation(extent = {{200,80},{220,100}})));
   Modelica.Blocks.Interfaces.RealInput dutyCycle "Commanded duty cycle" annotation(Placement(transformation(extent = {{-300,60},{-260,100}})));
   PulseLogicNph
-             pulseLogic annotation(Placement(transformation(extent={{156,38},{176,
+             pulseLogic(PwmClockFrequency=2e6)
+                        annotation(Placement(transformation(extent={{156,38},{176,
             58}})));
   HalfBridgeLogicBLDC halfBridgeLogicINSD[m]
     annotation (Placement(transformation(extent={{198,38},{218,58}})));
