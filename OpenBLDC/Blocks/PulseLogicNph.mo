@@ -7,7 +7,7 @@ model PulseLogicNph "Generates PWM signal depending on commutation and speed"
     "Default PWM period prescaler = f_clock / f_PWM";
   parameter Boolean PwmVarFrequency = true "Apply variable frequency method?";
   Integer periodPsc(start=DefaultPeriodPsc);
-  discrete Real dutyCycle_d(start=0);
+  discrete Real dutyCycle_d(start=Modelica.Constants.small);
   Modelica.Blocks.Interfaces.RealInput dutyCycle annotation(Placement(transformation(extent = {{-120,60},{-80,100}})));
   Modelica.Blocks.Interfaces.RealInput bridgeModeIn[m] annotation(Placement(transformation(extent = {{-120,-20},{-80,20}})));
   Modelica.Blocks.Interfaces.BooleanInput active annotation(Placement(transformation(extent = {{-120,-100},{-80,-60}})));
@@ -18,8 +18,6 @@ model PulseLogicNph "Generates PWM signal depending on commutation and speed"
   Modelica.Blocks.Logical.Change changeBridgeMode[m]
     "Indicate if bridge mode has changed"
     annotation (Placement(transformation(extent={{0,14},{12,26}})));
-  Modelica.Blocks.MathBoolean.Or or1(nu=5)
-    annotation (Placement(transformation(extent={{26,14},{38,26}})));
   Modelica.Blocks.Math.RealToBoolean realToBoolean[m]
     annotation (Placement(transformation(extent={{-32,14},{-20,26}})));
   Interfaces.PwmControlBusConnectorOut pwmControlBusConnectorOut
@@ -61,13 +59,6 @@ equation
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
-  connect(or1.y, pwmControlBusConnectorOut.reset) annotation (Line(
-      points={{38.9,20},{44,20},{44,-98},{0,-98}},
-      color={255,0,255},
-      smooth=Smooth.None), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   connect(pulseWidth.y, pwmControlBusConnectorOut.pulses) annotation (Line(
       points={{54,58},{62,58},{62,-98},{0,-98}},
       color={255,0,255},
@@ -93,10 +84,8 @@ equation
       points={{-42,-16},{-47.4,-16}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(changeBridgeMode.y, or1.u[1:m]) annotation (Line(
-      points={{12.6,20},{26,20}},
-      color={255,0,255},
-      smooth=Smooth.None));
+  pwmControlBusConnectorOut.reset = Modelica.Math.BooleanVectors.anyTrue(changeBridgeMode[1:m].y);
+
   annotation(Diagram(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
             -100},{100,100}}),                                                                        graphics),
       Documentation(info="<html>

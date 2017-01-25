@@ -1,5 +1,5 @@
 HallDecode
-HallDecode5ph
+HallDecodeNew
 Triangular
 TestCtrl3ph
 HalfBridgeCtrl
@@ -23,7 +23,6 @@ DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
 SensorCtrl3phStateGraphNG
-SensorCtrl5phStateGraphNG
 PhaseDiffVoltage
 PhaseDiffVoltageNph
 CatchStart

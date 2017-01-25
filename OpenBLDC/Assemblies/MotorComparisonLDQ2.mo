@@ -38,9 +38,10 @@ model MotorComparisonLDQ2
     R_p=R_p,
     ppz=ppz,
     VsOpenCircuit=5/sqrt(2)*2*pi/ppz,
+    PhaseBEMF=5/1000,
+    m_k=0.4,
     L_md=L_p - L_p*0.2,
-    L_mq=L_p + L_p*0.2,
-    m_k=0)
+    L_mq=L_p + L_p*0.2)
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V=10)
     annotation (Placement(transformation(

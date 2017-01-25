@@ -11,7 +11,8 @@ model SensorlessBLDC "Application of sensorless BLDC commutation"
   Modelica.Mechanics.Rotational.Components.Fixed fixed annotation(Placement(transformation(extent = {{-20,-96},{0,-76}})));
   Blocks.HallDecode hallDecode annotation(Placement(transformation(extent = {{42,-26},{62,-6}})));
   Machines.PMSMm pMSM_run(
-                         R_p = 0.33 / 2, L_p = 3.5e-005 / 2, ppz = PPZ, PhaseBEMF = 0.005, Jr = 5e-005) annotation(Placement(transformation(extent = {{-38,-80},{-18,-60}})));
+                         R_p = 0.33 / 2,                     ppz = PPZ, PhaseBEMF = 0.005, Jr = 5e-005,
+    L_p=3.5e-005/2)                                                                                     annotation(Placement(transformation(extent = {{-38,-80},{-18,-60}})));
   Converters.SwitchingIdeal.Inverter3ph inverter3ph annotation(Placement(transformation(extent = {{-88,-80},{-68,-60}})));
   Modelica.Electrical.Analog.Basic.Ground ground2 annotation(Placement(transformation(extent = {{-128,-108},{-108,-88}})));
   Modelica.Electrical.Analog.Sources.ConstantVoltage battery(V = 15) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-118,-70})));

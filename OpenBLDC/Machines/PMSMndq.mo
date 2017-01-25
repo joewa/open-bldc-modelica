@@ -19,6 +19,7 @@ model PMSMndq
   parameter Integer m = 3 "Number of phases";
   parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / m * pi
     "Electrical angle between 2 phases";
+    // ang_pi als Vektor mit linspace konstruieren. Dann ang_pi als parameter ersetzbar machen.
   parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
     "Back EMF constant of one single phase (peak value) [VS/rad]";
   SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
