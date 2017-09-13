@@ -10,5 +10,6 @@ equation
   pulseWidthVar.dutyCycle = 0.25;
   mysample = time > Modelica.Constants.small;
   pulseWidthVar.active = mysample;
+  pulseWidthVar.reset = mysample;
   annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
 end TestPWM;
