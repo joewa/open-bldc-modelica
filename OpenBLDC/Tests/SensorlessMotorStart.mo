@@ -9,5 +9,5 @@ model SensorlessMotorStart
       TorqueDirection = false,
       w_nominal = 8000 * 2 * Modelica.Constants.pi / 60, tau_nominal = -0.01),
       motorVoltageCommand(k = 0.8));
-  annotation(experiment);
+  annotation(experiment(StopTime = 0.5));
 end SensorlessMotorStart;

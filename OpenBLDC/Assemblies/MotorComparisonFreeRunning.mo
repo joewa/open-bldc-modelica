@@ -5,9 +5,9 @@ model MotorComparisonFreeRunning
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
   parameter Integer ppz = 6 "Motor pairs of poles";
-  parameter Modelica.SIunits.Resistance R_p = 0.33/2
+  parameter Modelica.Units.SI.Resistance R_p = 0.33/2
     "Motor per phase resistance";
-  parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
+  parameter Modelica.Units.SI.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
   parameter Real m_k(min=0, max=0.999) = 0.9 "Mutual coupling coefficient";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
@@ -55,13 +55,13 @@ model MotorComparisonFreeRunning
     annotation (Placement(transformation(extent={{-166,-40},{-146,-20}})));
   Blocks.HalfBridgeLogicBLDC halfBridgeDriver[3]
     annotation (Placement(transformation(extent={{-96,-48},{-76,-28}})));
-  Modelica.Blocks.Sources.BooleanStep startPWM[3](startTime=0.001e-3)
+  Modelica.Blocks.Sources.BooleanStep startPWM[3](each startTime=0.001e-3)
     annotation (Placement(transformation(extent={{-200,-70},{-180,-50}})));
-  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](k=false)
+  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](each k=false)
     annotation (Placement(transformation(extent={{-200,-100},{-180,-80}})));
-  Modelica.Blocks.Sources.Constant period[3](k=50e-6) "PWM period"
+  Modelica.Blocks.Sources.Constant period[3](each k=50e-6) "PWM period"
     annotation (Placement(transformation(extent={{-200,-40},{-180,-20}})));
-  Modelica.Blocks.Sources.Constant dutyCycle[3](k=0.6) "PWM duty cycle"
+  Modelica.Blocks.Sources.Constant dutyCycle[3](each k=0.6) "PWM duty cycle"
     annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
   Modelica.Blocks.Sources.Constant mode_a(k=0) "Fixed bridge mode"
     annotation (Placement(transformation(extent={{-140,-44},{-130,-34}})));
@@ -71,7 +71,7 @@ model MotorComparisonFreeRunning
     annotation (Placement(transformation(extent={{-140,-60},{-130,-50}})));
   Modelica.Blocks.Sources.Constant mode_c(k=0) "Fixed bridge mode"
     annotation (Placement(transformation(extent={{-140,-76},{-130,-66}})));
-  Modelica.Blocks.Sources.IntegerConstant pwmMode[3](k=1)
+  Modelica.Blocks.Sources.IntegerConstant pwmMode[3](each k=1)
     annotation (Placement(transformation(extent={{-122,-78},{-112,-68}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points={{0,-22},

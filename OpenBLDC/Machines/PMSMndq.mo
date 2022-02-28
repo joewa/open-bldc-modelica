@@ -1,53 +1,53 @@
 within OpenBLDC.Machines;
 model PMSMndq
   "Nph-PMSM stator frame model without mutual inductance but salient magnetics"
-  extends Modelica.Icons.MotorIcon;
+  extends Modelica.Electrical.Machines.Icons.TransientMachine;
   import Modelica.Constants.pi;
   import Modelica.Electrical.Analog;
   import Modelica.Mechanics.Rotational;
-  import Modelica.SIunits;
-  parameter SIunits.Inertia Jr = 0.0027 "Inertia of the rotor";
-  parameter SIunits.Inertia Js = 1 "Inertia of the stator";
-  parameter SIunits.Resistance R_p = 0.54 "Per phase resistance";
-  parameter SIunits.Inductance L_md = 0.00145
+  import Modelica.Units.SI;
+  parameter SI.Inertia Jr = 0.0027 "Inertia of the rotor";
+  parameter SI.Inertia Js = 1 "Inertia of the stator";
+  parameter SI.Resistance R_p = 0.54 "Per phase resistance";
+  parameter SI.Inductance L_md = 0.00145
     "Stator main field inductance in d-axis";
-  parameter SIunits.Inductance L_mq = 0.00145
+  parameter SI.Inductance L_mq = 0.00145
     "Stator main field inductance in q-axis";
-  parameter SIunits.Inductance L_mdq2 = (L_md + L_mq) / 2;
-  parameter SIunits.Inductance L_msail = (L_mq - L_md); // / 2;
+  parameter SI.Inductance L_mdq2 = (L_md + L_mq) / 2;
+  parameter SI.Inductance L_msail = (L_mq - L_md); // / 2;
   parameter Integer ppz = 1 "Pairs of poles";
   parameter Integer m = 3 "Number of phases";
-  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / m * pi
+  parameter SI.Angle ang_p(displayUnit = "rad") = 2 / m * pi
     "Electrical angle between 2 phases";
     // ang_pi als Vektor mit linspace konstruieren. Dann ang_pi als parameter ersetzbar machen.
-  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
+  parameter SI.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
     "Back EMF constant of one single phase (peak value) [VS/rad]";
-  SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
-  output SIunits.Angle phiMechanical = flange.phi - support.phi;
-  output SIunits.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
-  output SIunits.Angle phiElectrical = ppz * phiMechanical;
-  output SIunits.AngularVelocity wElectrical = ppz * wMechanical;
+  SI.MagneticFlux psi_m = PhaseBEMF / ppz;
+  output SI.Angle phiMechanical = flange.phi - support.phi;
+  output SI.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
+  output SI.Angle phiElectrical = ppz * phiMechanical;
+  output SI.AngularVelocity wElectrical = ppz * wMechanical;
   Rotational.Components.Inertia inertia_rotor(J = Jr);
   Rotational.Components.Inertia inertia_housing(J = Js);
   Rotational.Sources.Torque2 torque2;
-  Modelica.SIunits.Torque tau_el;
-  SIunits.MagneticFlux flux[m];
-  SIunits.Torque tau[m];
+  SI.Torque tau_el;
+  SI.MagneticFlux flux[m];
+  SI.Torque tau[m];
 
   Rotational.Interfaces.Flange_a flange annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   Rotational.Interfaces.Support support annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
 
-  Modelica.Electrical.MultiPhase.Basic.VariableInductor selfInductor(m=m)
+  Modelica.Electrical.Polyphase.Basic.VariableInductor selfInductor(m=m)
     annotation (Placement(transformation(extent={{-56,30},{-36,50}})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor resistor(                      m=m, R=fill(
+  Modelica.Electrical.Polyphase.Basic.Resistor resistor(                      m=m, R=fill(
         R_p, m))
     annotation (Placement(transformation(extent={{-32,30},{-12,50}})));
-  Modelica.Electrical.MultiPhase.Sources.SignalVoltage u(m=m) "back EMF"
+  Modelica.Electrical.Polyphase.Sources.SignalVoltage u(m=m) "back EMF"
     annotation (Placement(transformation(extent={{-8,30},{12,50}})));
-  Modelica.Electrical.MultiPhase.Interfaces.PositivePlug plug_sp(m=m)
+  Modelica.Electrical.Polyphase.Interfaces.PositivePlug plug_sp(m=m)
     "Positive stator plug"
     annotation (Placement(transformation(extent={{50,90},{70,110}})));
-  Modelica.Electrical.MultiPhase.Interfaces.NegativePlug plug_sn(m=m)
+  Modelica.Electrical.Polyphase.Interfaces.NegativePlug plug_sn(m=m)
     "Negative stator plug"
     annotation (Placement(transformation(extent={{-70,90},{-50,110}})));
 equation

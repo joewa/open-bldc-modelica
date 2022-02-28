@@ -34,7 +34,7 @@ equation
   y = time >= pulsStart and time < pulsStart + dutyCycle * periodTime and active;
 
   // Connect the PWM bus
-  pwmControlBusConnectorOut.pulses = y;
+  connect(y, pwmControlBusConnectorOut.pulses);
   connect(dutyCycle, pwmControlBusConnectorOut.dutyCycle) annotation (Line(
       points={{-100,80},{0,80},{0,-60},{100,-60}},
       color={0,0,127},

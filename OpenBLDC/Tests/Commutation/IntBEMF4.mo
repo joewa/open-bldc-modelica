@@ -1,6 +1,6 @@
 within OpenBLDC.Tests.Commutation;
 model IntBEMF4
-  "Commutation based on BEMF integration with extended method, 2-leg-PWM interupted"
+  "Commutation based on BEMF integration with extended method, 2-leg-PWM interupted; MSL 4.0 KO"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
       redeclare Blocks.SensorlessCtrl3phStateGraphNG sensorlessCtrl3phPWM(

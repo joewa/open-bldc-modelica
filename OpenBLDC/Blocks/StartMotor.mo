@@ -1,5 +1,5 @@
 within OpenBLDC.Blocks;
-block StartMotor "Select input 1 when true"
+block StartMotor "Ramp start motor when rmpStart and not HallAvail"
   extends Modelica.Blocks.Icons.DiscreteBlock;
   parameter Real DutyCycleStart = 0.2;
   parameter Real FinalSpeed = 200 "Speed at end of ramp [rev/s]";
@@ -29,5 +29,6 @@ equation
   //hasControl = if rampStart or HallAvail then true else false; // parameter in if-eqn is doof
   //hasControl = if rmpStart then true else false; // parameter in if-eqn is doof
   connect(bridgeSequence.y,bridgeModeOut) annotation(Line(points = {{61,0},{100,0}}, color = {0,0,127}, smooth = Smooth.None));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics),
+    Documentation(info = "<html><head></head><body>Run an open-loop ramp-start of the BLDC motor without using any feedback sensors. The ramp is stared when rmpStart becomes True.<div><br><div>Additionally, the parameter HallAvail can be used to disable the ramp start and pass the feedback from a hall sensor insted. However, this function should not be in this block. TODO: Make nice!</div></div></body></html>"));
 end StartMotor;

@@ -12,9 +12,9 @@ block TestCtrl3phPWM "Commutation applying PWM"
   Modelica.Blocks.Sources.Constant const2[3](each k = 5e-005) annotation(Placement(transformation(extent = {{-90,48},{-70,68}})));
   Modelica.Blocks.Sources.IntegerExpression integerExpression[3](each y = 1) annotation(Placement(transformation(extent = {{-32,-24},{-12,-4}})));
   HalfBridgeLogic halfBridgeLogic[3] annotation(Placement(transformation(extent = {{20,-10},{40,10}})));
-  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](k=false)
+  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](each k=false)
     annotation (Placement(transformation(extent={{-40,18},{-20,38}})));
-  Modelica.Blocks.Sources.BooleanConstant booleanConstant1[3](k=true)
+  Modelica.Blocks.Sources.BooleanConstant booleanConstant1[3](each k=true)
     annotation (Placement(transformation(extent={{-58,48},{-38,68}})));
 equation
   connect(angle,combiTable1Ds.u) annotation(Line(points = {{-100,0},{-62,0}}, color = {0,0,127}, smooth = Smooth.None));

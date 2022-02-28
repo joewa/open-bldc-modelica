@@ -1,6 +1,6 @@
 within OpenBLDC.Tests.Commutation;
 model HallReluctance
-  "Commutation with hall sensors - consider motor with reluctance"
+  "Commutation with hall sensors - consider motor with reluctance - MSL4-OK"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
       redeclare Blocks.SensorCtrl3phStateGraphNG sensorlessCtrl3phPWM(

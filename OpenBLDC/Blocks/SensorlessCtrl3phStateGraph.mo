@@ -1,7 +1,7 @@
 within OpenBLDC.Blocks;
 block SensorlessCtrl3phStateGraph "Commutation applying PWM"
   extends OpenBLDC.Icons.ControlLaw;
-  parameter Modelica.SIunits.Duration DelayCommutation = 3e-005
+  parameter Modelica.Units.SI.Duration DelayCommutation = 3e-005
     "Delay commutation";
   Boolean chAngle;
   Integer intAngle;

@@ -2,7 +2,7 @@ within OpenBLDC.Blocks;
 partial block DetectCommutationPartial
   "I/O ports for commutation detection algorithm"
   extends Modelica.Blocks.Icons.Block;
-  parameter Modelica.SIunits.Duration DelayCommutation = 5e-005
+  parameter Modelica.Units.SI.Duration DelayCommutation = 5e-005
     "Delay commutation";
   parameter Real minEMF = 0.5 "Minimum EMF for good speed";
   //Real maxBEMF "Max EMF in this cycle";

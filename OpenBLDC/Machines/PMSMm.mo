@@ -1,38 +1,38 @@
 within OpenBLDC.Machines;
 model PMSMm "3ph-PMSM stator frame model with mutual inductance"
-  extends Modelica.Icons.MotorIcon;
+  extends Modelica.Electrical.Machines.Icons.TransientMachine;
   import Modelica.Constants.pi;
   import Modelica.Electrical.Analog;
   import Modelica.Mechanics.Rotational;
-  import Modelica.SIunits;
-  parameter SIunits.Inertia Jr = 0.0027 "Inertia of the rotor";
-  parameter SIunits.Inertia Js = 1 "Inertia of the stator";
-  parameter SIunits.Resistance R_p = 0.54 "Per phase resistance";
-  parameter SIunits.Inductance L_p = 0.00145 "Per phase inductance";
+  import Modelica.Units.SI;
+  parameter SI.Inertia Jr = 0.0027 "Inertia of the rotor";
+  parameter SI.Inertia Js = 1 "Inertia of the stator";
+  parameter SI.Resistance R_p = 0.54 "Per phase resistance";
+  parameter SI.Inductance L_p = 0.00145 "Per phase inductance";
   parameter Real m_k(min=0, max=0.999) = 0 "Mutual coupling coefficient";
   parameter Integer ppz = 1 "Pairs of poles";
-  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
+  parameter SI.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
     "Electrical angle between 2 phases";
-  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
+  parameter SI.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
     "Back EMF constant of one single phase (peak value) [VS/rad]";
   constant Integer m = 3 "Number of phases";
-  parameter SIunits.Inductance L_3 = L_p * (1 - m_k / 3) "Override L_v3";
-  parameter SIunits.Inductance L_M = m_k / 3 * L_p "Override L_M";
-  SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
-  output SIunits.Angle phiMechanical = flange.phi - support.phi;
-  output SIunits.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
-  output SIunits.Angle phiElectrical = ppz * phiMechanical;
-  output SIunits.AngularVelocity wElectrical = ppz * wMechanical;
+  parameter SI.Inductance L_3 = L_p * (1 - m_k / 3) "Override L_v3";
+  parameter SI.Inductance L_M = m_k / 3 * L_p "Override L_M";
+  SI.MagneticFlux psi_m = PhaseBEMF / ppz;
+  output SI.Angle phiMechanical = flange.phi - support.phi;
+  output SI.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
+  output SI.Angle phiElectrical = ppz * phiMechanical;
+  output SI.AngularVelocity wElectrical = ppz * wMechanical;
   Rotational.Components.Inertia inertia_rotor(J = Jr);
   Rotational.Components.Inertia inertia_housing(J = Js);
   Rotational.Sources.Torque2 torque2;
-  Modelica.SIunits.Torque tau_el;
-  SIunits.MagneticFlux flux_a;
-  SIunits.MagneticFlux flux_b;
-  SIunits.MagneticFlux flux_c;
-  SIunits.Torque tau_a;
-  SIunits.Torque tau_b;
-  SIunits.Torque tau_c;
+  SI.Torque tau_el;
+  SI.MagneticFlux flux_a;
+  SI.MagneticFlux flux_b;
+  SI.MagneticFlux flux_c;
+  SI.Torque tau_a;
+  SI.Torque tau_b;
+  SI.Torque tau_c;
   Analog.Interfaces.Pin a1 annotation(extent = [-110,86;-90,106]);
   Analog.Interfaces.Pin b1 annotation(extent = [-110,6;-90,26]);
   Analog.Interfaces.Pin c1 annotation(extent = [-110,-74;-90,-54]);
@@ -43,24 +43,24 @@ model PMSMm "3ph-PMSM stator frame model with mutual inductance"
   Rotational.Interfaces.Flange_a flange annotation(Placement(transformation(extent = {{90,-10},{110,10}})));
   Rotational.Interfaces.Support support annotation(Placement(transformation(extent = {{90,-90},{110,-70}})));
 
-  Modelica.Electrical.MultiPhase.Basic.MutualInductor mutualInductor(L=[L_3,-
+  Modelica.Electrical.Polyphase.Basic.MutualInductor mutualInductor(L=[L_3,-
         L_M,-L_M; -L_M,L_3,-L_M; -L_M,-L_M,L_3])
     annotation (Placement(transformation(extent={{-56,30},{-36,50}})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor resistor(m=3, R={R_p,R_p,R_p})
+  Modelica.Electrical.Polyphase.Basic.Resistor resistor(m=3, R={R_p,R_p,R_p})
     annotation (Placement(transformation(extent={{-32,30},{-12,50}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a1(m=m, k=1)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_a1(m=m, k=1)
     annotation (Placement(transformation(extent={{-66,80},{-86,100}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a2(m=m, k=1)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_a2(m=m, k=1)
     annotation (Placement(transformation(extent={{-66,60},{-86,80}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b1(m=m, k=2)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_b1(m=m, k=2)
     annotation (Placement(transformation(extent={{-66,0},{-86,20}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b2(m=m, k=2)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_b2(m=m, k=2)
     annotation (Placement(transformation(extent={{-66,-20},{-86,0}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c1(m=m, k=3)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_c1(m=m, k=3)
     annotation (Placement(transformation(extent={{-66,-80},{-86,-60}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c2(m=m, k=3)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_c2(m=m, k=3)
     annotation (Placement(transformation(extent={{-66,-100},{-86,-80}})));
-  Modelica.Electrical.MultiPhase.Sources.SignalVoltage u
+  Modelica.Electrical.Polyphase.Sources.SignalVoltage u
     annotation (Placement(transformation(extent={{-8,30},{12,50}})));
 equation
   flux_a = psi_m * cos(phiElectrical + 0 * ang_p);

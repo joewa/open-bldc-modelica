@@ -34,16 +34,18 @@ equation
     reinit(KV, KV0);
     pwmActive = true;
     //fill(false, 3);
-elsewhen commutate then
-    reinit(phi, mod(pre(phi) - 1 + dir, 6) + 1);
-    pwmActive = true;
-    //fill(true, 3);
-
-elsewhen shutdown then
+  elsewhen shutdown then
     reinit(phi, 0);
     reinit(dir, 0);
+    reinit(KV, 0);
     pwmActive = false;
     //fill(false, 3);
   end when;
+  when commutate then
+    reinit(phi, mod(pre(phi) - 1 + dir, 6) + 1);
+    //pwmActive = true;
+    //fill(true, 3);
+  end when;
+
   annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics));
 end CommutationCounter;

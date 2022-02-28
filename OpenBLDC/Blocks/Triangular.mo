@@ -2,13 +2,13 @@ within OpenBLDC.Blocks;
 block Triangular
   //extends Interfaces.SO;
   parameter Real amplitude = 1 "Amplitude of triangle";
-  parameter Modelica.SIunits.Time period(final min = Modelica.Constants.small, start = 1)
+  parameter Modelica.Units.SI.Time period(final min = Modelica.Constants.small, start = 1)
     "Time for one period";
-  parameter Modelica.SIunits.Time startTime = 0
+  parameter Modelica.Units.SI.Time startTime = 0
     "Output = offset for time < startTime";
   Modelica.Blocks.Interfaces.RealOutput y annotation(Placement(transformation(extent = {{96,30},{116,50}})));
 protected
-  Modelica.SIunits.Time T0(final start = startTime)
+  Modelica.Units.SI.Time T0(final start = startTime)
     "Start time of current period";
 equation
   when sample(startTime, period) then

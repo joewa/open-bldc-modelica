@@ -6,7 +6,7 @@ model AdcSingleChannelInteger "Analog digital converter example"
     annotation (Placement(transformation(extent={{-90,-50},{-70,-30}})));
   Modelica.Electrical.Analog.Sources.SineVoltage sineVoltage(
     V=1,
-    freqHz=5000,
+    f=5000,
     offset=1.5) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,

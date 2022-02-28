@@ -1,11 +1,12 @@
 within OpenBLDC.Converters.SwitchingIdeal;
 model Inverter3ph "3-phase inverter (wrapper)"
   extends OpenBLDC.Icons.Converter;
+  import Modelica.Units.SI;
   constant Integer m = 3 "Number of phases";
-  parameter Modelica.SIunits.Resistance RonSwitch = 1e-005 "Ron of Switch";
-  parameter Modelica.SIunits.Conductance GoffSwitch = 1e-005 "Gon of Switch";
-  parameter Modelica.SIunits.Resistance RonDiode = 1e-005 "Ron of Diode";
-  parameter Modelica.SIunits.Conductance GoffDiode = 1e-005 "Gon of Diode";
+  parameter SI.Resistance RonSwitch = 1e-005 "Ron of Switch";
+  parameter SI.Conductance GoffSwitch = 1e-005 "Gon of Switch";
+  parameter SI.Resistance RonDiode = 1e-005 "Ron of Diode";
+  parameter SI.Conductance GoffDiode = 1e-005 "Gon of Diode";
   Modelica.Blocks.Interfaces.BooleanInput ctrl_l[m] annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 270, origin = {20,106})));
   Modelica.Blocks.Interfaces.BooleanInput ctrl_h[m] annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 270, origin = {-20,106})));
   Modelica.Electrical.Analog.Interfaces.Pin p_a annotation(Placement(transformation(extent = {{90,30},{110,50}})));
@@ -14,35 +15,35 @@ model Inverter3ph "3-phase inverter (wrapper)"
   Modelica.Electrical.Analog.Interfaces.PositivePin p_p "Positive supply pin" annotation(Placement(transformation(extent = {{-110,30},{-90,50}})));
   Modelica.Electrical.Analog.Interfaces.NegativePin p_n "Negative supply pin" annotation(Placement(transformation(extent = {{-110,-50},{-90,-30}})));
   Inverter inverter(m = m) annotation(Placement(transformation(extent = {{-22,-10},{0,10}})));
-  Modelica.Electrical.MultiPhase.Basic.Star star_p(m = m) annotation(Placement(transformation(extent = {{-60,30},{-80,50}})));
-  Modelica.Electrical.MultiPhase.Basic.Star star_n(m = m) annotation(Placement(transformation(extent = {{-62,-50},{-82,-30}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent = {{40,30},{60,50}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b(m = m, k = 2) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c(m = m, k = 3) annotation(Placement(transformation(extent = {{40,-50},{60,-30}})));
+  Modelica.Electrical.Polyphase.Basic.Star star_p(m = m) annotation(Placement(transformation(extent = {{-60,30},{-80,50}})));
+  Modelica.Electrical.Polyphase.Basic.Star star_n(m = m) annotation(Placement(transformation(extent = {{-62,-50},{-82,-30}})));
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent = {{40,30},{60,50}})));
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_b(m = m, k = 2) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_c(m = m, k = 3) annotation(Placement(transformation(extent = {{40,-50},{60,-30}})));
   Modelica.Blocks.Interfaces.RealOutput v_dc "dc link voltage" annotation(Placement(transformation(extent = {{-90,-90},{-110,-70}})));
   Modelica.Blocks.Interfaces.RealOutput v[m] "output voltage" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {0,-100})));
   Modelica.Blocks.Interfaces.RealOutput i[m] "output current" annotation(Placement(transformation(extent = {{10,-10},{-10,10}}, rotation = 90, origin = {40,-100})));
   Modelica.Electrical.Analog.Sensors.VoltageSensor voltageSensor annotation(Placement(transformation(extent = {{-10,10},{10,-10}}, rotation = 270, origin = {-88,-16})));
-  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense_L(m=m, R=fill(3600.0, m))
+  Modelica.Electrical.Polyphase.Basic.Resistor r_sense_L(m=m, R=fill(3600.0, m))
     "Impedance of voltage divider for phase voltage measurement" annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-32,-40})));
 protected
-  parameter Modelica.SIunits.Resistance ronSwitch[:] = fill(RonSwitch, m);
-  parameter Modelica.SIunits.Conductance goffSwitch[:] = fill(GoffSwitch, m);
-  parameter Modelica.SIunits.Resistance ronDiode[:] = fill(RonDiode, m);
-  parameter Modelica.SIunits.Conductance goffDiode[:] = fill(GoffDiode, m);
-  parameter Modelica.SIunits.Voltage vknee[:] = fill(0, m);
+  parameter SI.Resistance ronSwitch[:] = fill(RonSwitch, m);
+  parameter SI.Conductance goffSwitch[:] = fill(GoffSwitch, m);
+  parameter SI.Resistance ronDiode[:] = fill(RonDiode, m);
+  parameter SI.Conductance goffDiode[:] = fill(GoffDiode, m);
+  parameter SI.Voltage vknee[:] = fill(0, m);
 public
-  Modelica.Electrical.MultiPhase.Basic.Resistor r_sense_H(m=m, R=fill(10000.0,
+  Modelica.Electrical.Polyphase.Basic.Resistor r_sense_H(m=m, R=fill(10000.0,
         m)) "Impedance of voltage divider for phase voltage measurement"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={6,-24})));
-  Modelica.Electrical.MultiPhase.Basic.Capacitor c_sense(m=m, C=fill(0.5e-9, m))
+  Modelica.Electrical.Polyphase.Basic.Capacitor c_sense(m=m, C=fill(0.5e-9, m))
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,

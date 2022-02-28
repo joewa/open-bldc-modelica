@@ -7,7 +7,7 @@ block HallDecode "Hall look up table"
   Modelica.Blocks.Math.Gain gain(k = 1) annotation(Placement(transformation(extent = {{-50,-40},{-30,-20}})));
   Modelica.Blocks.Math.Gain gain1(k = 2) annotation(Placement(transformation(extent = {{-50,-10},{-30,10}})));
   Modelica.Blocks.Math.Gain gain2(k = 4) annotation(Placement(transformation(extent = {{-50,20},{-30,40}})));
-  Modelica.Blocks.Tables.CombiTable1D combiTable1D(table = [1,4;2,2;3,3;4,6;5,5;6,1]) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
+  Modelica.Blocks.Tables.CombiTable1Dv combiTable1D(table = [1,4;2,2;3,3;4,6;5,5;6,1]) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
 equation
   connect(gain.u,u[1]) annotation(Line(points={{-52,-30},{-76,-30},{-76,
           -13.3333},{-100,-13.3333}},                                                                 color = {0,0,127}, smooth = Smooth.None));

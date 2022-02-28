@@ -18,8 +18,9 @@ equation
   when senseBEMF then
     reinit(intBEMF, KV);
     reinit(maxBEMF, 0);
-  elsewhen maxBEMF < abs(v_sense) then
-    // das ist fragwürdig
+  end when;
+  when senseBEMF and maxBEMF < abs(v_sense) then
+    // das ist fragwuerdig
     reinit(maxBEMF, abs(v_sense));
   end when;
   y = if intBEMF < 0 and senseBEMF then true else false;

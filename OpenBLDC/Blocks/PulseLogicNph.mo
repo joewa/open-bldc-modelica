@@ -30,17 +30,19 @@ equation
   pulseWidth.reset = false;
 
   pulseWidth.dutyCycle = dutyCycle_d;
-  pwmControlBusConnectorOut.dutyCycle = dutyCycle_d;
   when active and pwmControlBusConnectorOut.reset then
     dutyCycle_d = dutyCycle;
   end when;
 
   pulseWidth.periodTime = periodPsc / PwmClockFrequency;
-  pwmControlBusConnectorOut.period = periodPsc / PwmClockFrequency;
   when PwmVarFrequency and pwmControlBusConnectorOut.reset then
     periodPsc = integer( DefaultPeriodPsc / ( 4 * dutyCycle_d * (1 - dutyCycle_d)));
   end when;
 
+  //pwmControlBusConnectorOut.period = periodPsc / PwmClockFrequency;
+  connect(pwmControlBusConnectorOut.period, pulseWidth.periodTime);
+  //pwmControlBusConnectorOut.dutyCycle = dutyCycle_d;
+  connect(pulseWidth.dutyCycle, pwmControlBusConnectorOut.dutyCycle);
   connect(pulseWidth.y,y) annotation(Line(points={{54,58},{62,58},{62,80},{100,80}},   color = {255,0,255}, smooth = Smooth.None));
   connect(active,pulseWidth.active) annotation(Line(points={{-100,-80},{-8,-80},
           {-8,50},{34,50}},                                                                        color = {255,0,255}, smooth = Smooth.None));

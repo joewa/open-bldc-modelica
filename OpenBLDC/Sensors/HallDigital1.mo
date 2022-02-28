@@ -2,9 +2,9 @@ within OpenBLDC.Sensors;
 model HallDigital1 "Digital hall sensor"
   extends OpenBLDC.Icons.Sensor;
   import Modelica.Constants.pi;
-  parameter Modelica.SIunits.Angle hall_angle = 0
+  parameter Modelica.Units.SI.Angle hall_angle = 0
     "Hall sensor is mounted at this electrical angle and outputs true";
-  Modelica.SIunits.Angle phi_el;
+  Modelica.Units.SI.Angle phi_el;
   Real y_inside;
   Modelica.Mechanics.Rotational.Interfaces.Flange_a flange
     "Flange to be measured"                                                        annotation(Placement(transformation(extent = {{-110,-10},{-90,10}})));

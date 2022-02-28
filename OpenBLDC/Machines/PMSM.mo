@@ -1,31 +1,31 @@
 within OpenBLDC.Machines;
 model PMSM "3ph-PMSM stator frame model"
-  extends Modelica.Icons.MotorIcon;
+  extends Modelica.Electrical.Machines.Icons.TransientMachine;
   import Modelica.Constants.pi;
   import Modelica.Electrical.Analog;
   import Modelica.Mechanics.Rotational;
-  import Modelica.SIunits;
-  parameter SIunits.Inertia Jr = 0.0027 "Inertia of the rotor";
-  parameter SIunits.Inertia Js = 1 "Inertia of the stator";
-  parameter SIunits.Resistance R_p = 0.54 "Per phase resistance";
-  parameter SIunits.Inductance L_p = 0.00145 "Per phase inductance";
+  import Modelica.Units.SI;
+  parameter SI.Inertia Jr = 0.0027 "Inertia of the rotor";
+  parameter SI.Inertia Js = 1 "Inertia of the stator";
+  parameter SI.Resistance R_p = 0.54 "Per phase resistance";
+  parameter SI.Inductance L_p = 0.00145 "Per phase inductance";
   parameter Integer ppz = 1 "Pairs of poles";
-  parameter SIunits.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
+  parameter SI.Angle ang_p(displayUnit = "rad") = 2 / 3 * pi
     "Electrical angle between 2 phases";
-  parameter SIunits.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
+  parameter SI.MagneticFlux PhaseBEMF = 2 / 3 * 1.04
     "Back EMF constant of one single phase (peak value) [VS/rad]";
   //parameter SIunits.Current I_a_0 = 0 "Initial current of phase a";
   //parameter SIunits.Current I_b_0 = 0 "Initial current of phase b";
   //parameter SIunits.Current I_c_0 = 0 "Initial current of phase c";
-  SIunits.MagneticFlux psi_m = PhaseBEMF / ppz;
-  output SIunits.Angle phiMechanical = flange.phi - support.phi;
-  output SIunits.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
-  output SIunits.Angle phiElectrical = ppz * phiMechanical;
-  output SIunits.AngularVelocity wElectrical = ppz * wMechanical;
+  SI.MagneticFlux psi_m = PhaseBEMF / ppz;
+  output SI.Angle phiMechanical = flange.phi - support.phi;
+  output SI.AngularVelocity wMechanical(displayUnit = "1/min") = der(phiMechanical);
+  output SI.Angle phiElectrical = ppz * phiMechanical;
+  output SI.AngularVelocity wElectrical = ppz * wMechanical;
   Rotational.Components.Inertia inertia_rotor(J = Jr);
   Rotational.Components.Inertia inertia_housing(J = Js);
   Rotational.Sources.Torque2 torque2;
-  Modelica.SIunits.Torque tau_el;
+  SI.Torque tau_el;
   Analog.Interfaces.Pin a1 annotation(extent = [-110,86;-90,106]);
   Analog.Interfaces.Pin b1 annotation(extent = [-110,6;-90,26]);
   Analog.Interfaces.Pin c1 annotation(extent = [-110,-74;-90,-54]);
@@ -35,12 +35,12 @@ model PMSM "3ph-PMSM stator frame model"
   Analog.Basic.Inductor l_a(L = L_p);
   Analog.Basic.Inductor l_b(L = L_p);
   Analog.Basic.Inductor l_c(L = L_p);
-  SIunits.MagneticFlux flux_a;
-  SIunits.MagneticFlux flux_b;
-  SIunits.MagneticFlux flux_c;
-  SIunits.Torque tau_a;
-  SIunits.Torque tau_b;
-  SIunits.Torque tau_c;
+  SI.MagneticFlux flux_a;
+  SI.MagneticFlux flux_b;
+  SI.MagneticFlux flux_c;
+  SI.Torque tau_a;
+  SI.Torque tau_b;
+  SI.Torque tau_c;
   Analog.Sources.SignalVoltage u_a;
   Analog.Sources.SignalVoltage u_b;
   Analog.Sources.SignalVoltage u_c;

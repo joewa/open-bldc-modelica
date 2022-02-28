@@ -1,15 +1,15 @@
 within OpenBLDC.Interfaces;
 partial model SupplyPort "Base model of the converter (DC)-supply port"
-
+  import Modelica.Units.SI;
   Modelica.Electrical.Analog.Interfaces.PositivePin pSupply(final v(start = 0))
     "Positive pin of the supply circuit"                                                                             annotation(Placement(transformation(extent = {{-110,50},{-90,70}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.NegativePin nSupply(final v(start = 0))
     "Negative pin of the supply circuit"                                                                             annotation(Placement(transformation(extent = {{-110,-70},{-90,-50}}, rotation = 0)));
-  parameter Modelica.SIunits.Current IConverterMax(min = 0)
+  parameter SI.Current IConverterMax(min = 0)
     "Maximum admissible converter DC supply current"                                                         annotation(Dialog(tab = "Reference values and limits"));
-  Modelica.SIunits.Voltage vSupply "Voltage of the supply port";
-  Modelica.SIunits.Current iSupply "Current of the supply port";
-  Modelica.SIunits.Power powerSupply "Power of the supply port";
+  SI.Voltage vSupply "Voltage of the supply port";
+  SI.Current iSupply "Current of the supply port";
+  SI.Power powerSupply "Power of the supply port";
 equation
   vSupply = pSupply.v - nSupply.v;
   iSupply = pSupply.i;

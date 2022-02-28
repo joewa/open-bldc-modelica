@@ -1,13 +1,13 @@
 within OpenBLDC.Interfaces;
 partial model LoadPort "Base model of the converter load port"
-
+  import Modelica.Units.SI;
   Modelica.Electrical.Analog.Interfaces.PositivePin pLoad
     "Positive pin of the load circuit"                                                       annotation(Placement(transformation(extent = {{50,-110},{70,-90}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.NegativePin nLoad
     "Negative pin of the load circuit"                                                       annotation(Placement(transformation(extent = {{-70,-110},{-50,-90}}, rotation = 0)));
-  Modelica.SIunits.Voltage vLoad "Voltage of the load port";
-  Modelica.SIunits.Current iLoad "Current of the load port";
-  Modelica.SIunits.Power powerLoad "Power of the load port";
+  SI.Voltage vLoad "Voltage of the load port";
+  SI.Current iLoad "Current of the load port";
+  SI.Power powerLoad "Power of the load port";
 equation
   vLoad = pLoad.v - nLoad.v;
   iLoad = pLoad.i;

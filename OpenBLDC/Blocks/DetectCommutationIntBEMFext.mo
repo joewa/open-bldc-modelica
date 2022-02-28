@@ -1,6 +1,6 @@
 within OpenBLDC.Blocks;
 block DetectCommutationIntBEMFext
-  "Detects sensorless when commutation is required by back EMF integration - extended method"
+  "Detects sensorless when commutation is required by back EMF integration - extended method; MSL 4.0 KO"
   extends DetectCommutationPartial;
   parameter Boolean sampleHi = true "Sample when PWM signal is high when true";
   parameter Boolean sampleLo = true "Sample when PWM signal is low when true";
@@ -8,7 +8,7 @@ block DetectCommutationIntBEMFext
   parameter Integer dropnoisysamples = 1 "Drop samples with switching noise";
   parameter Integer bufsize = 10 "Size of buffer";
   parameter Real period_adc = 1e-6;
-  parameter Modelica.SIunits.Time Ts_ADC = 1e-6 "Sample rate of ADC";
+  parameter Modelica.Units.SI.Time Ts_ADC = 1e-6 "Sample rate of ADC";
   parameter Real vdivider = 3.6/13.6 "Voltage divider of phase voltage";
   parameter Integer NREG = 10 "Number of samples for a valid regression";
   parameter Boolean modeSlope = true
@@ -62,14 +62,15 @@ algorithm
     yreg := zeros(NREG);
     m_reg := 0;
     n_reg := 0;
-  end when;
-  when senseBEMF then
+  //end when;
+  //when senseBEMF then
+  elsewhen senseBEMF then
     maxBEMF:= 0;
     time_blockstart := time;
   end when;
   when maxBEMF < abs(v_sense) then
-    // das ist fragwürdig
-    maxBEMF :=abs(v_sense);
+    // das ist fragwuerdig
+    maxBEMF := abs(v_sense);
   end when;
   speedOK :=true;//maxBEMF > minEMF; TODO
 

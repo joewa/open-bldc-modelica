@@ -4,9 +4,9 @@ model MotorComparisonLzero2 "Test setup to compare the effect of Lzero"
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
   parameter Integer ppz = 6 "Motor pairs of poles";
-  parameter Modelica.SIunits.Resistance R_p = 0.33/2
+  parameter Modelica.Units.SI.Resistance R_p = 0.33/2
     "Motor per phase resistance";
-  parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
+  parameter Modelica.Units.SI.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
   parameter Real m_k(min=0, max=0.999) = 0.5 "Mutual coupling coefficient";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
@@ -52,13 +52,13 @@ model MotorComparisonLzero2 "Test setup to compare the effect of Lzero"
     annotation (Placement(transformation(extent={{-128,-42},{-108,-22}})));
   Blocks.HalfBridgeDriver halfBridgeDriver[3]
     annotation (Placement(transformation(extent={{-96,-48},{-76,-28}})));
-  Modelica.Blocks.Sources.BooleanStep startPWM[3](startTime=5e-3)
+  Modelica.Blocks.Sources.BooleanStep startPWM[3](each startTime=5e-3)
     annotation (Placement(transformation(extent={{-166,-72},{-146,-52}})));
-  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](k=false)
+  Modelica.Blocks.Sources.BooleanConstant booleanConstant[3](each k=false)
     annotation (Placement(transformation(extent={{-166,-102},{-146,-82}})));
-  Modelica.Blocks.Sources.Constant period[3](k=50e-6) "PWM period"
+  Modelica.Blocks.Sources.Constant period[3](each k=50e-6) "PWM period"
     annotation (Placement(transformation(extent={{-166,-42},{-146,-22}})));
-  Modelica.Blocks.Sources.Constant dutyCycle[3](k=0.5) "PWM duty cycle"
+  Modelica.Blocks.Sources.Constant dutyCycle[3](each k=0.5) "PWM duty cycle"
     annotation (Placement(transformation(extent={{-166,-12},{-146,8}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points={{0,-22},

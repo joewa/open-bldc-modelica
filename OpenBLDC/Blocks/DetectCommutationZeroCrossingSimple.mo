@@ -25,10 +25,11 @@ equation
     //Erste Kommutierung: time_from_zc < 0 oder wenn zu langsam gewesen
     reinit(time_from_zc, 0);
     reinit(maxBEMF, 0);
-elsewhen maxBEMF < abs(bemf) then
+  end when;
+  when senseBEMF and maxBEMF < abs(bemf) then
     reinit(maxBEMF, abs(bemf));
-
-elsewhen pre(v_greaterthan0) == true and v_greaterthan0 == false then
+  end when;
+  when senseBEMF and pre(v_greaterthan0) == true and v_greaterthan0 == false then
     // detect negative zero crossing
     reinit(time_from_zc, 0);
     reinit(time2commutate, pre(time_from_zc) / 2);

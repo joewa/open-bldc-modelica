@@ -1,5 +1,5 @@
 within OpenBLDC.Tests.Commutation;
-model ZeroCrossings1 "Commutation based on BEMF zero crossing detection"
+model ZeroCrossings1 "Commutation based on BEMF zero crossing detection - MSL4-OK"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
       redeclare Blocks.SensorlessCtrl3phStateGraphNG sensorlessCtrl3phPWM(

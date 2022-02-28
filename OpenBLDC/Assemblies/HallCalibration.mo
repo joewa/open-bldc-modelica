@@ -4,9 +4,9 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
   parameter Integer ppz = 1 "Motor pairs of poles";
-  parameter Modelica.SIunits.Resistance R_p = 0.33/2
+  parameter Modelica.Units.SI.Resistance R_p = 0.33/2
     "Motor per phase resistance";
-  parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
+  parameter Modelica.Units.SI.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));
   Sensors.HallDigital123 hallDigital123 annotation(Placement(transformation(extent = {{12,-32},{32,-12}})));
@@ -38,7 +38,7 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
   Converters.SwitchingIdeal.Inverter3ph inverter3ph1
                                                     annotation(Placement(transformation(extent={{-98,
             -126},{-78,-106}})));
-  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_PermanentMagnet
+  Modelica.Electrical.Machines.BasicMachines.SynchronousMachines.SM_PermanentMagnet
     smpm(useSupport=true,
     p=ppz,
     fsNominal=490,
@@ -50,15 +50,15 @@ model HallCalibration "Constant speed demonstrate hall sensor commutation"
     useDamperCage=false)
     annotation (Placement(transformation(extent={{-48,-160},{-28,-140}})));
 
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent={{-58,
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_a(m = m, k = 1) annotation(Placement(transformation(extent={{-58,
             -112},{-70,-98}})));
   Modelica.Electrical.Machines.Utilities.TerminalBox
                                  terminalBox(terminalConnection="Y")
     annotation (Placement(transformation(extent={{-48,-136},{-28,-116}},
           rotation=0)));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_b(m=m, k=2)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_b(m=m, k=2)
     annotation (Placement(transformation(extent={{-46,-120},{-58,-106}})));
-  Modelica.Electrical.MultiPhase.Basic.PlugToPin_p plugToPin_c(m=m, k=3)
+  Modelica.Electrical.Polyphase.Basic.PlugToPin_p plugToPin_c(m=m, k=3)
     annotation (Placement(transformation(extent={{-58,-130},{-70,-116}})));
 equation
   connect(constantSpeed.flange,hallDigital123.flange) annotation(Line(points = {{-42,-22},{12,-22}}, color = {0,0,0}, smooth = Smooth.None));

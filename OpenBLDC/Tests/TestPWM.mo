@@ -1,5 +1,5 @@
 within OpenBLDC.Tests;
-model TestPWM "Test function of Blocks.PulseWidth"
+model TestPWM "Test function of Blocks.PulseWidth - MSL4-OK"
   extends Modelica.Icons.Example;
   OpenBLDC.Blocks.PulseWidthVar pulseWidthVar annotation(Placement(transformation(extent = {{-18,12},{2,32}})));
   Real x(start = 0);

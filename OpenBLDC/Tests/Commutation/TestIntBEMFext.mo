@@ -1,5 +1,5 @@
 within OpenBLDC.Tests.Commutation;
-model TestIntBEMFext "Model to understand the linear regression method"
+model TestIntBEMFext "Model to understand the linear regression method - MSL4-KO"
   extends Modelica.Icons.Example;
   Blocks.DetectCommutationIntBEMFext     dC(
     bufsize=10,

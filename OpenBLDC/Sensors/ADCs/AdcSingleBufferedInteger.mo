@@ -5,7 +5,7 @@ model AdcSingleBufferedInteger
   parameter Real VMax = 3 "Maximum voltage";
   parameter Integer Resolution(final min=2) = 4096 "ADC resolution";
   parameter Integer BufDepth(final min=1) = 50 "Buffer depth";
-  parameter Modelica.SIunits.Time Ts = 1e-6 "Sample rate";
+  parameter Modelica.Units.SI.Time Ts = 1e-6 "Sample rate";
 
   Modelica.Electrical.Analog.Interfaces.PositivePin pin_p
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));

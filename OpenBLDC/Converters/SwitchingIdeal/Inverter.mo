@@ -1,28 +1,29 @@
 within OpenBLDC.Converters.SwitchingIdeal;
 model Inverter "Universal m-phase inverter"
   extends OpenBLDC.Interfaces.PartialInverter;
+  import Modelica.Units.SI;
   parameter Integer m(min = 1) = 3 "Number of phases";
-  parameter Modelica.SIunits.Resistance RonSwitch = 1e-005 "Ron of Switch";
-  parameter Modelica.SIunits.Conductance GoffSwitch = 1e-005 "Gon of Switch";
-  parameter Modelica.SIunits.Resistance RonDiode = 1e-005 "Ron of Diode";
-  parameter Modelica.SIunits.Conductance GoffDiode = 1e-005 "Gon of Diode";
-  Modelica.Electrical.MultiPhase.Ideal.IdealClosingSwitch swH(m = m, Ron = ronSwitch, Goff = goffSwitch) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-20,20})));
-  Modelica.Electrical.MultiPhase.Ideal.IdealClosingSwitch swL(m = m, Ron = ronSwitch, Goff = goffSwitch) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-20,-20})));
-  Modelica.Electrical.MultiPhase.Ideal.IdealDiode dH(m = m, Vknee = vknee, Ron = ronDiode, Goff = goffDiode) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 90, origin = {-40,20})));
-  Modelica.Electrical.MultiPhase.Ideal.IdealDiode dL(m = m, Vknee = vknee, Ron = ronDiode, Goff = goffDiode) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 90, origin = {-40,-20})));
+  parameter SI.Resistance RonSwitch = 1e-005 "Ron of Switch";
+  parameter SI.Conductance GoffSwitch = 1e-005 "Gon of Switch";
+  parameter SI.Resistance RonDiode = 1e-005 "Ron of Diode";
+  parameter SI.Conductance GoffDiode = 1e-005 "Gon of Diode";
+  Modelica.Electrical.Polyphase.Ideal.IdealClosingSwitch swH(m = m, Ron = ronSwitch, Goff = goffSwitch) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-20,20})));
+  Modelica.Electrical.Polyphase.Ideal.IdealClosingSwitch swL(m = m, Ron = ronSwitch, Goff = goffSwitch) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-20,-20})));
+  Modelica.Electrical.Polyphase.Ideal.IdealDiode dH(m = m, Vknee = vknee, Ron = ronDiode, Goff = goffDiode) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 90, origin = {-40,20})));
+  Modelica.Electrical.Polyphase.Ideal.IdealDiode dL(m = m, Vknee = vknee, Ron = ronDiode, Goff = goffDiode) annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 90, origin = {-40,-20})));
   Modelica.Blocks.Interfaces.BooleanInput ctrl_l[m] annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 270, origin = {20,106})));
   Modelica.Blocks.Interfaces.BooleanInput ctrl_h[m] annotation(Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 270, origin = {-20,106})));
-  Modelica.Electrical.MultiPhase.Sensors.VoltageSensor voltageSensor(m = m)
+  Modelica.Electrical.Polyphase.Sensors.VoltageSensor voltageSensor(m = m)
     "Output voltage sensor"                                                                         annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-60,-10})));
   Modelica.Blocks.Interfaces.RealOutput v[m] "Output voltage at plug_p" annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {-40,-100})));
-  Modelica.Electrical.MultiPhase.Sensors.CurrentSensor currentSensor(m = m) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
+  Modelica.Electrical.Polyphase.Sensors.CurrentSensor currentSensor(m = m) annotation(Placement(transformation(extent = {{40,-10},{60,10}})));
   Modelica.Blocks.Interfaces.RealOutput i[m] "Output current at plug_p" annotation(Placement(transformation(extent = {{-10,-10},{10,10}}, rotation = 270, origin = {40,-100})));
 protected
-  parameter Modelica.SIunits.Resistance ronSwitch[:] = fill(RonSwitch, m);
-  parameter Modelica.SIunits.Conductance goffSwitch[:] = fill(GoffSwitch, m);
-  parameter Modelica.SIunits.Resistance ronDiode[:] = fill(RonDiode, m);
-  parameter Modelica.SIunits.Conductance goffDiode[:] = fill(GoffDiode, m);
-  parameter Modelica.SIunits.Voltage vknee[:] = fill(0, m);
+  parameter SI.Resistance ronSwitch[:] = fill(RonSwitch, m);
+  parameter SI.Conductance goffSwitch[:] = fill(GoffSwitch, m);
+  parameter SI.Resistance ronDiode[:] = fill(RonDiode, m);
+  parameter SI.Conductance goffDiode[:] = fill(GoffDiode, m);
+  parameter SI.Voltage vknee[:] = fill(0, m);
 equation
   connect(dL.plug_p,swL.plug_n) annotation(Line(points = {{-40,-30},{-20,-30}}, color = {0,0,255}, smooth = Smooth.None));
   connect(dL.plug_n,swL.plug_p) annotation(Line(points = {{-40,-10},{-20,-10}}, color = {0,0,255}, smooth = Smooth.None));

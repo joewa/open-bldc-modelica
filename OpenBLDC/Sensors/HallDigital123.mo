@@ -2,7 +2,7 @@ within OpenBLDC.Sensors;
 model HallDigital123 "3 hall sensors"
   extends OpenBLDC.Icons.Sensor;
   import Modelica.Constants.pi;
-  parameter Modelica.SIunits.Angle hall_angle[3] = {(1 / 2 - 2 / 3) * pi,(1 / 2 + 0) * pi,(1 / 2 + 2 / 3) * pi}
+  parameter Modelica.Units.SI.Angle hall_angle[3] = {(1 / 2 - 2 / 3) * pi,(1 / 2 + 0) * pi,(1 / 2 + 2 / 3) * pi}
     "Hall sensor is mounted at this electrical angle and outputs true";
   parameter Real Ppz = 1 "Sensor pairs of poles";
   Modelica.Mechanics.Rotational.Components.IdealGear hallGear(ratio = Ppz)

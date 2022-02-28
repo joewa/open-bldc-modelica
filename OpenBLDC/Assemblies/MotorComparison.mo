@@ -5,9 +5,9 @@ model MotorComparison
   import Modelica.Constants.pi;
   constant Integer m = 3 "Number of phases";
   parameter Integer ppz = 6 "Motor pairs of poles";
-  parameter Modelica.SIunits.Resistance R_p = 0.33/2
+  parameter Modelica.Units.SI.Resistance R_p = 0.33/2
     "Motor per phase resistance";
-  parameter Modelica.SIunits.Inductance L_p = 3.5e-5/2
+  parameter Modelica.Units.SI.Inductance L_p = 3.5e-5/2
     "Motor per phase inductance";
   parameter Real m_k(min=0, max=0.999) = 0 "Mutual coupling coefficient";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData annotation(Placement(transformation(extent = {{44,46},{64,66}})));

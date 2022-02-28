@@ -35,9 +35,11 @@ equation
     // hier richtige Zeit
     reinit(time_zc, 1);
     reinit(maxBEMF, 0);
-   elsewhen maxBEMF < abs(v[senseBridgeID] - v_dc / 2) then
+  end when;
+  when senseBEMF and maxBEMF < abs(v[senseBridgeID] - v_dc / 2) then
     reinit(maxBEMF, abs(v[senseBridgeID] - v_dc / 2));
-   elsewhen pre(v_greaterthan0) == true and v_greaterthan0 == false then
+  end when;
+  when senseBEMF and pre(v_greaterthan0) == true and v_greaterthan0 == false then
     // detect negative zero crossing
     reinit(time_zc, time);
     reinit(time2commutate, sqrt(abs(-KV / dv)) / 6 - DelayCommutation);

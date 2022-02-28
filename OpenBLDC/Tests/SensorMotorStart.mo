@@ -1,5 +1,5 @@
 within OpenBLDC.Tests;
-model SensorMotorStart "Startup of motor with sensorless commutation from zero"
+model SensorMotorStart "Startup of motor with hall sensor commutation from zero"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
     redeclare Blocks.SensorlessCtrl3phStateGraphNG sensorlessCtrl3phPWM(

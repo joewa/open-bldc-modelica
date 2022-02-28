@@ -1,6 +1,6 @@
 within OpenBLDC.Tests.Commutation;
 model IntBEMF3
-  "Commutation based on BEMF integration with extended method, 1-leg-PWM"
+  "Commutation based on BEMF integration with extended method, 1-leg-PWM; MSL 4.0 KO"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
       redeclare Blocks.SensorlessCtrl3phStateGraphNG sensorlessCtrl3phPWM(

@@ -5,7 +5,7 @@ block DetectCommutationIntBEMFext_old
   parameter Boolean sampleAll = true "Sample only on pulses when false";
   parameter Integer bufsize = 10 "Size of buffer";
   parameter Real period_adc = 1e-6;
-  parameter Modelica.SIunits.Time Ts_ADC = 1e-6 "Sample rate of ADC";
+  parameter Modelica.Units.SI.Time Ts_ADC = 1e-6 "Sample rate of ADC";
   parameter Real vdivider = 3.6/13.6 "Voltage divider of phase voltage";
   parameter Integer NREG = 10 "Number of elements for a valid regression";
   Integer v_dc_int(start=0) "ADC value of dc link voltage";
@@ -75,7 +75,7 @@ algorithm
     //anstieg :=0;
   end when;
   when maxBEMF < abs(v_sense) then
-    // das ist fragwürdig
+    // das ist fragwï¿½rdig
     maxBEMF :=abs(v_sense);
   end when;
   speedOK :=true;//maxBEMF > minEMF; TODO
