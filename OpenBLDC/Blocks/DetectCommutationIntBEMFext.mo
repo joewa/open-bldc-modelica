@@ -62,9 +62,9 @@ algorithm
     yreg := zeros(NREG);
     m_reg := 0;
     n_reg := 0;
-  //end when;
-  //when senseBEMF then
-  elsewhen senseBEMF then
+  end when;
+  when senseBEMF then
+  //elsewhen senseBEMF then
     maxBEMF:= 0;
     time_blockstart := time;
   end when;
@@ -72,6 +72,7 @@ algorithm
     // das ist fragwuerdig
     maxBEMF := abs(v_sense);
   end when;
+
   speedOK :=true;//maxBEMF > minEMF; TODO
 
   //Neueste Variante mit ADC-Modell

@@ -65,8 +65,9 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), experiment(StopTime=0.0002),
+            -100},{100,100}}), graphics), experiment(StopTime = 0.0002, StartTime = 0, Tolerance = 1e-6, Interval = 4e-7),
     Documentation(info="<html>
 <p>This demo calculates the slope and the zero crossing of the ramp signal.</p>
-</html>"));
+</html>"),
+  __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian +d=initialization --preOptModules normalInlineFunction,evaluateParameters,simplifyIfEquations,expandDerOperator,clockPartitioning,findStateOrder,replaceEdgeChange,inlineArrayEqn,removeEqualRHS,removeSimpleEquations,comSubExp,resolveLoops,evalFunc");
 end TestIntBEMFext;
