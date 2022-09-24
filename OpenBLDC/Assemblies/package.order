@@ -1,3 +1,4 @@
+ClosedLoopSystems
 MotorComparisonFreeRunning
 MotorComparison
 MotorComparisonLzero
@@ -9,4 +10,3 @@ HallCalibrationOld
 HallSensor_Test
 MotorConstSpeedSensorless
 SensorlessBLDC
-ClosedLoopSystems

@@ -1,0 +1,6 @@
+mkvirtualenv py3jupystuff -p python3.8
+
+pip install matplotlib plotly scipy networkx
+
+pip install jill
+

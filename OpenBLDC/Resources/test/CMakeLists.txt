@@ -1,0 +1,43 @@
+message(STATUS "WRITING BUILD FILES FOR test")
+
+
+
+# Workaround for VS2010 https://github.com/modelica-3rdparty/Modelica_DeviceDrivers/pull/291#issuecomment-504923476
+if (MSVC)
+    if (${MSVC_VERSION} VERSION_LESS "1700")
+        target_compile_options(gmock PUBLIC /WX-)
+        target_compile_options(gmock_main PUBLIC /WX-)
+        target_compile_options(gtest PUBLIC /WX-)
+        target_compile_options(gtest_main PUBLIC /WX-)
+    endif()
+endif()
+
+
+# Keep CACHE cleaner
+mark_as_advanced(
+    BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+    INSTALL_GMOCK INSTALL_GTEST
+    gmock_build_tests gtest_build_samples gtest_build_tests
+    gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+)
+
+if (NOT (${CMAKE_VERSION} VERSION_LESS "3.10.0"))
+    # https://cmake.org/cmake/help/latest/module/GoogleTest.html
+    include(GoogleTest)
+endif()
+
+macro(package_add_test TESTNAME)
+    add_executable(${TESTNAME} ${ARGN})
+    target_link_libraries(${TESTNAME} gtest gmock gtest_main)
+    if (NOT (${CMAKE_VERSION} VERSION_LESS "3.10.0"))
+        gtest_discover_tests(${TESTNAME} PROPERTIES TIMEOUT 10)
+    else()
+        add_test(NAME ${TESTNAME} COMMAND ${TESTNAME})
+    endif()
+endmacro()
+
+
+# Communication module
+add_subdirectory(Communication)
+# Utility module
+add_subdirectory(Util)
