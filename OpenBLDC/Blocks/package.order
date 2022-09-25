@@ -24,6 +24,7 @@ DetectCommutationZeroCrossing
 SensorlessCtrl3phStateGraph
 SensorlessCtrl3phStateGraphNG
 SensorCtrl3phStateGraphNG
+SensorCtrl3phContinuous
 PhaseDiffVoltage
 PhaseDiffVoltageNph
 CatchStart

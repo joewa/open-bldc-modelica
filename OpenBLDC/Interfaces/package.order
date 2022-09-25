@@ -1,7 +1,9 @@
 AdcBusses
 PartialInverter
+LoadPins
 LoadPort
 Source
+SupplyPins
 SupplyPort
 PwmControlBusConnectorIn
 PwmControlBusConnectorOut

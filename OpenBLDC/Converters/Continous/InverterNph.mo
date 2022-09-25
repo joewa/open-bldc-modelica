@@ -1,8 +1,8 @@
-within OpenBLDC.Converters.SwitchingIdeal;
+within OpenBLDC.Converters.Continous;
 
-model InverterNph "m-phase switching inverter (wrapper)"
+model InverterNph "m-phase continuous inverter (wrapper)"
   extends OpenBLDC.Converters.Partial.InverterNph;
-  Modelica.Blocks.Interfaces.BooleanInput ctrl_h[m] annotation(
+  Modelica.Blocks.Interfaces.RealInput ctrl_h[m] annotation(
       Placement(transformation(extent = {{-20,-20},{20,20}}, rotation = 270, origin = {-20,106})));
   Inverter inverter(m = m) annotation(Placement(transformation(extent = {{-22,-10},{0,10}})));
 equation
@@ -11,9 +11,9 @@ equation
       color = {255,0,255},
       smooth = Smooth.None));
   connect(ctrl_h,inverter.ctrl_h) annotation(
-      Line(points = {{-20,106},{-20,80},{-13.2,80},{-13.2,10.6}},
-      color = {255,0,255},
-      smooth = Smooth.None));
+      Line(points = {{-20, 106}, {-20, 80}, {-13, 80}, {-13, 11}},
+      color = {0, 0, 127},
+      thickness = 0.5));
   connect(star_p.plug_p,inverter.plugH) annotation(
       Line(points = {{-60,40},{-42,40},{-42,4},{-22,4}},
       color = {0,0,255},
