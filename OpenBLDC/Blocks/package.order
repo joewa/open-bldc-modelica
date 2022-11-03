@@ -6,6 +6,7 @@ TestCtrl3ph
 HalfBridgeCtrl
 TestCtrl3phPWM
 HalfBridgeLogicBLDC
+HalfBridgeLogicBLDCContinuous
 HalfBridgeLogicINSD
 HalfBridgeLogic
 HalfBridgeDriver

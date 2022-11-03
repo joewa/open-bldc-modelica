@@ -3,7 +3,7 @@ model HallReluctanceContinuous
   "Commutation with hall sensors - consider motor with reluctance - MSL4-OK"
   extends Modelica.Icons.Example;
   extends Assemblies.SensorlessBLDC(
-      redeclare Blocks.SensorCtrl3phContinuous sensorlessCtrl3phPWM,
+      redeclare Blocks.SensorCtrl3phContinuous sensorlessCtrl3phPWM(PwmMode=1),
       redeclare Converters.Continous.Inverter3ph inverter3ph,
       mechanicalLoad(w_fixed = 8000 * 2 * Modelica.Constants.pi / 60), motorVoltageCommand(k = 0.2));
   annotation(experiment(StopTime = 0.003), Documentation(info="<html>

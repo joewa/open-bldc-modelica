@@ -28,26 +28,14 @@ block SensorCtrl3phContinuous "Commutation applying PWM"
     Placement(visible = true, transformation(extent = {{-104, 24}, {-84, 44}}, rotation = 0)));
   Modelica.Blocks.Interfaces.RealInput v_dc annotation(
     Placement(visible = true, transformation(origin = {60, -100}, extent = {{-20, -20}, {20, 20}}, rotation = 90)));
-  Modelica.Blocks.Sources.Constant constZeroPoint5[3](each k = 0.5) annotation(
-    Placement(visible = true, transformation(extent = {{138, 42}, {150, 54}}, rotation = 0)));
-  Modelica.Blocks.Math.Gain gain(k = -1) annotation(
+  Modelica.Blocks.Math.Gain gain(k = 1) annotation(
     Placement(visible = true, transformation(origin = {20, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Product product[3] annotation(
-    Placement(visible = true, transformation(origin = {140, 74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Math.Add add[3] annotation(
-    Placement(visible = true, transformation(origin = {180, 68}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.GreaterEqualThreshold greaterEqualThreshold[3](each threshold = -0.5)  annotation(
-    Placement(visible = true, transformation(origin = {111, -35}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.LessEqualThreshold lessEqualThreshold[3](each threshold = 0.5)  annotation(
-    Placement(visible = true, transformation(origin = {111, -68}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.Nand nand[3] annotation(
-    Placement(visible = true, transformation(origin = {161, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Routing.Replicator replicator(nout = 3)  annotation(
+  Modelica.Blocks.Routing.Replicator replicator(nout = 3) annotation(
     Placement(visible = true, transformation(origin = {60, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Sources.Constant dutyCycleOne[3](each k = 1)  annotation(
-    Placement(visible = true, transformation(origin = {179, 20}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Blocks.Logical.Switch switch[3] annotation(
-    Placement(visible = true, transformation(origin = {229, 60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  OpenBLDC.Blocks.HalfBridgeLogicBLDCContinuous halfBridgeLogicBLDCContinuous[3] annotation(
+    Placement(visible = true, transformation(origin = {150, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Sources.IntegerConstant pwmMode[3](each k = 1) annotation(
+    Placement(visible = true, transformation(extent = {{118, 35}, {128, 45}}, rotation = 0)));
 equation
 //intAngle = integer(angle);
 //chAngle = change(intAngle);
@@ -61,34 +49,18 @@ equation
     Line(points = {{-83, 34}, {-58, 34}}, color = {0, 0, 127}));
   connect(dutyCycle, gain.u) annotation(
     Line(points = {{-280, 80}, {8, 80}}, color = {0, 0, 127}));
-  connect(combiTable1Ds.y, product.u2) annotation(
-    Line(points = {{73, 34}, {90, 34}, {90, 68}, {128, 68}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(product.y, add.u1) annotation(
-    Line(points = {{151, 74}, {168, 74}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(constZeroPoint5.y, add.u2) annotation(
-    Line(points = {{150.6, 48}, {158.6, 48}, {158.6, 62}, {167.6, 62}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(combiTable1Ds.y, greaterEqualThreshold.u) annotation(
-    Line(points = {{73, 34}, {90, 34}, {90, -35}, {99, -35}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(combiTable1Ds.y, lessEqualThreshold.u) annotation(
-    Line(points = {{73, 34}, {90, 34}, {90, -68}, {99, -68}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(greaterEqualThreshold.y, nand.u1) annotation(
-    Line(points = {{122, -35}, {141, -35}, {141, -60}, {149, -60}}, color = {255, 0, 255}, thickness = 0.5));
-  connect(lessEqualThreshold.y, nand.u2) annotation(
-    Line(points = {{122, -68}, {149, -68}}, color = {255, 0, 255}, thickness = 0.5));
-  connect(nand.y, lCtrl) annotation(
-    Line(points = {{172, -60}, {260, -60}}, color = {255, 0, 255}, thickness = 0.5));
   connect(gain.y, replicator.u) annotation(
     Line(points = {{31, 80}, {48, 80}}, color = {0, 0, 127}));
-  connect(replicator.y, product.u1) annotation(
-    Line(points = {{71, 80}, {128, 80}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(nand.y, switch.u2) annotation(
-    Line(points = {{172, -60}, {201, -60}, {201, 60}, {217, 60}}, color = {255, 0, 255}, thickness = 0.5));
-  connect(dutyCycleOne.y, switch.u3) annotation(
-    Line(points = {{190, 20}, {211, 20}, {211, 52}, {217, 52}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(add.y, switch.u1) annotation(
-    Line(points = {{191, 68}, {217, 68}}, color = {0, 0, 127}, thickness = 0.5));
-  connect(switch.y, hCtrl) annotation(
-    Line(points = {{240, 60}, {260, 60}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(pwmMode.y, halfBridgeLogicBLDCContinuous.pwm_Mode) annotation(
+    Line(points = {{129, 40}, {133, 40}, {133, 46}, {140, 46}}, color = {255, 127, 0}, thickness = 0.5));
+  connect(combiTable1Ds.y, halfBridgeLogicBLDCContinuous.val) annotation(
+    Line(points = {{73, 34}, {90, 34}, {90, 54}, {140, 54}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(replicator.y, halfBridgeLogicBLDCContinuous.pulses) annotation(
+    Line(points = {{71, 80}, {91, 80}, {91, 62}, {140, 62}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(halfBridgeLogicBLDCContinuous.hCtrl, hCtrl) annotation(
+    Line(points = {{160, 60}, {260, 60}}, color = {0, 0, 127}, thickness = 0.5));
+  connect(halfBridgeLogicBLDCContinuous.lCtrl, lCtrl) annotation(
+    Line(points = {{160, 48}, {240, 48}, {240, -60}, {260, -60}}, color = {255, 0, 255}, thickness = 0.5));
   annotation(
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-280, -100}, {260, 140}}), graphics),
     Icon(coordinateSystem(extent = {{-280, -100}, {260, 140}}, preserveAspectRatio = false), graphics),
