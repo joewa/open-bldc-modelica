@@ -63,5 +63,5 @@ a client is provided as C code test program
 </p>
 </html>"),
     experiment(StopTime=10),
-    Diagram(graphics = {Text(origin = {89, 155},lineColor = {28, 108, 200}, extent = {{-147, -99}, {-27, -107}}, textString = "Ensure that receive is called before  send is called")}));
+    Diagram(graphics = {Text(origin = {89, 155},textColor = {28, 108, 200}, extent = {{-147, -99}, {-27, -107}}, textString = "Ensure that receive is called before  send is called")}));
 end ProportionalDiscreteTcpIP;
