@@ -41,3 +41,5 @@ endmacro()
 add_subdirectory(Communication)
 # Utility module
 add_subdirectory(Util)
+# ChibiESC's software-in-the-loop
+add_subdirectory(ChibiESC)
