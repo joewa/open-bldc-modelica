@@ -22,11 +22,12 @@ float clamp( float value, float min, float max ) {
 int main(void) {
     void * client;
     float arr_out[1];  // must be 32-bit float
-    float arr_in[2];
+    float arr_in[4];
     char sendMessage[16];
     const char *recMessage;
     int i;
-    float r, y, u;
+    float t, r, y, u;
+    t = 0.0;
 
     client = MDD_TCPIPClient_Constructor();
     if (client == 0) {
@@ -36,13 +37,14 @@ int main(void) {
 
     if (MDD_TCPIPClient_Connect(client, "localhost", 10002)) {
         //for (int i = 0; i < 20; i=i+1) {
-        while(1) {
+        while(t < 1.0) {
             // Read
             recMessage = MDD_TCPIPClient_Read(client, sizeof(arr_in));
             memcpy(arr_in, recMessage, sizeof(arr_in));
-            r = arr_in[0];
-            y = arr_in[1];
-            printf("r: %f, y: %f\n", r, y);
+            t = arr_in[0];
+            r = arr_in[2];
+            y = arr_in[3];
+            printf("t: %f, r: %f, y: %f\n", t, r, y);
             u = clamp(25.0 * (r - y), -10, 10);
             // Write
             arr_out[0] = u;

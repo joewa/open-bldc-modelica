@@ -1,6 +1,28 @@
+# pip
 mkvirtualenv py3jupystuff -p python3.8
 
 pip install matplotlib plotly scipy networkx
 
 pip install jill
 
+
+# miniforge
+conda create -n bldc python=3.11 numpy pandas scipy ipywidgets jupyterlab plotly matplotlib nodejs jill
+
+# Install Julia
+https://github.com/johnnychen94/jill.py
+jill install
+
+Start Julia
+julia
+
+Julia widgets in Jupyter
+using Pkg
+Pkg.add("Mux")
+Pkg.add("IJulia")
+We may need to...
+python3 -m pip install --upgrade webio_jupyter_extension
+
+Pkg.add("DataFrames")
+Pkg.add(["Plots", "Interact"])
+Pkg.add("Blink")
