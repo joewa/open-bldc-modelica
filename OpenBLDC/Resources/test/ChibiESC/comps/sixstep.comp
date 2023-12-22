@@ -1,0 +1,114 @@
+HAL_COMP(sixstep);
+
+HAL_PIN(enable) = 0.0;//NO;
+HAL_PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+HAL_PIN(angle6) = 0.0;
+
+MEM(float angle6f) = 0;
+MEM(float time) = 0.0;
+MEM(int en) = 0;
+MEM(int d) = 0;
+MEM(int pwm_period) = PWM_DEFAULT_PERIOD_CYCLES;
+MEM(int pwm_t_on) = 0;
+MEM(int legp) = 0;
+MEM(int legn) = 0;
+MEM(int legoff) = 0;
+MEM(float last_angle6) = 0.0;
+
+
+
+void commutate_6step_anti() {//TODO Besser ein C-File mit 6-Step-Funktionen machen
+	angle6f = PIN(angle6);
+	// 1.ADC KOmpente -> schreibt auf HAL-PINS
+	// 1.5 Fehler-Componente
+	// wINKEL!
+	// 2. Comp fuer Sollwerte
+	// 3. Regler (Strom) ACHTUNG PWM-WERT INS PRELOAD-REGISTER SCHREIBEN, Shadow REGISTER wird dann von Hardware aktualisiert
+	// Kommutieren mit aktuellem PWM und ADC starten. Nicht waehrend eines Schrittes verwenden.
+	// Diese Funktion koennte man auch in eine eigene Komponente packen.
+	if( PIN(angle6) != last_angle6 ) {last_angle6 = PIN(angle6); // Start or Commutate!! EDGE( PIN(angle6)
+		adcStopConversion(&ADCD1);
+		pwmStop(&PWMD1);
+		// TODO: besser 6 adc_commutate_group's in einem Array ablegen?
+		if ((uint8_t)PIN(angle6) == 1) { // sample W_VOLTAGE, triggered by U_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_CONT; // ADC_CR2: select TIM1_CC1 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN2(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN2); // W_VOLTAGE
+			legp = 0; legn = 1; legoff=2;
+		} else if ((uint8_t)PIN(angle6) == 2) { // sample U_VOLTAGE, triggered by W_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_EXTSEL_1 | ADC_CR2_CONT; //ADC_CR2: select TIM1_CC3 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN0(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN0); // U_VOLTAGE
+			legp = 2; legn = 1; legoff=0;
+		} else if ((uint8_t)PIN(angle6) == 3) { // sample V_VOLTAGE, triggered by W_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_EXTSEL_1 | ADC_CR2_CONT; //ADC_CR2: select TIM1_CC3 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN1(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN1); // V_VOLTAGE
+			legp = 2; legn = 0; legoff=1;
+		} else if ((uint8_t)PIN(angle6) == 4) { // sample W_VOLTAGE, triggered by V_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_EXTSEL_0 | ADC_CR2_CONT; //ADC_CR2: select TIM1_CC2 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN2(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN2); // W_VOLTAGE
+			legp = 1; legn = 0; legoff=2;
+		} else if ((uint8_t)PIN(angle6) == 5) { // sample U_VOLTAGE, triggered by V_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_EXTSEL_0 | ADC_CR2_CONT; //ADC_CR2: select TIM1_CC2 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN0(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN0); // U_VOLTAGE
+			legp = 1; legn = 2; legoff=0;
+		} else if ((uint8_t)PIN(angle6) == 6) { // sample V_VOLTAGE, triggered by U_PWM
+			//adc_commutate_group.cr2 = ADC_CR2_EXTTRIG | ADC_CR2_CONT; //ADC_CR2: select TIM1_CC1 event
+			//adc_commutate_group.smpr2 = ADC_SMPR2_SMP_AN1(ADC_SAMPLE_1P5);
+			//adc_commutate_group.sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN1); // V_VOLTAGE
+			legp = 0; legn = 2; legoff=1;
+		}
+		pwm1cfg.channels[legoff].mode = PWM_OUTPUT_ACTIVE_HIGH;//PWM_OUTPUT_DISABLED;
+		pwm1cfg.channels[legp].mode = PWM_OUTPUT_ACTIVE_HIGH;
+		pwm1cfg.channels[legn].mode = PWM_OUTPUT_ACTIVE_LOW;
+		//pwm1cfg.period = period; //TODO: Hier auch Periodendauer setzen
+		//palClearPad(GPIOB, GPIOB_U_NDTS); palClearPad(GPIOB, GPIOB_V_NDTS); palClearPad(GPIOB, GPIOB_W_NDTS);
+		//adcStartConversion(&ADCD1, &adc_commutate_group, commutatesamples, ADC_COMMUTATE_BUF_DEPTH);
+		adcStartConversion(&ADCD1, &adc_commutate_group, commutatesamples, 2*ADC_FRT_DEFAULT_PERIOD_CYCLES);
+		pwmStart(&PWMD1, &pwm1cfg); // PWM signal generation
+	}
+	pwm_t_on =(0.5 + PIN(d_ref) / 2) * pwm_period; // d_percent = 0.5 + PIN(d_ref) / 2;
+	//legp=0; legn=1;
+	pwmEnableChannel(&PWMD1, legoff, 0);
+	pwmEnableChannel(&PWMD1, legp, pwm_t_on);
+	pwmEnableChannel(&PWMD1, legn, pwm_t_on);
+}
+
+
+RT_INIT(
+  PIN(enable) = 0.0;//NO;
+  PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+);
+
+RT_DEINIT(
+  PIN(enable) = 0.0;//NO;
+  PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+);
+
+FRT(
+  // Erlaube Frequenzaenderung nur bei Kommutierung! Begrenze PWM nach oben in Abhaengigkeit der Frequenz
+  //PIN(pos) = mod(TIM_GetCounter(ENC1_TIM) * 2.0f * M_PI / (float)e_res);
+  if(en == YES && bal_ext.frt_extended_state == FRT_WAITFOR_REMOTE) {			// Normal operation: PWM is active
+	  commutate_6step_anti();
+  } else if(en == YES && bal_ext.frt_extended_state == FRT_WAITFOR_TIMEOUT) {	// Enable operation: FRT-Thread will be invoked by ADC-callback
+	  bal_ext.frt_extended_state = FRT_WAITFOR_REMOTE; // Das Setzen und Ruecksetzen vielleicht lieber in einer speicher-comp machen? Diese kriegt die niedrigeste prio
+	  PIN(angle6) = 1.0f;
+	  commutate_6step_anti();
+	  //adcStartConversion(&ADCD1, &adc_commutate_group, commutatesamples, 2*ADC_FRT_DEFAULT_PERIOD_CYCLES);
+  } else if(en == NO && bal_ext.frt_extended_state == FRT_WAITFOR_REMOTE) {		// Disable
+	  bal_ext.frt_extended_state = FRT_WAITFOR_TIMEOUT;
+	  adcStopConversion(&ADCD1);
+	  pwmStop(&PWMD1);
+	  PIN(angle6) = 0.0f; last_angle6 = 0.0f; EDGE( PIN(angle6) );
+  }
+
+);
+
+RT(
+  en = (int)PIN(enable);
+);
+
+ENDCOMP;

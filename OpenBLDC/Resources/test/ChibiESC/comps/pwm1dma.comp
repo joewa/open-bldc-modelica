@@ -1,0 +1,149 @@
+/*
+ * pwm1dma.comp
+ *
+ *  Created on: 31.12.2016
+ *      Author: joerg
+ */
+
+//using FB_TX
+
+/*
+Ideen für DMA-ADC.
+- PWM-DMA und ADC-DMA durch das gleiche Timer-CC-Event starten (TIM1,2,8...).
+- Beide DMA's laufen im Circular-mode und laufen nach genau der gleichen Zeit über.
+  D.h., wenn sie mit unterschiedlicher Frequenz laufen, dann können sie auch unterschiedlich groß sein.
+- So kann jedes ADC-DMA-Sample immer eindeutig einem Schaltzustand der Bruecke zugeordnet werden.
+STM32F4 Reference Manual: Table 42. DMA1 request mapping
+
+*/
+
+#define NUM_OF_SAMPLES_S  400
+#define TIM_FREQ 84.0
+#define TIM_DIV 5.0
+#define SIG_FREQ 2.5
+#define OVER (TIM_FREQ / TIM_DIV / SIG_FREQ)//one bit
+#define OFFSET (OVER / 2.0)//half bit
+#define SIG_POS_START 16
+
+HAL_COMP(pwm1dma);
+
+HAL_PIN(enable) = 0.0;
+HAL_PIN(start) = 0.0;
+HAL_PIN(offset) = 120.0;
+HAL_PIN(d) = 0.0;
+HAL_PIN(pos) = 0.0;
+HAL_PIN(error) = 0.0;
+HAL_PIN(cc);
+HAL_PIN(arr) = 5376;
+
+MEM(int en) = 0;
+MEM(volatile uint32_t reply_buf[NUM_OF_SAMPLES_S + 1]);
+MEM(volatile uint32_t request_buf[4000]);
+//MEM(DMA_InitTypeDef dma_tx_config);
+//MEM(DMA_InitTypeDef dma_rx_config);
+
+
+// BEGIN WS2812 --> TODO: Mache eigene c-file
+// END WS2812
+
+
+RT_INIT(
+  //GPIO_InitTypeDef GPIO_InitStruct;
+
+  //TX enable - Pin 12
+  /*GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_12;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_25MHz;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_SetBits(GPIOB, GPIO_Pin_12);
+
+  //TX - Pin 10
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_ResetBits(GPIOB,GPIO_Pin_10);
+
+  //RX Joerg: Brauchen wir nicht
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);*/
+
+  // HIER GEHTS LOS!
+  //TIM8 triggers DMA to sample reply
+  //RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE); --> TIM8 aktivieren
+  //TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+  //TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  //TIM_TimeBaseStructure.TIM_Period = 32;
+  //TIM_TimeBaseStructure.TIM_Prescaler = 1;
+  //TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+  //TIM_TimeBaseInit(TIM8, &TIM_TimeBaseStructure);
+  //TIM_ARRPreloadConfig(TIM8,ENABLE);
+  //TIM_DMACmd(TIM8, TIM_DMA_Update, ENABLE);
+  //TIM_Cmd(TIM8, ENABLE);
+
+  uint32_t tx_high   = GPIO_BSRR_BS_10; // Dies in den request_buf schreiben, um Pin 10 auf high zu setzen
+  uint32_t tx_low    = GPIO_BSRR_BR_10; // Pin 10 auf low setzen
+  int pos = 0;
+
+  for(int i = 0;i<1500;i++){
+    request_buf[pos++] = tx_low;
+    request_buf[pos++] = tx_high;
+  }
+
+  request_buf[pos++] = tx_low;
+
+  //DMA tx config
+  //bool dmaAllocError = TRUE;//bool_t dmaAllocError = TRUE;
+  //dmaAllocError = dmaStreamAllocate(STM32_DMA1_STREAM6, 10, NULL, NULL);//Joe: Channel 3: TIM2_CH2, TIM2_CH4
+  //dma_tx_config.DMA_Channel = DMA_Channel_7; //TIM8 ch1
+  //dma_tx_config.DMA_PeripheralBaseAddr = (uint32_t)&GPIOB->BSRRL;
+  //dma_tx_config.DMA_Memory0BaseAddr = (uint32_t)&request_buf;
+  //dma_tx_config.DMA_DIR = DMA_DIR_MemoryToPeripheral;
+  //dma_tx_config.DMA_BufferSize = pos;
+  //dma_tx_config.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+  //dma_tx_config.DMA_MemoryInc = DMA_MemoryInc_Enable;
+  //dma_tx_config.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
+  //dma_tx_config.DMA_MemoryDataSize = DMA_PeripheralDataSize_Word;
+  //dma_tx_config.DMA_Mode = DMA_Mode_Normal;
+  //dma_tx_config.DMA_Priority = DMA_Priority_VeryHigh;
+  //dma_tx_config.DMA_FIFOMode = DMA_FIFOMode_Disable;
+  //dma_tx_config.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
+  //dma_tx_config.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+  //dma_tx_config.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+
+  //ws2812_init();
+  //pwm_dma_init();
+
+);
+
+
+FRT(
+  if(en == YES && bal_ext.frt_extended_state == FRT_WAITFOR_REMOTE) {			// Normal operation: PWM is active
+	    //pwm_dma_setvals(0, 0, (uint16_t)PIN(d), 0);
+	    //commutate_6step_anti();
+	  //palTogglePad(BANK_PWM_F, PIN_PWM_F);
+  } else if(en == YES && bal_ext.frt_extended_state == FRT_WAITFOR_TIMEOUT) {	// Enable operation: FRT-Thread will be invoked by ADC-callback
+	  bal_ext.frt_extended_state = FRT_WAITFOR_REMOTE; // Das Setzen und Ruecksetzen vielleicht lieber in einer speicher-comp machen? Diese kriegt die niedrigeste prio
+	  pwm_dma_init_3();
+	  //adcStartConversion(&ADCD1, &adc_commutate_group, commutatesamples, 2*ADC_FRT_DEFAULT_PERIOD_CYCLES);
+	  //pwm_dma_setvals(0, 0, (uint16_t)PIN(d), 0); TODO Hier Wert setzen!!
+  } else if(en == NO && bal_ext.frt_extended_state == FRT_WAITFOR_REMOTE) {		// Disable
+	  bal_ext.frt_extended_state = FRT_WAITFOR_TIMEOUT;
+	  pwm_dma_stop_3();
+	  //adcStopConversion(&ADCD1);
+  }
+);
+
+
+RT(
+  en = (int)PIN(enable);
+);
+
+ENDCOMP;
+

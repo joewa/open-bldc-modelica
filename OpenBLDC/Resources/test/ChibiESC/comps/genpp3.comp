@@ -1,0 +1,127 @@
+HAL_COMP(genpp3); // Generate pulse pattern (3-phase)
+
+HAL_PIN(adc_frt_period_cycles) = ADC_FRT_DEFAULT_PERIOD_CYCLES;
+MEM(uint16_t adc_frt_period_cycles_uint = ADC_FRT_DEFAULT_PERIOD_CYCLES);
+
+//sdu sdv sdw input
+HAL_PIN(sdu) = 0.0;
+HAL_PIN(sdv) = 0.0;
+HAL_PIN(sdw) = 0.0;
+
+//modulation mode
+HAL_PIN(mode) = 2.0;
+// Number of pulse-periods in the next FRT-Cycle for each channel
+HAL_PIN(periods) = 1.0;
+
+//HAL_PIN(hv_temp) = 0.0;
+
+//enable in
+HAL_PIN(enable) = 0.0;
+//TODO: half bridge enable in
+HAL_PIN(enu) = 1.0;
+HAL_PIN(env) = 1.0;
+HAL_PIN(enw) = 1.0;
+
+//fault output
+HAL_PIN(fault) = 0.0;
+
+HAL_PIN(min_on_pwm) = 20.0;		// min on-time [pwm-systicks] - Genügt das zum Messen? Ggf. anpassen!
+HAL_PIN(min_off_pwm) = 40.0; 	//min off-time [pwm-systicks]
+
+MEMEXT(struct pwm_dma_s *next_pwmdma_state_ptr); // Defined in pwmadcdma.c
+//MEMEXT(struct pwm_dma_s *actual_pwmdma_state_ptr);
+// TODO: Gedanke: ch_timer_buffer und ch_GPIOs_buffer sind wahrscheinlich am Besten für die Auswertung?? Dann 3*PWM_DMA_MAX_EDGES lang machen und Ringpuffern
+MEMEXT(uint32_t ch_timer_buffer[N_PWM_CHANNELS][N_PWM_MAX_EDGES]); // Ein Array fuer jeden Channel. N_PWM_CHANNELS=3
+MEMEXT(uint16_t ch_GPIOs_buffer[N_PWM_MAX_EDGES]);
+MEMEXT(const uint16_t PIN_MASK[]);
+MEM(int en) = 0;
+
+FRT(
+//   float udc = MAX(PIN(udc), 0.1);
+//TODO:!
+//PIN_MASK = transpose(uint16(zeros(length(PIN_IDs),1)));
+//for i = 1:length(PIN_IDs)
+//  PIN_MASK(i) = uint16( bitshift(uint16(1), uint16(PIN_IDs(i))) );
+//endfor
+   step_pwmdma_state_ptr();
+
+   next_pwmdma_state_ptr->adc_frt_period_cycles = adc_frt_period_cycles_uint; //ADC_FRT_DEFAULT_PERIOD_CYCLES ;	// next_ADC_FRT_PERIOD_CYCLES wurde ggf vorher neu berechnet:
+   //actual_pwmdma_state_ptr->adc_frt_period_cycles = ADC_FRT_DEFAULT_PERIOD_CYCLES; 	// Dito
+   //uint16_t actual_PWM_FRT_PERIOD_CYCLES = actual_pwmdma_state_ptr->adc_frt_period_cycles * ADC_PWM_DIVIDER;
+   uint16_t next_PWM_FRT_PERIOD_CYCLES = next_pwmdma_state_ptr->adc_frt_period_cycles * ADC_PWM_DIVIDER;
+
+   uint16_t periods = (int16_t)PIN(periods);
+   uint16_t sp_period = next_PWM_FRT_PERIOD_CYCLES / periods; // Periode eines Single Pulse. TODO: Beachte nicht-ganzzahlige Division
+
+   // Wertebereich zurechstutzen
+   uint16_t p[3];
+   p[0] = CLAMP(PIN(sdu), 0.0, 1.0) * sp_period;
+   p[1] = CLAMP(PIN(sdv), 0.0, 1.0) * sp_period;
+   p[2] = CLAMP(PIN(sdw), 0.0, 1.0) * sp_period;
+
+   // Mindestschaltzeiten sicherstellen
+   uint16_t min_on_pwm = PIN(min_on_pwm);
+   uint16_t min_off_pwm = PIN(min_off_pwm);
+   if((p[0] > 0 && p[0] < min_on_pwm) || (p[1] > 0 && p[1] < min_on_pwm) || (p[2] > 0 && p[2] < min_on_pwm)){
+	  p[0] += min_on_pwm;
+	  p[1] += min_on_pwm;
+      p[2] += min_on_pwm;
+   }
+
+   if((p[0] > sp_period - min_off_pwm) || (p[1] > sp_period - min_off_pwm) || (p[2] > sp_period - min_off_pwm)){
+	  p[0] -= min_off_pwm;
+	  p[1] -= min_off_pwm;
+	  p[2] -= min_off_pwm;
+   }
+
+
+   uint16_t pcnt[3]; // Anzahl der neuen Pulse in einer Phase
+   pcnt[0]=0; pcnt[1]=0; pcnt[2]=0;
+   uint16_t pstate = 0;
+
+   // TODO Achtung: hier muss jeweils noch die letzte Off-Zeit aus dem letzten FRT-Zyklus berücksichtigt werden
+   //   Besser genau zum Ende des
+   // TODO Je nach Pulsmuster kann ein GPIO aus dem letzten FRT-Zyklus auch noch eingeschaltet sein.
+
+   // switch-case mode 0 % center aligned PWM  --> TODO: Machen!
+
+   uint32_t center = 0; // ACHTUNG: möglichst Rundungsfehler vermeiden.
+
+   uint16_t periods2 = 2 * periods;
+   uint16_t i; uint16_t ip;
+   uint16_t last_gpio_state = 0; // ACHTUNG: Muss eigentlich vom letzten Durchlauf gemerkt werden.
+   for(i = 0; i < periods2; i += 2) {
+	   center = (i + 1) * next_PWM_FRT_PERIOD_CYCLES / periods2;
+	   for(ip = 0; ip < 3; ip++) {
+		   if(p[ip] > 0) {
+			   ch_timer_buffer[ip][i]	=	center - p[ip] / 2; 		// Einschaltpuls
+			   ch_GPIOs_buffer[i]		|=	PIN_MASK[ip];
+			   ch_timer_buffer[ip][i+1]	=	center + p[ip] / 2; 		// Ausschaltpuls
+			   ch_GPIOs_buffer[i+1]		&=	~PIN_MASK[ip];
+			   pcnt[ip] += 2;
+		   }
+	   }
+   }
+
+   /*
+   // Noch einen DMA-Transfer ans Ende der Periode auf irgendeinem Kanal bei Zeit "next_PWM_FRT_PERIOD_CYCLES" schreiben
+   ch_timer_buffer[0][pcnt[0]] = next_PWM_FRT_PERIOD_CYCLES; // Schreibe einen Puls auf Kanal 0
+   ch_GPIOs_buffer[pcnt[0] + 1] = ch_GPIOs_buffer[pcnt[0]];
+   pcnt[0]++;
+   */
+
+   // ch_timer_buffer immer 0xFFFF-terminieren weil so das Sortieren schneller geht.
+   for(ip = 0; ip < 3; ip++) {
+	   ch_timer_buffer[ip][pcnt[ip]] = (uint32_t)0xFFFF;
+   }
+
+   //TODO: check enable timing on fault pin
+   PIN(fault) = 0;//HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_7);
+);
+
+RT(
+  en = (int)PIN(enable);
+  adc_frt_period_cycles_uint = (uint16_t)PIN(adc_frt_period_cycles);
+);
+
+ENDCOMP;
