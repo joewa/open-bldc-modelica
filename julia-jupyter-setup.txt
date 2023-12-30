@@ -7,7 +7,7 @@ pip install jill
 
 
 # miniforge
-conda create -n bldc python=3.11 numpy pandas scipy ipywidgets jupyterlab plotly matplotlib nodejs jill
+conda create -n bldc python=3.11 numpy pandas scipy ipywidgets jupyter jupyter_contrib_nbextensions plotly matplotlib nodejs jill
 
 # Install Julia
 https://github.com/johnnychen94/jill.py
