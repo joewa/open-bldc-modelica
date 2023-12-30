@@ -1,0 +1,31 @@
+HAL_COMP(simfast);
+
+HAL_PIN(amp) = 3.1;
+HAL_PIN(freq) = 1.0;
+HAL_PIN(sawtooth) = 0.0;
+HAL_PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+
+MEM(float time) = 0.0;
+MEM(float amp) = 0.0;
+MEM(float freq) = 0.0;
+MEM(float sawtooth) = 0.0;
+
+RT_INIT(
+  HAL_PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+);
+
+RT_DEINIT(
+  HAL_PIN(d_ref) = 0.0; // duty cycle TODO: PWM frequency or period
+);
+
+FRT(
+  if( (sawtooth += amp*freq*period) > amp ) sawtooth = 0;
+);
+
+RT(
+  amp = PIN(amp);
+  freq = PIN(freq);
+  PIN(sawtooth) = sawtooth;
+);
+
+ENDCOMP;

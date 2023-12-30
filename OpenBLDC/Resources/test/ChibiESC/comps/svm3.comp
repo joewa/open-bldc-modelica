@@ -1,0 +1,92 @@
+/*
+ * svm3.comp
+ *
+ *  Created on: 29.12.2016
+ *      Author: joerg
+ */
+/*
+ * Inputs für diesen Block.
+ * Mode-Pin
+ * 1. du,dv,dw
+ * 2. a,b (alpha, beta)
+ * 3. Betrag, Phase
+ */
+
+
+
+HAL_COMP(svm3);
+
+//du dv dw inputs
+HAL_PIN(du) = 0;
+HAL_PIN(dv) = 0;
+HAL_PIN(dw) = 0;
+
+//sdu sdv sdw outputs
+HAL_PIN(sdu);
+HAL_PIN(sdv);
+HAL_PIN(sdw);
+
+//commutation mode
+HAL_PIN(cmode) = 0.0;
+
+//modulation mode
+HAL_PIN(mode) = 2.0;
+
+//half bridge enable out - auch bei analog-auswertung verwenden?
+//HAL_PIN(enu) = 1.0;
+//HAL_PIN(env) = 1.0;
+//HAL_PIN(enw) = 1.0;
+
+FRT(
+   float offset = 0;
+
+   float du = PIN(du);
+   float dv = PIN(dv);
+   float dw = PIN(dw);
+
+   switch((int)PIN(mode)){
+      default:
+      case 0: // std, sine modulation
+         offset = (du + dv + dw) / 3.0 - 0.5;
+         break;
+
+      case 1: // svm, space vector modulation
+         offset = (MIN3(du, dv, dw) + MAX3(du, dv, dw)) / 2.0 - 0.5;
+         break;
+
+      case 2: // fbm, flat bottom space vector modulation
+         offset = MIN3(du, dv, dw);
+         break;
+
+      case 3: // ftm, flat top space vector modulation
+         offset = MAX3(du, dv, dw);// - udc;
+         break;
+   }
+
+/*   PIN(enu) = 1.0;
+   PIN(env) = 1.0;
+   PIN(enw) = 1.0;
+
+   switch((int)PIN(cmode)){
+      case 1: // block
+         if(du > dv && du < dw){
+            PIN(enu) = 0.0;
+         }
+         if(dv > du && dv < dw){
+            PIN(env) = 0.0;
+         }
+         if(dw > du && dw < dv){
+            PIN(enw) = 0.0;
+         }
+         break;
+
+      default: // sine
+         break;
+   }*/
+
+   PIN(sdu) = du - offset;
+   PIN(sdv) = dv - offset;
+   PIN(sdw) = dw - offset;
+);
+
+ENDCOMP;
